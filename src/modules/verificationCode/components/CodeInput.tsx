@@ -17,6 +17,8 @@ import {UserNotFoundErrorMessage} from '../../../apis/verification/verifyCode';
 import {BAD_REQUEST} from '../../../constants/api/Config';
 import {CODE_ERROR} from '../../../constants/verificationCode/Config';
 import Loading from '../../../components/Loading';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 type Props = {
   style: StyleProp<ViewStyle>;
@@ -35,7 +37,7 @@ export default (props: Props) => {
 
   const [values, setValues] = useState(inputRefList.map(() => ''));
 
-  // const navigation = useNavigation<StackNavigationProp<any>>();
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   const statusValue = useAppSelector(status);
 
@@ -60,8 +62,7 @@ export default (props: Props) => {
       const {error} = store.getState().verificationCode;
 
       if (error === UserNotFoundErrorMessage) {
-        Alert.alert(UserNotFoundErrorMessage);
-        // navigation.push('Gender', {mobile: props.mobile});
+        navigation.push('Gender', {mobile: props.mobile});
       } else if (error === BAD_REQUEST) {
         showError(CODE_ERROR);
       } else {

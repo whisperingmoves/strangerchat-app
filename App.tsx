@@ -12,6 +12,7 @@ import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 import Login from './src/modules/login/Login';
 import VerificationCode from './src/modules/verificationCode/VerificationCode';
+import Gender from './src/modules/gender/Gender';
 
 const Stack = createStackNavigator();
 
@@ -47,6 +48,15 @@ function App(): Element {
           <Stack.Screen
             name="VerificationCode"
             component={VerificationCode}
+            options={{
+              headerShown: false,
+              ...TransitionPresets.SlideFromRightIOS,
+            }}
+          />
+
+          <Stack.Screen
+            name="Gender"
+            component={Gender}
             options={{
               headerShown: false,
               ...TransitionPresets.SlideFromRightIOS,
