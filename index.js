@@ -1,14 +1,14 @@
-/**
- * @format
- */
-
 import React from 'react';
-import {AppRegistry} from 'react-native';
+import {AppRegistry, Platform, UIManager} from 'react-native';
 import Config from 'react-native-config';
+import {Provider} from 'react-redux';
 import App from './App';
 import {name as appName} from './app.json';
 import {monitorError} from './src/stores/monitor/api';
 import ErrorBoundary from './src/components/ErrorBoundary';
+import {persistor, store} from './src/stores/store';
+import {PersistGate} from 'redux-persist/integration/react';
+import {ActionSheetProvider} from '@expo/react-native-action-sheet';
 
 console.log(Config);
 
@@ -42,8 +42,19 @@ if (global?.HermesInternal?.hasPromise?.()) {
   }
 }
 
+if (Platform.OS === 'android') {
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+}
 AppRegistry.registerComponent(appName, () => () => (
-  <ErrorBoundary>
-    <App />
-  </ErrorBoundary>
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <ActionSheetProvider>
+        <ErrorBoundary>
+          <App />
+        </ErrorBoundary>
+      </ActionSheetProvider>
+    </PersistGate>
+  </Provider>
 ));
