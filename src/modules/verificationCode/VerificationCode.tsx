@@ -18,7 +18,7 @@ import CodeInput from './components/CodeInput';
 import ReSendButton from './components/ReSendButton';
 
 import BackHeader from '../../components/BackHeader';
-import {Mobile} from '../login/slice';
+import {Mobile} from '../login/store/slice';
 
 type Props = {
   route: Route<string, {mobile: Mobile}>;

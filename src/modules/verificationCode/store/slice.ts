@@ -1,11 +1,11 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
-import {RootState} from '../../stores/store';
+import {RootState} from '../../../stores/store';
 import {verifyCode} from './api';
 import {
   VerifyCodeRequest,
   VerifyCodeResponse,
-} from '../../apis/verification/verifyCode';
+} from '../../../apis/verification/verifyCode';
 
 export type Error = string;
 

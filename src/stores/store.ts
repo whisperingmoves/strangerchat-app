@@ -14,10 +14,9 @@ import {
   PURGE,
   REGISTER,
   REHYDRATE,
-} from 'redux-persist/es/constants';
-// import {createBlacklistFilter} from 'redux-persist-transform-filter';
-import loginReducer from '../modules/login/slice';
-import verificationCodeReducer from '../modules/verificationCode/slice';
+} from 'redux-persist/es/constants'; // import {createBlacklistFilter} from 'redux-persist-transform-filter';
+import loginReducer from '../modules/login/store/slice';
+import verificationCodeReducer from '../modules/verificationCode/store/slice';
 
 export const LOG_OUT = 'LOG_OUT';
 

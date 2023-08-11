@@ -15,10 +15,16 @@ import {
   RESEND_IN_SECONDS,
 } from '../../../constants/verificationCode/Config';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
-import {Mobile, resetStatus, sendCodeAsync, status} from '../../login/slice';
+import {
+  Mobile,
+  resetStatus,
+  scene,
+  sendCodeAsync,
+  setScene,
+  status,
+} from '../../login/store/slice';
 import {store} from '../../../stores/store';
 import {showError} from '../../../utils/notification';
-import Loading from '../../../components/Loading';
 
 type Props = {
   style: StyleProp<ViewStyle>;
@@ -27,7 +33,11 @@ type Props = {
 
 export default (props: Props) => {
   const [second, setSecond] = useState<number>(DURATION);
+
   const statusValue = useAppSelector(status);
+
+  const sceneValue = useAppSelector(scene);
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -57,7 +67,7 @@ export default (props: Props) => {
   };
 
   useEffect(() => {
-    if (statusValue === 'success') {
+    if (statusValue === 'success' && sceneValue === 'verificationCode') {
       dispatch(resetStatus());
 
       LayoutAnimation.easeInEaseOut();
@@ -69,7 +79,7 @@ export default (props: Props) => {
       return;
     }
 
-    if (statusValue === 'failed') {
+    if (statusValue === 'failed' && sceneValue === 'verificationCode') {
       dispatch(resetStatus());
 
       const {error} = store.getState().login;
@@ -86,22 +96,20 @@ export default (props: Props) => {
       return;
     }
 
+    dispatch(setScene('verificationCode'));
+
     dispatch(sendCodeAsync(props.mobile));
   };
 
   return (
-    <>
-      <Loading visible={statusValue === 'loading'} />
-
-      <TouchableOpacity
-        style={props.style}
-        activeOpacity={second === 0 ? 0.7 : 1}
-        onPress={handlePress}>
-        <Text style={[styles.txt, txtStyle]}>
-          {second === 0 ? RESEND : RESEND_IN_SECONDS(second)}
-        </Text>
-      </TouchableOpacity>
-    </>
+    <TouchableOpacity
+      style={props.style}
+      activeOpacity={second === 0 ? 0.7 : 1}
+      onPress={handlePress}>
+      <Text style={[styles.txt, txtStyle]}>
+        {second === 0 ? RESEND : RESEND_IN_SECONDS(second)}
+      </Text>
+    </TouchableOpacity>
   );
 };
 

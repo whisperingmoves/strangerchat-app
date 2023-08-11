@@ -11,12 +11,12 @@ import {isNumeric} from '../../../utils/validation';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {store} from '../../../stores/store';
 import {showError} from '../../../utils/notification';
-import Loading from '../../../components/Loading';
-import {Mobile} from '../../login/slice';
-import {resetStatus, status, verifyCodeAsync} from '../slice';
+import {Mobile} from '../../login/store/slice';
+import {resetStatus, status, verifyCodeAsync} from '../store/slice';
 import {UserNotFoundErrorMessage} from '../../../apis/verification/verifyCode';
 import {BAD_REQUEST} from '../../../constants/api/Config';
 import {CODE_ERROR} from '../../../constants/verificationCode/Config';
+import Loading from '../../../components/Loading';
 
 type Props = {
   style: StyleProp<ViewStyle>;
@@ -135,22 +135,20 @@ export default (props: Props) => {
   };
 
   return (
-    <>
+    <View style={[styles.root, props.style]}>
       <Loading visible={statusValue === 'loading'} />
 
-      <View style={[styles.root, props.style]}>
-        {inputRefList.map((input, index) => (
-          <InputItem
-            key={index}
-            inputRef={input}
-            value={values[index]}
-            onChange={newValue => handleChange(newValue, index)}
-            onBackspace={() => focusPrev(index)}
-            onSubmitEditing={() => focusNext(index)}
-          />
-        ))}
-      </View>
-    </>
+      {inputRefList.map((input, index) => (
+        <InputItem
+          key={index}
+          inputRef={input}
+          value={values[index]}
+          onChange={newValue => handleChange(newValue, index)}
+          onBackspace={() => focusPrev(index)}
+          onSubmitEditing={() => focusNext(index)}
+        />
+      ))}
+    </View>
   );
 };
 

@@ -16,14 +16,21 @@ import Agree from './components/Agree';
 import GetCodeButton from './components/Button';
 import LoginWith from './components/LoginWith';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {Mobile, resetStatus, sendCodeAsync, status} from './slice';
+import {
+  Mobile,
+  resetStatus,
+  scene,
+  sendCodeAsync,
+  setScene,
+  status,
+} from './store/slice';
 import {isNumeric} from '../../utils/validation';
 import {showError} from '../../utils/notification';
-import Loading from '../../components/Loading';
 import {store} from '../../stores/store';
 import MobileNumber from './components/MobileNumber';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import Loading from '../../components/Loading';
 
 export default () => {
   const insets = useSafeAreaInsets();
@@ -34,14 +41,16 @@ export default () => {
 
   const statusValue = useAppSelector(status);
 
+  const sceneValue = useAppSelector(scene);
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (statusValue === 'success') {
+    if (statusValue === 'success' && sceneValue === 'login') {
       dispatch(resetStatus());
 
       navigation.push('VerificationCode', {mobile});
-    } else if (statusValue === 'failed') {
+    } else if (statusValue === 'failed' && sceneValue === 'login') {
       const {error} = store.getState().login;
 
       showError(error);
@@ -66,6 +75,8 @@ export default () => {
       return;
     }
 
+    dispatch(setScene('login'));
+
     dispatch(sendCodeAsync(mobile));
   };
 
@@ -78,28 +89,26 @@ export default () => {
   };
 
   return (
-    <>
-      <Loading visible={statusValue === 'loading'} />
+    <ScrollView style={[styles.root, statusBarStyle]}>
+      <Loading visible={statusValue === 'loading' && sceneValue === 'login'} />
 
-      <ScrollView style={[styles.root, statusBarStyle]}>
-        <Text style={styles.titleTxt}>{WELCOME}</Text>
+      <Text style={styles.titleTxt}>{WELCOME}</Text>
 
-        <Text style={styles.descTxt}>{WELCOME_MESSAGE}</Text>
+      <Text style={styles.descTxt}>{WELCOME_MESSAGE}</Text>
 
-        <MobileNumber
-          style={styles.mobileNumber}
-          onChangeText={handleChangeText}
-          input={mobile}
-          onSubmitEditing={handlePress}
-        />
+      <MobileNumber
+        style={styles.mobileNumber}
+        onChangeText={handleChangeText}
+        input={mobile}
+        onSubmitEditing={handlePress}
+      />
 
-        <Agree style={styles.agree} />
+      <Agree style={styles.agree} />
 
-        <GetCodeButton style={styles.getCodeBtn} onPress={handlePress} />
+      <GetCodeButton style={styles.getCodeBtn} onPress={handlePress} />
 
-        <LoginWith style={styles.loginWith} />
-      </ScrollView>
-    </>
+      <LoginWith style={styles.loginWith} />
+    </ScrollView>
   );
 };
 
