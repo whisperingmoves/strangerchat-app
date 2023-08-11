@@ -3,7 +3,7 @@ import {StatusBar, useColorScheme} from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
@@ -11,6 +11,7 @@ import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 import Login from './src/modules/login/Login';
+import VerificationCode from './src/modules/verificationCode/VerificationCode';
 
 const Stack = createStackNavigator();
 
@@ -40,6 +41,15 @@ function App(): Element {
             component={Login}
             options={{
               headerShown: false,
+            }}
+          />
+
+          <Stack.Screen
+            name="VerificationCode"
+            component={VerificationCode}
+            options={{
+              headerShown: false,
+              ...TransitionPresets.SlideFromRightIOS,
             }}
           />
         </Stack.Navigator>

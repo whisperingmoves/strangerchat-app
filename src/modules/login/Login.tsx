@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, ScrollView, StyleSheet, Text} from 'react-native';
+import {ScrollView, StyleSheet, Text} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
@@ -16,24 +16,21 @@ import Agree from './components/Agree';
 import GetCodeButton from './components/Button';
 import LoginWith from './components/LoginWith';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {
-  Mobile as MobileType,
-  resetStatus,
-  sendSMSVerificationCodeAsync,
-  status,
-} from './slice';
+import {Mobile, resetStatus, sendCodeAsync, status} from './slice';
 import {isNumeric} from '../../utils/validation';
 import {showError} from '../../utils/notification';
 import Loading from '../../components/Loading';
 import {store} from '../../stores/store';
 import MobileNumber from './components/MobileNumber';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 export default () => {
   const insets = useSafeAreaInsets();
 
-  // const navigation = useNavigation<StackNavigationProp<any>>();
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
-  const [mobile, setMobile] = useState<MobileType>('');
+  const [mobile, setMobile] = useState<Mobile>('');
 
   const statusValue = useAppSelector(status);
 
@@ -43,8 +40,7 @@ export default () => {
     if (statusValue === 'success') {
       dispatch(resetStatus());
 
-      Alert.alert('success');
-      // navigation.push('VerificationCode', {mobile});
+      navigation.push('VerificationCode', {mobile});
     } else if (statusValue === 'failed') {
       const {error} = store.getState().login;
 
@@ -70,7 +66,7 @@ export default () => {
       return;
     }
 
-    dispatch(sendSMSVerificationCodeAsync(mobile));
+    dispatch(sendCodeAsync(mobile));
   };
 
   const handleChangeText = (text: string) => {

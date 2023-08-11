@@ -1,6 +1,5 @@
 import React from 'react';
 import {AppRegistry, Platform, UIManager} from 'react-native';
-import Config from 'react-native-config';
 import {Provider} from 'react-redux';
 import App from './App';
 import {name as appName} from './app.json';
@@ -9,8 +8,6 @@ import ErrorBoundary from './src/components/ErrorBoundary';
 import {persistor, store} from './src/stores/store';
 import {PersistGate} from 'redux-persist/integration/react';
 import {ActionSheetProvider} from '@expo/react-native-action-sheet';
-
-console.log(Config);
 
 // 普通 JavaScript 报错的收集
 const defaultHandler =

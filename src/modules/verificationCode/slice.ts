@@ -1,33 +1,37 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 import {RootState} from '../../stores/store';
-import {sendCode} from './api';
-
-export type Mobile = string;
+import {verifyCode} from './api';
+import {
+  VerifyCodeRequest,
+  VerifyCodeResponse,
+} from '../../apis/verification/verifyCode';
 
 export type Error = string;
 
 export type Status = 'idle' | 'loading' | 'failed' | 'success';
 
 export interface State {
+  payload: VerifyCodeResponse | undefined;
   error: Error;
   status: Status;
 }
 
 const initialState: State = {
+  payload: undefined,
   error: '',
   status: 'idle',
 };
 
-export const sendCodeAsync = createAsyncThunk<void, string>(
-  'login/sendCode',
-  async mobile => {
-    await sendCode(mobile);
-  },
-);
+export const verifyCodeAsync = createAsyncThunk<
+  VerifyCodeResponse,
+  VerifyCodeRequest
+>('verificationCode/verifyCode', async request => {
+  return await verifyCode(request);
+});
 
 export const slice = createSlice({
-  name: 'login',
+  name: 'verificationCode',
 
   initialState,
 
@@ -39,15 +43,17 @@ export const slice = createSlice({
 
   extraReducers: builder => {
     builder
-      .addCase(sendCodeAsync.pending, state => {
+      .addCase(verifyCodeAsync.pending, state => {
         state.status = 'loading';
       })
 
-      .addCase(sendCodeAsync.fulfilled, state => {
+      .addCase(verifyCodeAsync.fulfilled, (state, action) => {
         state.status = 'success';
+
+        state.payload = action.payload;
       })
 
-      .addCase(sendCodeAsync.rejected, (state, action) => {
+      .addCase(verifyCodeAsync.rejected, (state, action) => {
         state.status = 'failed';
 
         state.error = action.error.message || '';
@@ -57,6 +63,6 @@ export const slice = createSlice({
 
 export const {resetStatus} = slice.actions;
 
-export const status = (state: RootState) => state.login.status;
+export const status = (state: RootState) => state.verificationCode.status;
 
 export default slice.reducer;

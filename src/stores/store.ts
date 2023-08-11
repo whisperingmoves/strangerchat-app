@@ -17,6 +17,7 @@ import {
 } from 'redux-persist/es/constants';
 // import {createBlacklistFilter} from 'redux-persist-transform-filter';
 import loginReducer from '../modules/login/slice';
+import verificationCodeReducer from '../modules/verificationCode/slice';
 
 export const LOG_OUT = 'LOG_OUT';
 
@@ -31,6 +32,7 @@ const persistConfig = {
 
 const appReducer = combineReducers({
   login: loginReducer,
+  verificationCode: verificationCodeReducer,
 });
 
 const rootReducer = (state: any, action: any) => {
