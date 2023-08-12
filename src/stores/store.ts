@@ -18,6 +18,7 @@ import {
 import loginReducer from '../modules/login/store/slice';
 import verificationCodeReducer from '../modules/verificationCode/store/slice';
 import genderReducer from '../modules/gender/store/slice';
+import birthdayReducer from '../modules/birthday/store/slice';
 
 export const LOG_OUT = 'LOG_OUT';
 
@@ -34,6 +35,7 @@ const appReducer = combineReducers({
   login: loginReducer,
   verificationCode: verificationCodeReducer,
   gender: genderReducer,
+  birthday: birthdayReducer,
 });
 
 const rootReducer = (state: any, action: any) => {

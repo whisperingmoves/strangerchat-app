@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Alert,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
@@ -16,6 +9,8 @@ import icon_female from '../../../assets/icon_female.png';
 import icon_male from '../../../assets/icon_male.png';
 import {Mobile} from '../../login/store/slice';
 import {Gender, GENDER_MAP} from '../store/slice';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 type Props = {
   style: StyleProp<ViewStyle>;
@@ -23,15 +18,14 @@ type Props = {
 };
 
 export default (props: Props) => {
-  // const navigation = useNavigation<StackNavigationProp<any>>();
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   const handlePress = (gender: Gender) => {
     return () => {
-      Alert.alert(gender);
-      // navigation.push('Birthday', {
-      //   gender,
-      //   mobile: props.mobile,
-      // });
+      navigation.push('Birthday', {
+        gender,
+        mobile: props.mobile,
+      });
     };
   };
 

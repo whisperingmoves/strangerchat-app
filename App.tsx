@@ -13,6 +13,7 @@ import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 import Login from './src/modules/login/Login';
 import VerificationCode from './src/modules/verificationCode/VerificationCode';
 import Gender from './src/modules/gender/Gender';
+import Birthday from './src/modules/birthday/Birthday';
 
 const Stack = createStackNavigator();
 
@@ -57,6 +58,15 @@ function App(): Element {
           <Stack.Screen
             name="Gender"
             component={Gender}
+            options={{
+              headerShown: false,
+              ...TransitionPresets.SlideFromRightIOS,
+            }}
+          />
+
+          <Stack.Screen
+            name="Birthday"
+            component={Birthday}
             options={{
               headerShown: false,
               ...TransitionPresets.SlideFromRightIOS,
