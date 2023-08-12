@@ -2,22 +2,26 @@ import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import {RootState} from '../../../stores/store';
 import {sendCode} from './api';
+import {GeoPosition} from 'react-native-geolocation-service';
+import {getLocation} from '../../../utils/geolocation';
 
 export type Mobile = string;
 
 export type Error = string;
 
-export type Scene = 'login' | 'verificationCode' | undefined;
+export type Scene = 'login' | 'getLocation' | 'verificationCode' | undefined;
 
 export type Status = 'idle' | 'loading' | 'failed' | 'success';
 
 export interface State {
+  position: GeoPosition | undefined;
   error: Error;
   scene: Scene;
   status: Status;
 }
 
 const initialState: State = {
+  position: undefined,
   error: '',
   scene: undefined,
   status: 'idle',
@@ -27,6 +31,13 @@ export const sendCodeAsync = createAsyncThunk<void, string>(
   'login/sendCode',
   async mobile => {
     await sendCode(mobile);
+  },
+);
+
+export const getLocationAsync = createAsyncThunk<GeoPosition | undefined, void>(
+  'login/getLocation',
+  async () => {
+    return await getLocation();
   },
 );
 
@@ -56,6 +67,21 @@ export const slice = createSlice({
       })
 
       .addCase(sendCodeAsync.rejected, (state, action) => {
+        state.status = 'failed';
+
+        state.error = action.error.message || '';
+      })
+      .addCase(getLocationAsync.pending, state => {
+        state.status = 'loading';
+      })
+
+      .addCase(getLocationAsync.fulfilled, (state, action) => {
+        state.status = 'success';
+
+        state.position = action.payload;
+      })
+
+      .addCase(getLocationAsync.rejected, (state, action) => {
         state.status = 'failed';
 
         state.error = action.error.message || '';

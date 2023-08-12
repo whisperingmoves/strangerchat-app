@@ -13,12 +13,16 @@ import {store} from '../../../stores/store';
 import {showError} from '../../../utils/notification';
 import {Mobile} from '../../login/store/slice';
 import {resetStatus, status, verifyCodeAsync} from '../store/slice';
-import {UserNotFoundErrorMessage} from '../../../apis/verification/verifyCode';
+import {
+  UserNotFoundErrorMessage,
+  VerifyCodeRequest,
+} from '../../../apis/verification/verifyCode';
 import {BAD_REQUEST} from '../../../constants/api/Config';
 import {CODE_ERROR} from '../../../constants/verificationCode/Config';
 import Loading from '../../../components/Loading';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {GeoPosition} from 'react-native-geolocation-service';
 
 type Props = {
   style: StyleProp<ViewStyle>;
@@ -117,12 +121,19 @@ export default (props: Props) => {
       values.filter(item => item !== '').length === 6 &&
       statusValue !== 'loading'
     ) {
-      dispatch(
-        verifyCodeAsync({
-          mobile: props.mobile,
-          code: values.join(''),
-        }),
-      );
+      const params: VerifyCodeRequest = {
+        mobile: props.mobile,
+        code: values.join(''),
+      };
+
+      const position: GeoPosition | undefined = store.getState().login.position;
+
+      if (position) {
+        params.longitude = position.coords.longitude;
+        params.latitude = position.coords.latitude;
+      }
+
+      dispatch(verifyCodeAsync(params));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values]);

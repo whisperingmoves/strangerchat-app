@@ -17,6 +17,7 @@ import GetCodeButton from './components/Button';
 import LoginWith from './components/LoginWith';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {
+  getLocationAsync,
   Mobile,
   resetStatus,
   scene,
@@ -49,8 +50,19 @@ export default () => {
     if (statusValue === 'success' && sceneValue === 'login') {
       dispatch(resetStatus());
 
+      dispatch(setScene('getLocation'));
+
+      dispatch(getLocationAsync());
+    } else if (statusValue === 'success' && sceneValue === 'getLocation') {
+      dispatch(resetStatus());
+
       navigation.push('VerificationCode', {mobile});
-    } else if (statusValue === 'failed' && sceneValue === 'login') {
+    } else if (
+      statusValue === 'failed' &&
+      (sceneValue === 'login' || sceneValue === 'getLocation')
+    ) {
+      dispatch(resetStatus());
+
       const {error} = store.getState().login;
 
       showError(error);
@@ -90,7 +102,12 @@ export default () => {
 
   return (
     <ScrollView style={[styles.root, statusBarStyle]}>
-      <Loading visible={statusValue === 'loading' && sceneValue === 'login'} />
+      <Loading
+        visible={
+          statusValue === 'loading' &&
+          (sceneValue === 'login' || sceneValue === 'getLocation')
+        }
+      />
 
       <Text style={styles.titleTxt}>{WELCOME}</Text>
 
