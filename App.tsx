@@ -13,8 +13,10 @@ import Avatar from './src/modules/avatar/Avatar';
 import {Mobile} from './src/modules/login/store/slice';
 import {Gender as GenderType} from './src/modules/gender/store/slice';
 import {Birthday as BirthdayType} from './src/modules/birthday/store/slice';
+import Splash from './src/modules/splash/Splash';
 
 export type RootStackParamList = {
+  Splash: undefined;
   Login: undefined;
   VerificationCode: {mobile: Mobile};
   Gender: {mobile: Mobile};
@@ -35,15 +37,24 @@ function App(): Element {
 
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Login"
+          initialRouteName="Splash"
           screenOptions={{
             cardStyle: {elevation: 1},
           }}>
+          <Stack.Screen
+            name="Splash"
+            component={Splash}
+            options={{
+              headerShown: false,
+            }}
+          />
+
           <Stack.Screen
             name="Login"
             component={Login}
             options={{
               headerShown: false,
+              ...TransitionPresets.ModalPresentationIOS,
             }}
           />
 

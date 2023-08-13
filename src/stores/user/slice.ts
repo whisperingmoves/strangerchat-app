@@ -96,4 +96,6 @@ export const status = (state: RootState) => state.user.status;
 
 export const scene = (state: RootState) => state.user.scene;
 
+export const userId = (state: RootState) => state.user.userId;
+
 export default slice.reducer;
