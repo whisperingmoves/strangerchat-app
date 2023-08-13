@@ -17,6 +17,7 @@ import birthdayReducer from '../modules/birthday/store/slice';
 import avatarReducer from '../modules/avatar/store/slice';
 import userReducer from '../stores/user/slice';
 import navigationBarReducer from '../modules/navigationBar/store/slice';
+import homeReducer from '../modules/home/store/slice';
 
 export const LOG_OUT = 'LOG_OUT';
 
@@ -36,6 +37,7 @@ const appReducer = combineReducers({
   avatar: avatarReducer,
   user: userReducer,
   navigationBar: navigationBarReducer,
+  home: homeReducer,
 });
 
 const rootReducer = (state: any, action: any) => {

@@ -11,7 +11,6 @@ export const executeCheckin = async (
   const response = await axiosInstance.post('/users/checkin/check', null, {
     headers: new AxiosHeaders({
       Authorization: `Bearer ${token}`,
-      'Content-Type': 'multipart/form-data',
     }),
   });
 

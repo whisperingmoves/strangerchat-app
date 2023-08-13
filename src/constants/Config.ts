@@ -19,3 +19,7 @@ export const TAKE_PHOTO = 'Take a photo';
 export const SELECT_PHOTO = 'Select photo';
 
 export const CHAT = 'Chat';
+
+export const FOLLOWING = 'Following';
+
+export const FOLLOW = 'Follow';
