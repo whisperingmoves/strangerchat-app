@@ -44,6 +44,7 @@ import {
   resetStatus as resetUserStatus,
   scene,
   setScene,
+  setUser,
   status as userStatus,
 } from '../../stores/user/slice';
 import {GeoPosition} from 'react-native-geolocation-service';
@@ -102,12 +103,34 @@ export default (props: Props) => {
     if (userStatusValue === 'success') {
       dispatch(resetUserStatus());
 
+      dispatch(
+        setUser({
+          mobile,
+          gender,
+          birthday,
+          avatar:
+            selectedIndex === 8
+              ? avatarUri
+              : Image.resolveAssetSource(AVATAR_LIST[selectedIndex]).uri,
+        }),
+      );
+
       // navigation.reset({
       //   index: 0,
       //   routes: [{name: 'NavigationBar'}],
       // });
 
-      Alert.alert(JSON.stringify({gender, mobile, birthday}));
+      Alert.alert(
+        JSON.stringify({
+          gender,
+          mobile,
+          birthday,
+          avatar:
+            selectedIndex === 8
+              ? avatarUri
+              : Image.resolveAssetSource(AVATAR_LIST[selectedIndex]).uri,
+        }),
+      );
 
       return;
     }

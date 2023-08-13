@@ -23,6 +23,7 @@ import Loading from '../../../components/Loading';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {GeoPosition} from 'react-native-geolocation-service';
+import {setUser} from '../../../stores/user/slice';
 
 type Props = {
   style: StyleProp<ViewStyle>;
@@ -50,6 +51,13 @@ export default (props: Props) => {
   useEffect(() => {
     if (statusValue === 'success') {
       dispatch(resetStatus());
+
+      dispatch(
+        setUser({
+          ...store.getState().verificationCode.payload,
+          mobile: props.mobile,
+        }),
+      );
 
       // navigation.reset({
       //   index: 0,
