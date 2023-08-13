@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, ScrollView, StyleSheet, Text} from 'react-native';
+import {Alert, Image, ScrollView, StyleSheet, Text} from 'react-native';
 
 import {Route, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -12,9 +12,16 @@ import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
-import {AVATAR, AVATAR_DESC} from '../../constants/avatar/Config';
+import {
+  AVATAR,
+  AVATAR_CANNOT_BE_EMPTY,
+  AVATAR_DESC,
+} from '../../constants/avatar/Config';
 import NextButton from '../../components/NextButton';
-import AvatarContainer from './components/AvatarContainer';
+import AvatarContainer, {
+  AVATAR_BOY_LIST,
+  AVATAR_GIRL_LIST,
+} from './components/AvatarContainer';
 import {openImagePicker} from '../../utils/image';
 
 import BackHeader from '../../components/BackHeader';
@@ -26,11 +33,20 @@ import {Gender} from '../gender/store/slice';
 import {Birthday} from '../birthday/store/slice';
 import {
   Avatar,
-  resetStatus,
+  resetStatus as resetAvatarStatus,
   status as avatarStatus,
   uploadAvatarAsync,
 } from './store/slice';
 import {showError} from '../../utils/notification';
+import {RegisterUserRequest} from '../../apis/user/registerUser';
+import {
+  registerUserAsync,
+  resetStatus as resetUserStatus,
+  scene,
+  setScene,
+  status as userStatus,
+} from '../../stores/user/slice';
+import {GeoPosition} from 'react-native-geolocation-service';
 
 type Props = {
   route: Route<string, {gender: Gender; mobile: Mobile; birthday: Birthday}>;
@@ -49,6 +65,8 @@ export default (props: Props) => {
 
   const insets = useSafeAreaInsets();
 
+  const AVATAR_LIST = gender === 'male' ? AVATAR_BOY_LIST : AVATAR_GIRL_LIST;
+
   useEffect(() => {
     if (selectedIndex === 8) {
       handleImagePicker();
@@ -58,11 +76,31 @@ export default (props: Props) => {
 
   const avatarStatusValue = useAppSelector(avatarStatus);
 
+  const userStatusValue = useAppSelector(userStatus);
+
+  const sceneValue = useAppSelector(scene);
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (avatarStatusValue === 'success') {
-      dispatch(resetStatus());
+      dispatch(resetAvatarStatus());
+
+      return;
+    }
+
+    if (avatarStatusValue === 'failed') {
+      dispatch(resetAvatarStatus());
+
+      const {error} = store.getState().avatar;
+
+      showError(error);
+
+      return;
+    }
+
+    if (userStatusValue === 'success') {
+      dispatch(resetUserStatus());
 
       // navigation.reset({
       //   index: 0,
@@ -74,24 +112,49 @@ export default (props: Props) => {
       return;
     }
 
-    if (avatarStatusValue === 'failed') {
-      dispatch(resetStatus());
+    if (userStatusValue === 'failed') {
+      dispatch(resetUserStatus());
 
-      const {error} = store.getState().avatar;
+      const {error} = store.getState().user;
 
       showError(error);
 
       return;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [avatarStatusValue]);
+  }, [avatarStatusValue, userStatusValue]);
 
   const statusBarStyle: StyleProp<ViewStyle> = {
     paddingTop: insets.top,
   };
 
   const handleNextPress = () => {
-    Alert.alert(JSON.stringify({gender, mobile, birthday}));
+    if (selectedIndex === 8 && !avatarUri) {
+      showError(AVATAR_CANNOT_BE_EMPTY);
+
+      return;
+    }
+
+    const params: RegisterUserRequest = {
+      mobile,
+      gender,
+      birthday,
+      avatar:
+        selectedIndex === 8
+          ? avatarUri
+          : Image.resolveAssetSource(AVATAR_LIST[selectedIndex]).uri,
+    };
+
+    const position: GeoPosition | undefined = store.getState().login.position;
+
+    if (position) {
+      params.longitude = position.coords.longitude;
+      params.latitude = position.coords.latitude;
+    }
+
+    dispatch(setScene('avatar'));
+
+    dispatch(registerUserAsync(params));
   };
 
   const uploadAvatar = (avatar: Avatar) => {
@@ -113,7 +176,12 @@ export default (props: Props) => {
       style={[styles.root, statusBarStyle]}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.contentContainer}>
-      <Loading visible={avatarStatusValue === 'loading'} />
+      <Loading
+        visible={
+          avatarStatusValue === 'loading' ||
+          (userStatusValue === 'loading' && sceneValue === 'avatar')
+        }
+      />
 
       <BackHeader onPress={handleBackPress} style={styles.backHeader} />
 

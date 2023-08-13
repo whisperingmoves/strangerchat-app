@@ -1,9 +1,4 @@
-import {
-  Action,
-  combineReducers,
-  configureStore,
-  ThunkAction,
-} from '@reduxjs/toolkit';
+import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import {persistReducer, persistStore} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -14,12 +9,13 @@ import {
   PURGE,
   REGISTER,
   REHYDRATE,
-} from 'redux-persist/es/constants'; // import {createBlacklistFilter} from 'redux-persist-transform-filter';
+} from 'redux-persist/es/constants';
 import loginReducer from '../modules/login/store/slice';
 import verificationCodeReducer from '../modules/verificationCode/store/slice';
 import genderReducer from '../modules/gender/store/slice';
 import birthdayReducer from '../modules/birthday/store/slice';
 import avatarReducer from '../modules/avatar/store/slice';
+import userReducer from '../stores/user/slice';
 
 export const LOG_OUT = 'LOG_OUT';
 
@@ -28,8 +24,7 @@ export const STORAGE_KEY = 'strangerchat';
 const persistConfig = {
   key: STORAGE_KEY,
   storage: AsyncStorage,
-  // whitelist: ['user'],
-  // transforms: [createBlacklistFilter('user', ['scene', 'error', 'status'])],
+  whitelist: ['user'],
 };
 
 const appReducer = combineReducers({
@@ -38,6 +33,7 @@ const appReducer = combineReducers({
   gender: genderReducer,
   birthday: birthdayReducer,
   avatar: avatarReducer,
+  user: userReducer,
 });
 
 const rootReducer = (state: any, action: any) => {
@@ -67,9 +63,9 @@ export type RootState = ReturnType<typeof store.getState>;
 
 export type AppDispatch = typeof store.dispatch;
 
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  RootState,
-  unknown,
-  Action<string>
->;
+// export type AppThunk<ReturnType = void> = ThunkAction<
+//   ReturnType,
+//   RootState,
+//   unknown,
+//   Action<string>
+// >;
