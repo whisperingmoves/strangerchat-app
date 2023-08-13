@@ -1,5 +1,5 @@
 import React from 'react';
-import {AppRegistry, Platform, UIManager} from 'react-native';
+import {AppRegistry, LogBox, Platform, UIManager} from 'react-native';
 import {Provider} from 'react-redux';
 import App from './App';
 import {name as appName} from './app.json';
@@ -23,7 +23,7 @@ const customRejectionTrackingOptions = {
   onUnhandled: (id, error) => {
     monitorError(error).then();
   },
-  onHandled: id => {},
+  // onHandled: id => {},
 };
 if (global?.HermesInternal?.hasPromise?.()) {
   if (__DEV__) {
@@ -44,6 +44,11 @@ if (Platform.OS === 'android') {
     UIManager.setLayoutAnimationEnabledExperimental(true);
   }
 }
+
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
+
 AppRegistry.registerComponent(appName, () => () => (
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>

@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 
-export type Birthday = Date;
+export type Birthday = string;
 
 export interface State {}
 

@@ -5,8 +5,8 @@ import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 import {ImageSourcePropType} from 'react-native/Libraries/Image/Image';
 
-import icon_female from '../../../assets/icon_female.png';
-import icon_male from '../../../assets/icon_male.png';
+import icon_female from '../../../assets/images/icons/icon_female.png';
+import icon_male from '../../../assets/images/icons/icon_male.png';
 import {Mobile} from '../../login/store/slice';
 import {Gender, GENDER_MAP} from '../store/slice';
 import {useNavigation} from '@react-navigation/native';

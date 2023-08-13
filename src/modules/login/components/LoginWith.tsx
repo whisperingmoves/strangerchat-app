@@ -7,9 +7,9 @@ import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 import {LOGIN_WITH} from '../../../constants/login/Config';
 
-import icon_facebook from '../../../assets/icon_facebook.png';
-import icon_google from '../../../assets/icon_google.png';
-import icon_twitter from '../../../assets/icon_twitter.png';
+import icon_facebook from '../../../assets/images/icons/icon_facebook.png';
+import icon_google from '../../../assets/images/icons/icon_google.png';
+import icon_twitter from '../../../assets/images/icons/icon_twitter.png';
 
 type Props = {
   style: StyleProp<ViewStyle>;

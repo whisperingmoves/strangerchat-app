@@ -41,6 +41,7 @@
     "react-native-linear-gradient": "^2.8.2",
     "react-native-loading-spinner-overlay": "^3.0.1",
     "react-native-localize": "^3.0.2",
+    "react-native-mime-types": "^2.4.0",
     "react-native-network-info": "^5.2.1",
     "react-native-pager-view": "^6.2.0",
     "react-native-permissions": "^3.8.4",

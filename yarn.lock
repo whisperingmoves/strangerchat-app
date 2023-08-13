@@ -5137,6 +5137,11 @@ micromatch@^4.0.4:
   resolved "https://registry.npmjs.org/mime-db/-/mime-db-1.52.0.tgz"
   integrity sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==
 
+mime-db@~1.37.0:
+  version "1.37.0"
+  resolved "https://registry.npmjs.org/mime-db/-/mime-db-1.37.0.tgz"
+  integrity sha512-R3C4db6bgQhlIhPU48fUtdVmKnflq+hRdad7IyKhtFj06VPNVdk2RhiYL3UjQIlso8L+YxAtFkobT0VK+S/ybg==
+
 mime-types@^2.1.12, mime-types@^2.1.27, mime-types@~2.1.34:
   version "2.1.35"
   resolved "https://registry.npmjs.org/mime-types/-/mime-types-2.1.35.tgz"
@@ -5793,6 +5798,13 @@ react-native-localize@^3.0.2:
   version "3.0.2"
   resolved "https://registry.npmjs.org/react-native-localize/-/react-native-localize-3.0.2.tgz"
   integrity sha512-/l/oE1LVNgIRRhLbhmfFMHiWV0xhUn0A0iz1ytLVRYywL7FTp8Rx2vkJS/q/RpExDvV7yLw2493XZBYIM1dnLQ==
+
+react-native-mime-types@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.npmjs.org/react-native-mime-types/-/react-native-mime-types-2.4.0.tgz"
+  integrity sha512-a7LymNr7yQzrDEhSMPNAy9aIs1OckBpo6G8OkjVQTzaCe0XaSXCXu6KJsu/a4c3HVF9t0FiFSnxsRVEctpPI0g==
+  dependencies:
+    mime-db "~1.37.0"
 
 react-native-network-info@^5.2.1:
   version "5.2.1"

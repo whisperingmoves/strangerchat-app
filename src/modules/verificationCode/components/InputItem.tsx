@@ -5,8 +5,8 @@ import {NativeSyntheticEvent} from 'react-native/Libraries/Types/CoreEventTypes'
 
 import {TextInputKeyPressEventData} from 'react-native/Libraries/Components/TextInput/TextInput';
 
-import icon_selected from '../../../assets/icon_selected.png';
-import icon_unselected from '../../../assets/icon_unselected.png';
+import icon_selected from '../../../assets/images/icons/icon_selected.png';
+import icon_unselected from '../../../assets/images/icons/icon_unselected.png';
 
 import {isNumeric} from '../../../utils/validation';
 

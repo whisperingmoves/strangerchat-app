@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Alert, ScrollView, StyleSheet, Text} from 'react-native';
+import {ScrollView, StyleSheet, Text} from 'react-native';
 
 import {Route, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -15,7 +15,6 @@ import {BIRTHDAY, BIRTHDAY_DESC} from '../../constants/birthday/Config';
 import BackHeader from '../../components/BackHeader';
 import {Gender, GENDER_MAP} from '../gender/store/slice';
 import {Mobile} from '../login/store/slice';
-import {Birthday} from './store/slice';
 
 type Props = {
   route: Route<string, {gender: Gender; mobile: Mobile}>;
@@ -24,7 +23,7 @@ type Props = {
 export default (props: Props) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
-  const [birthday, setBirthday] = useState<Birthday>(new Date());
+  const [birthday, setBirthday] = useState<Date>(new Date());
 
   const insets = useSafeAreaInsets();
 
@@ -35,12 +34,11 @@ export default (props: Props) => {
   const {gender, mobile} = props.route.params;
 
   const handleNextPress = () => {
-    Alert.alert(mobile);
-    // navigation.push('Avatar', {
-    //   gender: gender,
-    //   mobile,
-    //   birthday: moment(birthday).format('YYYY-MM-DD'),
-    // });
+    navigation.push('Avatar', {
+      gender: gender,
+      mobile,
+      birthday: moment(birthday).format('YYYY-MM-DD'),
+    });
   };
 
   const handleBackPress = () => {

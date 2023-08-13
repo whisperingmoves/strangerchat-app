@@ -5,7 +5,7 @@ import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-import icon_dropdown from '../../../assets/icon_dropdown.png';
+import icon_dropdown from '../../../assets/images/icons/icon_dropdown.png';
 import {MOBILE_NUMBER} from '../../../constants/login/Config';
 
 type Props = {

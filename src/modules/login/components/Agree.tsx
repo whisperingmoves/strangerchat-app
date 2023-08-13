@@ -5,7 +5,7 @@ import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
-import icon_select from '../../../assets/icon_select.png';
+import icon_select from '../../../assets/images/icons/icon_select.png';
 import {
   AGREE_TO_OUR,
   AND,
