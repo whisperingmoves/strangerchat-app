@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Image, ScrollView, StyleSheet, Text} from 'react-native';
+import {Image, ScrollView, StyleSheet, Text} from 'react-native';
 
 import {Route, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -115,22 +115,10 @@ export default (props: Props) => {
         }),
       );
 
-      // navigation.reset({
-      //   index: 0,
-      //   routes: [{name: 'NavigationBar'}],
-      // });
-
-      Alert.alert(
-        JSON.stringify({
-          gender,
-          mobile,
-          birthday,
-          avatar:
-            selectedIndex === 8
-              ? avatarUri
-              : Image.resolveAssetSource(AVATAR_LIST[selectedIndex]).uri,
-        }),
-      );
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'NavigationBar'}],
+      });
 
       return;
     }

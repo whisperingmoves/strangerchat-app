@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Alert, StyleSheet, Text} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
@@ -23,7 +23,10 @@ export default () => {
   useEffect(() => {
     setTimeout(() => {
       if (userIdValue) {
-        Alert.alert('success');
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'NavigationBar'}],
+        });
       } else {
         navigation.replace('Login');
       }

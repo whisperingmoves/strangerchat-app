@@ -17,3 +17,5 @@ export const SETTINGS = 'Settings';
 export const TAKE_PHOTO = 'Take a photo';
 
 export const SELECT_PHOTO = 'Select photo';
+
+export const CHAT = 'Chat';

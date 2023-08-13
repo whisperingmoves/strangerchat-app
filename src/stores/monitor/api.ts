@@ -36,8 +36,6 @@ export const monitorError = async (error: Error) => {
     occurredFunction: getOccurredFunction(error),
   };
 
-  console.debug('monitorError', body);
-
   return await monitorErrorApi(body);
 };
 

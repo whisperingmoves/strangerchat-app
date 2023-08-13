@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Alert, StyleSheet, TextInput, View} from 'react-native';
+import {StyleSheet, TextInput, View} from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
@@ -59,11 +59,10 @@ export default (props: Props) => {
         }),
       );
 
-      // navigation.reset({
-      //   index: 0,
-      //   routes: [{name: 'NavigationBar'}],
-      // });
-      Alert.alert('success');
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'NavigationBar'}],
+      });
 
       return;
     }

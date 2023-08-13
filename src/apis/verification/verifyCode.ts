@@ -13,16 +13,16 @@ export interface VerifyCodeResponse {
   gender: string;
   birthday: string;
   avatar: string;
-  giftsReceived: number;
-  username: string;
-  city: string;
-  followingCount: number;
-  followersCount: number;
-  visitorsCount: number;
-  freeHeatsLeft: number;
-  coinBalance: number;
-  checkedDays: number;
-  lastCheckDate: number;
+  giftsReceived?: number;
+  username?: string;
+  city?: string;
+  followingCount?: number;
+  followersCount?: number;
+  visitorsCount?: number;
+  freeHeatsLeft?: number;
+  coinBalance?: number;
+  checkedDays?: number;
+  lastCheckDate?: number;
 }
 
 export const UserNotFoundErrorMessage = 'User Not Found';

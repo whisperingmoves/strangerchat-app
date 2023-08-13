@@ -98,4 +98,8 @@ export const scene = (state: RootState) => state.user.scene;
 
 export const userId = (state: RootState) => state.user.userId;
 
+export const checkedDays = (state: RootState) => state.user.checkedDays;
+
+export const lastCheckDate = (state: RootState) => state.user.lastCheckDate;
+
 export default slice.reducer;
