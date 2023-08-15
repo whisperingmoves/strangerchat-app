@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import {
-  Alert,
   Image,
   LayoutChangeEvent,
   StyleSheet,
@@ -56,8 +55,7 @@ export default ({state, descriptors, navigation}: BottomTabBarProps) => {
 
         const handlePress = () => {
           if (i === 2) {
-            // navigation.navigate('NewPost');
-            Alert.alert('success');
+            navigation.navigate('NewPost');
           } else {
             navigation.navigate(route.name, {height});
           }

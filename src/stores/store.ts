@@ -18,6 +18,7 @@ import avatarReducer from '../modules/avatar/store/slice';
 import userReducer from '../stores/user/slice';
 import navigationBarReducer from '../modules/navigationBar/store/slice';
 import homeReducer from '../modules/home/store/slice';
+import newPostReducer from '../modules/newPost/store/slice';
 
 export const LOG_OUT = 'LOG_OUT';
 
@@ -26,7 +27,7 @@ export const STORAGE_KEY = 'strangerchat';
 const persistConfig = {
   key: STORAGE_KEY,
   storage: AsyncStorage,
-  whitelist: ['user'],
+  whitelist: ['user', 'newPost'],
 };
 
 const appReducer = combineReducers({
@@ -38,6 +39,7 @@ const appReducer = combineReducers({
   user: userReducer,
   navigationBar: navigationBarReducer,
   home: homeReducer,
+  newPost: newPostReducer,
 });
 
 const rootReducer = (state: any, action: any) => {

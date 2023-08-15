@@ -15,6 +15,7 @@ import {Gender as GenderType} from './src/modules/gender/store/slice';
 import {Birthday as BirthdayType} from './src/modules/birthday/store/slice';
 import Splash from './src/modules/splash/Splash';
 import NavigationBar from './src/modules/navigationBar/NavigationBar';
+import NewPost from './src/modules/newPost/NewPost';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -24,6 +25,7 @@ export type RootStackParamList = {
   Birthday: {gender: GenderType; mobile: Mobile};
   Avatar: {gender: GenderType; mobile: Mobile; birthday: BirthdayType};
   NavigationBar: undefined;
+  NewPost: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -102,6 +104,15 @@ function App(): Element {
             options={{
               headerShown: false,
               ...TransitionPresets.SlideFromRightIOS,
+            }}
+          />
+
+          <Stack.Screen
+            name="NewPost"
+            component={NewPost}
+            options={{
+              headerShown: false,
+              ...TransitionPresets.ModalSlideFromBottomIOS,
             }}
           />
         </Stack.Navigator>

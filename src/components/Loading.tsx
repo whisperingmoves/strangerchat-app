@@ -1,7 +1,6 @@
 import React from 'react';
-import Spinner from 'react-native-loading-spinner-overlay';
 import {StyleSheet} from 'react-native';
-
+import Spinner from 'react-native-loading-spinner-overlay';
 import {LOADING} from '../constants/Config';
 
 type Props = {
