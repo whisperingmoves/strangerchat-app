@@ -13,6 +13,7 @@ import {Avatar} from '../../avatar/store/slice';
 import Relation from './Relation';
 import Info from './Info';
 import {getUsername} from '../helper';
+import {generateFullURL} from '../../helper';
 
 export type Props = {
   relation?: RelationType;
@@ -29,7 +30,11 @@ export default (props: Props) => {
     <TouchableOpacity activeOpacity={0.7}>
       <ImageBackground
         style={styles.root}
-        source={{uri: props.firstImage ? props.firstImage : props.avatar}}
+        source={{
+          uri: props.firstImage
+            ? generateFullURL(props.firstImage)
+            : generateFullURL(props.avatar),
+        }}
         imageStyle={styles.bg}>
         {props.relation && (
           <Relation relation={props.relation} style={styles.relation} />
@@ -56,6 +61,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
+    borderRadius: 10,
   },
   relation: {
     position: 'absolute',

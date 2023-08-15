@@ -16,6 +16,7 @@ import {Distance, UserId, Username} from '../store/slice';
 import {Avatar} from '../../avatar/store/slice';
 import {AWAY_FROM} from '../../../constants/home/Config';
 import {getUsername} from '../helper';
+import {generateFullURL} from '../../helper';
 
 type Props = {
   style: StyleProp<ViewStyle>;
@@ -43,7 +44,10 @@ export default (props: Props) => {
         style={styles.avatarBg}
         imageStyle={styles.avatarBgImg}>
         <TouchableOpacity activeOpacity={0.7}>
-          <Image source={{uri: props.avatar}} style={styles.avatar} />
+          <Image
+            source={{uri: generateFullURL(props.avatar)}}
+            style={styles.avatar}
+          />
         </TouchableOpacity>
       </ImageBackground>
     </View>
