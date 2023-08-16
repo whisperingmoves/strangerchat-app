@@ -18,6 +18,7 @@ import icon_checked from '../../../assets/images/icons/icon_checked.png';
 import icon_dialog from '../../../assets/images/icons/icon_dialog.png';
 import {UPLOAD} from '../../../constants/avatar/Config';
 import {Avatar} from '../store/slice';
+import {generateFullURL} from '../../helper';
 
 type Props = {
   avatar: ImageSourcePropType;
@@ -52,7 +53,7 @@ export default (props: Props) => {
         ]}>
         {props.index === 8 && (
           <ImageBackground
-            source={avatarUri ? {uri: avatarUri} : icon_dialog}
+            source={avatarUri ? {uri: generateFullURL(avatarUri)} : icon_dialog}
             style={avatarUri ? styles.uploadedBg : styles.uploadBg}
             imageStyle={styles.uploadBgImage}>
             {!avatarUri && <Text style={styles.uploadTxt}>{UPLOAD}</Text>}

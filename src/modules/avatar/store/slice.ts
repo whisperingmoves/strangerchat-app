@@ -10,14 +10,13 @@ export type Error = string;
 
 export type Status = 'idle' | 'loading' | 'failed' | 'success';
 
-export interface State {
-  payload: UploadAvatarResponse | undefined;
+export interface State extends UploadAvatarResponse {
   error: Error;
   status: Status;
 }
 
 const initialState: State = {
-  payload: undefined,
+  url: '',
   error: '',
   status: 'idle',
 };
@@ -49,7 +48,7 @@ export const slice = createSlice({
       .addCase(uploadAvatarAsync.fulfilled, (state, action) => {
         state.status = 'success';
 
-        state.payload = action.payload;
+        state.url = action.payload.url;
       })
 
       .addCase(uploadAvatarAsync.rejected, (state, action) => {
@@ -63,5 +62,7 @@ export const slice = createSlice({
 export const {resetStatus} = slice.actions;
 
 export const status = (state: RootState) => state.avatar.status;
+
+export const url = (state: RootState) => state.avatar.url;
 
 export default slice.reducer;

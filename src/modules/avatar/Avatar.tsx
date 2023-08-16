@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Image, ScrollView, StyleSheet, Text} from 'react-native';
+import {ScrollView, StyleSheet, Text} from 'react-native';
 
 import {Route, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -18,16 +18,12 @@ import {
   AVATAR_DESC,
 } from '../../constants/avatar/Config';
 import NextButton from '../../components/NextButton';
-import AvatarContainer, {
-  AVATAR_BOY_LIST,
-  AVATAR_GIRL_LIST,
-} from './components/AvatarContainer';
+import AvatarContainer from './components/AvatarContainer';
 import {openImagePicker} from '../../utils/image';
 
 import BackHeader from '../../components/BackHeader';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {store} from '../../stores/store';
-import Loading from '../../components/Loading';
 import {Mobile} from '../login/store/slice';
 import {Gender} from '../gender/store/slice';
 import {Birthday} from '../birthday/store/slice';
@@ -36,18 +32,21 @@ import {
   resetStatus as resetAvatarStatus,
   status as avatarStatus,
   uploadAvatarAsync,
+  url as avatarUrl,
 } from './store/slice';
 import {showError} from '../../utils/notification';
 import {RegisterUserRequest} from '../../apis/user/registerUser';
 import {
   registerUserAsync,
   resetStatus as resetUserStatus,
-  scene,
   setScene,
   setUser,
   status as userStatus,
 } from '../../stores/user/slice';
 import {GeoPosition} from 'react-native-geolocation-service';
+import {checkFileExistence} from '../../utils/file';
+import {COULD_NOT_FIND_IMAGE} from '../../constants/Config';
+import {generateLocalAvatar} from '../helper';
 
 type Props = {
   route: Route<string, {gender: Gender; mobile: Mobile; birthday: Birthday}>;
@@ -58,15 +57,13 @@ export default (props: Props) => {
 
   const navigation = useNavigation<StackNavigationProp<any>>();
 
-  const [avatarUri, setAvatarUri] = useState('');
+  const avatarUri = useAppSelector(avatarUrl);
 
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
   const {showActionSheetWithOptions} = useActionSheet();
 
   const insets = useSafeAreaInsets();
-
-  const AVATAR_LIST = gender === 'male' ? AVATAR_BOY_LIST : AVATAR_GIRL_LIST;
 
   useEffect(() => {
     if (selectedIndex === 8) {
@@ -78,8 +75,6 @@ export default (props: Props) => {
   const avatarStatusValue = useAppSelector(avatarStatus);
 
   const userStatusValue = useAppSelector(userStatus);
-
-  const sceneValue = useAppSelector(scene);
 
   const dispatch = useAppDispatch();
 
@@ -111,7 +106,7 @@ export default (props: Props) => {
           avatar:
             selectedIndex === 8
               ? avatarUri
-              : Image.resolveAssetSource(AVATAR_LIST[selectedIndex]).uri,
+              : generateLocalAvatar(gender, selectedIndex),
         }),
       );
 
@@ -153,7 +148,7 @@ export default (props: Props) => {
       avatar:
         selectedIndex === 8
           ? avatarUri
-          : Image.resolveAssetSource(AVATAR_LIST[selectedIndex]).uri,
+          : generateLocalAvatar(gender, selectedIndex),
     };
 
     const position: GeoPosition | undefined = store.getState().login.position;
@@ -169,9 +164,15 @@ export default (props: Props) => {
   };
 
   const uploadAvatar = (avatar: Avatar) => {
-    setAvatarUri(avatar);
-
-    dispatch(uploadAvatarAsync(avatar));
+    checkFileExistence(avatar)
+      .then(result => {
+        if (result) {
+          dispatch(uploadAvatarAsync(avatar));
+        } else {
+          showError(COULD_NOT_FIND_IMAGE);
+        }
+      })
+      .catch(() => showError(COULD_NOT_FIND_IMAGE));
   };
 
   const handleImagePicker = () => {
@@ -187,13 +188,6 @@ export default (props: Props) => {
       style={[styles.root, statusBarStyle]}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.contentContainer}>
-      <Loading
-        visible={
-          avatarStatusValue === 'loading' ||
-          (userStatusValue === 'loading' && sceneValue === 'avatar')
-        }
-      />
-
       <BackHeader onPress={handleBackPress} style={styles.backHeader} />
 
       <Text style={styles.titleTxt}>{AVATAR}</Text>

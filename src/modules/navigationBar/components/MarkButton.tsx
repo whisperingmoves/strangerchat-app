@@ -7,7 +7,6 @@ import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {MARK_NOW} from '../../../constants/navigationBar/Config';
 import {executeCheckinAsync, resetStatus, status} from '../store/slice';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
-import Loading from '../../../components/Loading';
 import {store} from '../../../stores/store';
 import {showError} from '../../../utils/notification';
 import {lastCheckDate, setUser} from '../../../stores/user/slice';
@@ -64,8 +63,6 @@ export default (props: Props) => {
       activeOpacity={0.7}
       onPress={handlePress}
       disabled={todayIsCheckedIn}>
-      <Loading visible={statusValue === 'loading'} />
-
       <LinearGradient
         colors={['#D988FF', '#8B5CFF']}
         start={{x: 0, y: 0}}

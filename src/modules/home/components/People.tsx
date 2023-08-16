@@ -34,7 +34,7 @@ export default (props: Props) => {
           {props.username ? props.username : getUsername(props.userId)}
         </Text>
 
-        {props.distance && (
+        {(props.distance || props.distance === 0) && (
           <Text style={styles.txt}>{AWAY_FROM(`${props.distance} km`)}</Text>
         )}
       </View>

@@ -19,7 +19,6 @@ import {
 } from '../../../apis/verification/verifyCode';
 import {BAD_REQUEST} from '../../../constants/api/Config';
 import {CODE_ERROR} from '../../../constants/verificationCode/Config';
-import Loading from '../../../components/Loading';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {GeoPosition} from 'react-native-geolocation-service';
@@ -155,8 +154,6 @@ export default (props: Props) => {
 
   return (
     <View style={[styles.root, props.style]}>
-      <Loading visible={statusValue === 'loading'} />
-
       {inputRefList.map((input, index) => (
         <InputItem
           key={index}

@@ -16,19 +16,17 @@ export default () => {
   const [spinValue] = useState(new Animated.Value(0));
 
   useEffect(() => {
-    spin();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const spin = () => {
     spinValue.setValue(0);
-    Animated.timing(spinValue, {
-      toValue: 1,
-      duration: 3000,
-      easing: Easing.inOut(Easing.ease),
-      useNativeDriver: true,
-    }).start(() => spin());
-  };
+
+    Animated.loop(
+      Animated.timing(spinValue, {
+        toValue: 1,
+        duration: 3000,
+        easing: Easing.inOut(Easing.ease),
+        useNativeDriver: true,
+      }),
+    ).start();
+  }, [spinValue]);
 
   const spinInterpolate = spinValue.interpolate({
     inputRange: [0, 1],

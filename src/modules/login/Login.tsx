@@ -31,7 +31,6 @@ import {store} from '../../stores/store';
 import MobileNumber from './components/MobileNumber';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import Loading from '../../components/Loading';
 
 export default () => {
   const insets = useSafeAreaInsets();
@@ -102,13 +101,6 @@ export default () => {
 
   return (
     <ScrollView style={[styles.root, statusBarStyle]}>
-      <Loading
-        visible={
-          statusValue === 'loading' &&
-          (sceneValue === 'login' || sceneValue === 'getLocation')
-        }
-      />
-
       <Text style={styles.titleTxt}>{WELCOME}</Text>
 
       <Text style={styles.descTxt}>{WELCOME_MESSAGE}</Text>

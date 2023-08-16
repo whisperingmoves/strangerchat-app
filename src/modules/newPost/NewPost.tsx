@@ -28,7 +28,6 @@ import {
 } from './store/slice';
 import {showError} from '../../utils/notification';
 import {store} from '../../stores/store';
-import Loading from '../../components/Loading';
 
 export default () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -104,10 +103,6 @@ export default () => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={[styles.root, statusBarStyle]}>
-        <Loading
-          visible={statusValue === 'loading' && sceneValue === 'newPost'}
-        />
-
         <Header onClose={handleClose} onPublish={handlePublish} />
 
         <Input ref={inputRef} style={styles.input} />

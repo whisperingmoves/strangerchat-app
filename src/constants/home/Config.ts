@@ -39,3 +39,5 @@ export const YEARS_AGO = (years: number) => `${years} years ago`;
 export const USER = 'user';
 
 export const UPLOAD_UP_TO_MAX_IMAGES = 'Upload up to 9 images';
+
+export const UNKNOWN = 'unknown';
