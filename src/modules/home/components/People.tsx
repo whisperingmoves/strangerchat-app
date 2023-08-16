@@ -91,5 +91,6 @@ const styles = StyleSheet.create({
     height: 34,
     borderRadius: 17,
     resizeMode: 'cover',
+    marginTop: -3,
   },
 });
