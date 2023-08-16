@@ -10,12 +10,14 @@ import {
 import {copy, copyWithoutEmpty} from '../../../utils/object';
 import {UploadPostResponse} from '../../../apis/resource/uploadPost';
 import {UPLOAD_UP_TO_MAX_IMAGES} from '../../../constants/home/Config';
+import {GeoPosition} from 'react-native-geolocation-service';
+import {getLocation} from '../../../utils/geolocation';
 
 export type Photo = string;
 
 export type Error = string;
 
-export type Scene = 'newPost' | 'uploadPost' | undefined;
+export type Scene = 'newPost' | 'uploadPost' | 'getLocation' | undefined;
 
 export type Status = 'idle' | 'loading' | 'failed' | 'success';
 
@@ -65,6 +67,13 @@ export const uploadPostAsync = createAsyncThunk<UploadPostResponse, string>(
   'newPost/uploadPost',
   async photo => {
     return await uploadPost(photo);
+  },
+);
+
+export const getLocationAsync = createAsyncThunk<GeoPosition | undefined, void>(
+  'newPost/getLocation',
+  async () => {
+    return await getLocation();
   },
 );
 
@@ -132,6 +141,24 @@ export const slice = createSlice({
       )
 
       .addCase(uploadPostAsync.rejected, (state, action) => {
+        state.status = 'failed';
+
+        state.error = action.error.message || '';
+      })
+
+      .addCase(getLocationAsync.pending, state => {
+        state.status = 'loading';
+      })
+
+      .addCase(getLocationAsync.fulfilled, (state, action) => {
+        state.status = 'success';
+
+        state.longitude = action.payload?.coords.longitude.toString();
+
+        state.latitude = action.payload?.coords.latitude.toString();
+      })
+
+      .addCase(getLocationAsync.rejected, (state, action) => {
         state.status = 'failed';
 
         state.error = action.error.message || '';

@@ -20,6 +20,7 @@ import Input, {InputRef} from './components/Input';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {
   createPostAsync,
+  getLocationAsync,
   resetState,
   resetStatus,
   scene,
@@ -41,6 +42,13 @@ export default () => {
   const sceneValue = useAppSelector(scene);
 
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setScene('getLocation'));
+
+    dispatch(getLocationAsync());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handlePublish = () => {
     dispatch(setScene('newPost'));
@@ -76,6 +84,20 @@ export default () => {
     }
 
     if (statusValue === 'failed' && sceneValue === 'newPost') {
+      dispatch(resetStatus());
+
+      showError(store.getState().newPost.error);
+
+      return;
+    }
+
+    if (statusValue === 'success' && sceneValue === 'getLocation') {
+      dispatch(resetStatus());
+
+      return;
+    }
+
+    if (statusValue === 'failed' && sceneValue === 'getLocation') {
       dispatch(resetStatus());
 
       showError(store.getState().newPost.error);
