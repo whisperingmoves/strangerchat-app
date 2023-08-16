@@ -16,6 +16,8 @@ import {Birthday as BirthdayType} from './src/modules/birthday/store/slice';
 import Splash from './src/modules/splash/Splash';
 import NavigationBar from './src/modules/navigationBar/NavigationBar';
 import NewPost from './src/modules/newPost/NewPost';
+import Loading from './src/components/Loading';
+import useLoading from './src/hooks/useLoading';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -31,6 +33,8 @@ export type RootStackParamList = {
 const Stack = createStackNavigator<RootStackParamList>();
 
 function App(): Element {
+  const loading = useLoading();
+
   return (
     <SafeAreaProvider>
       <StatusBar
@@ -38,6 +42,8 @@ function App(): Element {
         backgroundColor="transparent"
         barStyle="dark-content"
       />
+
+      <Loading visible={loading} />
 
       <NavigationContainer>
         <Stack.Navigator
