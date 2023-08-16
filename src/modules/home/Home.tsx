@@ -49,7 +49,10 @@ export default () => {
 
   return (
     <LinearGradient colors={['#D988FF', '#8B5CFF']} style={styles.root}>
-      <ScrollView showsVerticalScrollIndicator={false} style={statusBarStyle}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={statusBarStyle}
+        bounces={false}>
         <Online />
 
         <OnlineTxt style={styles.onlineTxt} />

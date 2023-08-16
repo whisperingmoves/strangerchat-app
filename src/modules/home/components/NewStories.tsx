@@ -23,7 +23,7 @@ export default (props: Props) => {
 const styles = StyleSheet.create({
   root: {
     width: '100%',
-    height: 266,
+    height: 300,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     backgroundColor: '#FFFFFF',

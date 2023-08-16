@@ -3,6 +3,7 @@ import {Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {Avatar} from '../../avatar/store/slice';
 import {Online} from '../store/slice';
 import OnlineIndicator from '../../../components/OnlineIndicator';
+import {generateFullURL} from '../../helper';
 
 type Props = {
   avatar: Avatar;
@@ -12,7 +13,10 @@ type Props = {
 export default (props: Props) => {
   return (
     <TouchableOpacity style={styles.root} activeOpacity={0.7}>
-      <Image source={{uri: props.avatar}} style={styles.avatar} />
+      <Image
+        source={{uri: generateFullURL(props.avatar)}}
+        style={styles.avatar}
+      />
 
       {props.online === 1 && <OnlineIndicator style={styles.onlineIndicator} />}
     </TouchableOpacity>
