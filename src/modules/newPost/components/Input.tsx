@@ -1,6 +1,6 @@
 import React, {forwardRef, useImperativeHandle, useRef} from 'react';
 import {useDispatch} from 'react-redux';
-import {LayoutAnimation, ScrollView, StyleSheet, TextInput} from 'react-native';
+import {ScrollView, StyleSheet, TextInput} from 'react-native';
 
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
@@ -52,8 +52,6 @@ export default forwardRef((props: Props, ref) => {
         autoFocus={true}
         value={contentValue}
         onChangeText={text => {
-          LayoutAnimation.spring();
-
           dispatch(setState({content: text}));
         }}
         cursorColor={'#8B5CFF'}

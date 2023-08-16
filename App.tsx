@@ -109,7 +109,7 @@ function App(): Element {
             component={NavigationBar}
             options={{
               headerShown: false,
-              ...TransitionPresets.SlideFromRightIOS,
+              ...TransitionPresets.ModalSlideFromBottomIOS,
             }}
           />
 
