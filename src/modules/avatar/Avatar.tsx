@@ -46,7 +46,7 @@ import {
 import {GeoPosition} from 'react-native-geolocation-service';
 import {checkFileExistence} from '../../utils/file';
 import {COULD_NOT_FIND_IMAGE} from '../../constants/Config';
-import {generateLocalAvatar} from '../helper';
+import {AVATAR_BOY_URL_LIST, AVATAR_GIRL_URL_LIST} from '../helper';
 
 type Props = {
   route: Route<string, {gender: Gender; mobile: Mobile; birthday: Birthday}>;
@@ -64,6 +64,9 @@ export default (props: Props) => {
   const {showActionSheetWithOptions} = useActionSheet();
 
   const insets = useSafeAreaInsets();
+
+  const AVATAR_URL_LIST =
+    gender === 'male' ? AVATAR_BOY_URL_LIST : AVATAR_GIRL_URL_LIST;
 
   useEffect(() => {
     if (selectedIndex === 8) {
@@ -104,9 +107,7 @@ export default (props: Props) => {
           gender,
           birthday,
           avatar:
-            selectedIndex === 8
-              ? avatarUri
-              : generateLocalAvatar(gender, selectedIndex),
+            selectedIndex === 8 ? avatarUri : AVATAR_URL_LIST[selectedIndex],
         }),
       );
 
@@ -145,10 +146,7 @@ export default (props: Props) => {
       mobile,
       gender,
       birthday,
-      avatar:
-        selectedIndex === 8
-          ? avatarUri
-          : generateLocalAvatar(gender, selectedIndex),
+      avatar: selectedIndex === 8 ? avatarUri : AVATAR_URL_LIST[selectedIndex],
     };
 
     const position: GeoPosition | undefined = store.getState().login.position;

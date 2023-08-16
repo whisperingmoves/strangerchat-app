@@ -17,32 +17,20 @@ import avatar_girl_5 from '../assets/images/avatars/female/avatar_girl_5.png';
 import avatar_girl_6 from '../assets/images/avatars/female/avatar_girl_6.png';
 import avatar_girl_7 from '../assets/images/avatars/female/avatar_girl_7.png';
 import avatar_girl_8 from '../assets/images/avatars/female/avatar_girl_8.png';
-import {Gender} from './gender/store/slice';
-import {Image} from 'react-native';
-
-export const generateLocalAvatar = (gender: Gender, index: number) => {
-  return `avatar_${gender === 'male' ? 'boy' : 'girl'}_${index + 1}`;
-};
+import {Avatar} from './avatar/store/slice';
 
 export const generateFullURL = (serverURL: string): string => {
   const baseURL = Config.BASE_URL as string;
+
+  // 检查基础URL是否以斜杠结尾，避免重复斜杠
   const normalizedBaseURL = baseURL.endsWith('/') ? baseURL : baseURL + '/';
+
+  // 检查服务器返回的URL是否以斜杠开头，避免重复斜杠
   const normalizedServerURL = serverURL.startsWith('/')
     ? serverURL.substring(1)
     : serverURL;
 
-  if (serverURL.startsWith('avatar_boy_')) {
-    const index = parseInt(serverURL.substring('avatar_boy_'.length), 10) - 1;
-    const avatarBoyPath = AVATAR_BOY_LIST[index];
-    return Image.resolveAssetSource(avatarBoyPath).uri;
-  }
-
-  if (serverURL.startsWith('avatar_girl_')) {
-    const index = parseInt(serverURL.substring('avatar_girl_'.length), 10) - 1;
-    const avatarGirlPath = AVATAR_GIRL_LIST[index];
-    return Image.resolveAssetSource(avatarGirlPath).uri;
-  }
-
+  // 拼接基础URL和服务器返回的URL
   return normalizedBaseURL + normalizedServerURL;
 };
 
@@ -68,4 +56,26 @@ export const AVATAR_GIRL_LIST: ImageSourcePropType[] = [
   avatar_girl_7,
   avatar_girl_8,
   icon_spying,
+];
+
+export const AVATAR_BOY_URL_LIST: Avatar[] = [
+  'public/avatars/male/avatar_boy_1.png',
+  'public/avatars/male/avatar_boy_2.png',
+  'public/avatars/male/avatar_boy_3.png',
+  'public/avatars/male/avatar_boy_4.png',
+  'public/avatars/male/avatar_boy_5.png',
+  'public/avatars/male/avatar_boy_6.png',
+  'public/avatars/male/avatar_boy_7.png',
+  'public/avatars/male/avatar_boy_8.png',
+];
+
+export const AVATAR_GIRL_URL_LIST: Avatar[] = [
+  'public/avatars/female/avatar_girl_1.png',
+  'public/avatars/female/avatar_girl_2.png',
+  'public/avatars/female/avatar_girl_3.png',
+  'public/avatars/female/avatar_girl_4.png',
+  'public/avatars/female/avatar_girl_5.png',
+  'public/avatars/female/avatar_girl_6.png',
+  'public/avatars/female/avatar_girl_7.png',
+  'public/avatars/female/avatar_girl_8.png',
 ];
