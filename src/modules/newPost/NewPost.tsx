@@ -15,7 +15,6 @@ import Header from './components/Header';
 import BottomButton from './components/BottomButton';
 import Location from './components/Location';
 import Visibility from './components/Visibility';
-import {PUBLIC} from '../../constants/newPost/Config';
 import Input, {InputRef} from './components/Input';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {
@@ -26,6 +25,7 @@ import {
   scene,
   setScene,
   status,
+  visibility,
 } from './store/slice';
 import {showError} from '../../utils/notification';
 import {store} from '../../stores/store';
@@ -40,6 +40,8 @@ export default () => {
   const statusValue = useAppSelector(status);
 
   const sceneValue = useAppSelector(scene);
+
+  const visibilityValue = useAppSelector(visibility);
 
   const dispatch = useAppDispatch();
 
@@ -131,7 +133,11 @@ export default () => {
 
         <Location country={'Tokyo'} style={styles.location} />
 
-        <Visibility visibility={PUBLIC} style={styles.visibility} />
+        <Visibility
+          visibility={visibilityValue}
+          style={styles.visibility}
+          blurInput={blurInput}
+        />
 
         <BottomButton style={styles.bottomBtn} blurInput={blurInput} />
       </View>

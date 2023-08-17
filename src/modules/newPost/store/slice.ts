@@ -12,6 +12,10 @@ import {UploadPostResponse} from '../../../apis/resource/uploadPost';
 import {UPLOAD_UP_TO_MAX_IMAGES} from '../../../constants/home/Config';
 import {GeoPosition} from 'react-native-geolocation-service';
 import {getLocation} from '../../../utils/geolocation';
+import {PRIVATE, PUBLIC} from '../../../constants/newPost/Config';
+import {HOME} from '../../../constants/Config';
+
+export type Visibility = number | undefined;
 
 export type Photo = string;
 
@@ -20,6 +24,8 @@ export type Error = string;
 export type Scene = 'newPost' | 'uploadPost' | 'getLocation' | undefined;
 
 export type Status = 'idle' | 'loading' | 'failed' | 'success';
+
+export const VISIBILITY_MAP = [PUBLIC, HOME, PRIVATE];
 
 export interface State extends CreatePostRequest, CreatePostResponse {
   error: Error;
@@ -98,6 +104,10 @@ export const slice = createSlice({
     setScene: (state, action: PayloadAction<Scene>) => {
       state.scene = action.payload;
     },
+
+    setVisibility: (state, action: PayloadAction<Visibility>) => {
+      state.visibility = action.payload;
+    },
   },
 
   extraReducers: builder => {
@@ -166,7 +176,8 @@ export const slice = createSlice({
   },
 });
 
-export const {resetStatus, setState, resetState, setScene} = slice.actions;
+export const {resetStatus, setState, resetState, setScene, setVisibility} =
+  slice.actions;
 
 export const status = (state: RootState) => state.newPost.status;
 
@@ -175,5 +186,7 @@ export const scene = (state: RootState) => state.newPost.scene;
 export const content = (state: RootState) => state.newPost.content;
 
 export const images = (state: RootState) => state.newPost.images;
+
+export const visibility = (state: RootState) => state.newPost.visibility;
 
 export default slice.reducer;

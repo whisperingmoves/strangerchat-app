@@ -6,18 +6,13 @@ import Home from '../home/Home';
 import Explore from '../explore/Explore';
 import Chat from '../chat/Chat';
 import Profile from '../profile/Profile';
-import {
-  EXPLORE,
-  HOME,
-  POST,
-  PROFILE,
-} from '../../constants/navigationBar/Config';
+import {EXPLORE, POST, PROFILE} from '../../constants/navigationBar/Config';
 import TabBar from './components/TabBar';
 import Empty from '../../components/Empty';
 import DailyAttendance, {
   DailyAttendanceRef,
 } from './components/DailyAttendance';
-import {CHAT} from '../../constants/Config';
+import {CHAT, HOME} from '../../constants/Config';
 import {SocketProvider} from '../../contexts/SocketContext';
 import {isTimestampToday} from '../../utils/date';
 import {store} from '../../stores/store';

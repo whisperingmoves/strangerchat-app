@@ -5,18 +5,44 @@ import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 import icon_earth from '../../../assets/images/icons/icon_earth.png';
+import {setVisibility, Visibility, VISIBILITY_MAP} from '../store/slice';
+import {useActionSheet} from '@expo/react-native-action-sheet';
+import {ActionSheetOptions} from '@expo/react-native-action-sheet/lib/typescript/types';
+import {useAppDispatch} from '../../../hooks';
+import {PRIVATE, PUBLIC} from '../../../constants/newPost/Config';
+import {CANCEL, HOME} from '../../../constants/Config';
 
 type Props = {
-  visibility: string;
+  visibility: Visibility;
   style: StyleProp<ViewStyle>;
+  blurInput: () => void;
 };
 
 export default (props: Props) => {
+  const {showActionSheetWithOptions} = useActionSheet();
+
+  const dispatch = useAppDispatch();
+
+  const handlePress = () => {
+    props.blurInput();
+
+    setTimeout(() => {
+      openVisibilityPicker(showActionSheetWithOptions, visibility => {
+        dispatch(setVisibility(visibility));
+      });
+    }, 200);
+  };
+
   return (
-    <TouchableOpacity activeOpacity={0.7} style={[styles.root, props.style]}>
+    <TouchableOpacity
+      activeOpacity={0.7}
+      style={[styles.root, props.style]}
+      onPress={handlePress}>
       <Image source={icon_earth} />
 
-      <Text style={styles.txt}>{props.visibility}</Text>
+      <Text style={styles.txt}>
+        {VISIBILITY_MAP[props.visibility as number]}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -36,3 +62,26 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
+
+export const openVisibilityPicker = (
+  showActionSheetWithOptions: (
+    options: ActionSheetOptions,
+    callback: (i?: number) => void | Promise<void>,
+  ) => void,
+  setValue: (visibility: Visibility) => void,
+) => {
+  const options = [PUBLIC, HOME, PRIVATE, CANCEL];
+  const cancelButtonIndex = 3;
+  showActionSheetWithOptions(
+    {
+      options,
+      cancelButtonIndex,
+      textStyle: {
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        width: '100%',
+      },
+    },
+    setValue,
+  );
+};

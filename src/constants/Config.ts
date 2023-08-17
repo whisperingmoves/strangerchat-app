@@ -25,3 +25,5 @@ export const FOLLOWING = 'Following';
 export const FOLLOW = 'Follow';
 
 export const COULD_NOT_FIND_IMAGE = 'Could not find image';
+
+export const HOME = 'Home';

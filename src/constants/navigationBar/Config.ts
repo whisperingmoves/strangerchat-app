@@ -16,8 +16,6 @@ export const SIXTH_DAY = 'Sixth day';
 
 export const SEVENTH_DAY = 'Seventh day';
 
-export const HOME = 'Home';
-
 export const EXPLORE = 'Explore';
 
 export const PROFILE = 'Profile';
