@@ -21,6 +21,7 @@ import homeReducer from '../modules/home/store/slice';
 import newPostReducer from '../modules/newPost/store/slice';
 import followingReducer from '../modules/following/store/slice';
 import recommendReducer from '../modules/recommend/store/slice';
+import latestReducer from '../modules/latest/store/slice';
 
 export const LOG_OUT = 'LOG_OUT';
 
@@ -44,6 +45,7 @@ const appReducer = combineReducers({
   newPost: newPostReducer,
   following: followingReducer,
   recommend: recommendReducer,
+  latest: latestReducer,
 });
 
 const rootReducer = (state: any, action: any) => {
