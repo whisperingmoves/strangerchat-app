@@ -45,7 +45,7 @@ export default () => {
     if (statusValue === 'failed') {
       dispatch(resetStatus());
 
-      const {error} = store.getState().recommend;
+      const {error} = store.getState().latest;
 
       showError(error);
     }
