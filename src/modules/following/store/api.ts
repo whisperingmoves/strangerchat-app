@@ -1,12 +1,12 @@
 import {
+  FollowedPostData,
   getFollowedPosts as getFollowedPostsApi,
-  PostData,
+  GetFollowedPostsRequest,
 } from '../../../apis/post/getFollowedPosts';
 
 export const getFollowedPosts = async (
-  page: number = 1,
-  pageSize: number = 10,
+  request: GetFollowedPostsRequest,
   token: string,
-): Promise<PostData[]> => {
-  return await getFollowedPostsApi({page, pageSize}, token);
+): Promise<FollowedPostData[]> => {
+  return await getFollowedPostsApi(request, token);
 };

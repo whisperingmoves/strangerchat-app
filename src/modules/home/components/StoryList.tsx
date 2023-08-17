@@ -7,7 +7,13 @@ import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 import Item, {Props as ItemProps} from './Item';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
-import {getStoryListAsync, list, resetPage, status} from '../store/slice';
+import {
+  getStoryListAsync,
+  list,
+  resetPage,
+  resetStatus,
+  status,
+} from '../store/slice';
 import {store} from '../../../stores/store';
 import {showError} from '../../../utils/notification';
 import Separator from './Separator';
@@ -39,9 +45,20 @@ export default (props: Props) => {
   };
 
   useEffect(() => {
-    if (statusValue === 'idle') {
-      refresh();
-    } else if (statusValue === 'failed') {
+    refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (statusValue === 'success') {
+      dispatch(resetStatus());
+
+      return;
+    }
+
+    if (statusValue === 'failed') {
+      dispatch(resetStatus());
+
       const {error} = store.getState().home;
 
       showError(error);

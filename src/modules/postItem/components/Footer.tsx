@@ -6,9 +6,9 @@ import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import PlaceHolder from '../../../components/PlaceHolder';
 import ShareButton from './ShareButton';
 import CollectButton from './CollectButton';
-import LikeButton from './LikeButton';
-import CommentButton from './CommentButton';
 import {CommentCount, LikeCount} from '../../following/store/slice';
+import CommentButton from './CommentButton';
+import LikeButton from './LikeButton';
 
 type Props = {
   style: StyleProp<ViewStyle>;

@@ -3,7 +3,13 @@ import PostList from '../postList/PostList';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {store} from '../../stores/store';
 import {showError} from '../../utils/notification';
-import {getFollowedPostsAsync, list, resetPage, status} from './store/slice';
+import {
+  getFollowedPostsAsync,
+  list,
+  resetPage,
+  resetStatus,
+  status,
+} from './store/slice';
 
 export default () => {
   const statusValue = useAppSelector(status);
@@ -24,10 +30,22 @@ export default () => {
   };
 
   useEffect(() => {
-    if (statusValue === 'idle') {
-      refresh();
-    } else if (statusValue === 'failed') {
-      const {error} = store.getState().home;
+    refresh();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (statusValue === 'success') {
+      dispatch(resetStatus());
+
+      return;
+    }
+
+    if (statusValue === 'failed') {
+      dispatch(resetStatus());
+
+      const {error} = store.getState().following;
 
       showError(error);
     }
@@ -40,6 +58,7 @@ export default () => {
       refreshing={statusValue === 'loading'}
       refresh={refresh}
       load={load}
+      isFollowing={true}
     />
   );
 };

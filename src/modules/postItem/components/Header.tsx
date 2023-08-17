@@ -9,7 +9,7 @@ import {CHAT, FOR_YOU} from '../../../constants/Config';
 
 import icon_more from '../../../assets/images/icons/icon_more.png';
 import FollowButton from '../../../components/FollowButton';
-import {getUsername} from '../../helper';
+import {generateFullURL, getUsername} from '../../helper';
 import {formatTimeAgo} from '../../../utils/date';
 import {
   AuthorAvatar,
@@ -17,16 +17,17 @@ import {
   AuthorName,
   CreateTime,
 } from '../../following/store/slice';
+import {IsFollowed} from '../../recommend/store/slice';
 
 type Props = {
   authorId: AuthorId;
   authorAvatar: AuthorAvatar;
-  authorName: AuthorName;
-  createTime: CreateTime;
+  authorName?: AuthorName;
+  createTime?: CreateTime;
   isFollowing?: boolean;
   isRecommend?: boolean;
   isLatest?: boolean;
-  isFollowed?: boolean;
+  isFollowed?: IsFollowed;
   style: StyleProp<ViewStyle>;
 };
 
@@ -34,7 +35,10 @@ export default (props: Props) => {
   return (
     <View style={[styles.root, props.style]}>
       <TouchableOpacity activeOpacity={0.7}>
-        <Image source={{uri: props.authorAvatar}} style={styles.avatarImg} />
+        <Image
+          source={{uri: generateFullURL(props.authorAvatar)}}
+          style={styles.avatarImg}
+        />
       </TouchableOpacity>
 
       <View style={styles.infoContainer}>
@@ -43,7 +47,7 @@ export default (props: Props) => {
         </Text>
         <Text style={styles.createTimeTxt}>
           {props.isFollowing || props.isLatest
-            ? formatTimeAgo(props.createTime)
+            ? formatTimeAgo(props.createTime as number)
             : FOR_YOU}
         </Text>
       </View>

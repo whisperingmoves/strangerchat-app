@@ -10,16 +10,20 @@ import {LikeCount} from '../../following/store/slice';
 
 type Props = {
   style: StyleProp<ViewStyle>;
-  count: LikeCount;
+  count?: LikeCount;
 };
 
 export default (props: Props) => {
+  const showCountTxt = Boolean(props.count && props.count > 0);
+
   return (
     <TouchableOpacity activeOpacity={0.7} style={[styles.root, props.style]}>
       <Image source={icon_like_outlined} />
 
-      {props.count && props.count > 0 && (
-        <Text style={styles.txt}>{formatNumberWithSuffix(props.count)}</Text>
+      {showCountTxt && (
+        <Text style={styles.txt}>
+          {formatNumberWithSuffix(props.count as number)}
+        </Text>
       )}
     </TouchableOpacity>
   );

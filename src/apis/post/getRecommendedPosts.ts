@@ -1,11 +1,13 @@
 import axiosInstance from '../axios';
 
-export interface GetFollowedPostsRequest {
+export interface GetRecommendedPostsRequest {
   page?: number;
   pageSize?: number;
+  longitude?: number;
+  latitude?: number;
 }
 
-export interface FollowedPostData {
+export interface RecommendedPostData {
   authorId: string;
   authorAvatar: string;
   authorName?: string;
@@ -17,20 +19,23 @@ export interface FollowedPostData {
   commentCount?: number;
   postId: string;
   isLiked?: number;
+  isFollowed?: number;
   conversationId?: string;
   atUsers?: {id: string; username?: string}[];
 }
 
-export const getFollowedPosts = async (
-  request: GetFollowedPostsRequest,
+export const getRecommendedPosts = async (
+  request: GetRecommendedPostsRequest,
   token: string,
-): Promise<FollowedPostData[]> => {
-  const {page, pageSize} = request;
+): Promise<RecommendedPostData[]> => {
+  const {page, pageSize, longitude, latitude} = request;
 
-  const response = await axiosInstance.get('/posts/follows', {
+  const response = await axiosInstance.get('/posts/recommended', {
     params: {
       page: page || 1,
       pageSize: pageSize || 10,
+      longitude,
+      latitude,
     },
     headers: {
       Authorization: `Bearer ${token}`,

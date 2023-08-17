@@ -4,34 +4,31 @@ import {RootState} from '../../../stores/store';
 import {getFollowedPosts} from './api';
 import {State as UserState} from '../../../stores/user/slice';
 import {listPageReducer} from '../../../stores/helper';
-import {PostData} from '../../../apis/post/getFollowedPosts';
+import {
+  FollowedPostData,
+  GetFollowedPostsRequest,
+} from '../../../apis/post/getFollowedPosts';
 
 export type CreateTime = number;
 
-export type AuthorName = string | undefined;
+export type AuthorName = string;
 
 export type AuthorAvatar = string;
 
 export type AuthorId = string;
 
-export type City = string | undefined;
+export type City = string;
 
-export type LikeCount = number | undefined;
+export type LikeCount = number;
 
-export type CommentCount = number | undefined;
-
-export type Page = number;
-
-export type PageSize = number;
+export type CommentCount = number;
 
 export type Error = string;
 
 export type Status = 'idle' | 'loading' | 'failed' | 'success';
 
-export interface State {
-  list: PostData[];
-  page: Page;
-  pageSize: PageSize;
+export interface State extends GetFollowedPostsRequest {
+  list: FollowedPostData[];
   error: Error;
   status: Status;
 }
@@ -45,14 +42,14 @@ const initialState: State = {
 };
 
 export const getFollowedPostsAsync = createAsyncThunk<
-  PostData[],
+  FollowedPostData[],
   void,
   {state: {following: State; user: UserState}}
 >('following/getFollowedPosts', async (_, {getState}) => {
   const {page, pageSize} = getState().following;
   const {token} = getState().user;
 
-  return await getFollowedPosts(page, pageSize, token);
+  return await getFollowedPosts({page, pageSize}, token);
 });
 
 export const slice = createSlice({

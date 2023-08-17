@@ -9,11 +9,13 @@ import {CommentCount} from '../../following/store/slice';
 
 type Props = {
   style: StyleProp<ViewStyle>;
-  count: CommentCount;
+  count?: CommentCount;
   onPress: () => void;
 };
 
 export default (props: Props) => {
+  const showCountTxt = Boolean(props.count && props.count > 0);
+
   return (
     <TouchableOpacity
       activeOpacity={0.7}
@@ -21,8 +23,10 @@ export default (props: Props) => {
       onPress={props.onPress}>
       <Image source={icon_comment_outlined} />
 
-      {props.count && props.count > 0 && (
-        <Text style={styles.txt}>{formatNumberWithSuffix(props.count)}</Text>
+      {showCountTxt && (
+        <Text style={styles.txt}>
+          {formatNumberWithSuffix(props.count as number)}
+        </Text>
       )}
     </TouchableOpacity>
   );

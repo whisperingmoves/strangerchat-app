@@ -8,7 +8,7 @@ import icon_location from '../../../assets/images/icons/icon_location.png';
 import {City} from '../../following/store/slice';
 
 type Props = {
-  location: City;
+  location?: City;
   style: StyleProp<ViewStyle>;
 };
 

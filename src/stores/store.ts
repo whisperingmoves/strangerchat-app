@@ -20,6 +20,7 @@ import navigationBarReducer from '../modules/navigationBar/store/slice';
 import homeReducer from '../modules/home/store/slice';
 import newPostReducer from '../modules/newPost/store/slice';
 import followingReducer from '../modules/following/store/slice';
+import recommendReducer from '../modules/recommend/store/slice';
 
 export const LOG_OUT = 'LOG_OUT';
 
@@ -42,6 +43,7 @@ const appReducer = combineReducers({
   home: homeReducer,
   newPost: newPostReducer,
   following: followingReducer,
+  recommend: recommendReducer,
 });
 
 const rootReducer = (state: any, action: any) => {

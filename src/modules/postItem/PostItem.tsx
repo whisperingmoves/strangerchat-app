@@ -4,10 +4,12 @@ import {StyleSheet, Text, View} from 'react-native';
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 import Header from './components/Header';
+import {RecommendedPostData} from '../../apis/post/getRecommendedPosts';
+import {FollowedPostData} from '../../apis/post/getFollowedPosts';
+import PhotoList from '../../components/PhotoList';
+import {generateFullURL} from '../helper';
 import Location from './components/Location';
 import Footer from './components/Footer';
-import PhotoList from '../../components/PhotoList';
-import {PostData} from '../../apis/post/getFollowedPosts';
 
 type CustomProps = {
   isFollowing?: boolean;
@@ -19,7 +21,7 @@ type CustomProps = {
   footerStyle?: ViewStyle;
 };
 
-type PostDetailProps = PostData;
+type PostDetailProps = FollowedPostData & RecommendedPostData;
 
 export type Props = PostDetailProps & CustomProps;
 
@@ -42,14 +44,14 @@ export default (props: Props) => {
         isFollowing={props.isFollowing}
         isRecommend={props.isRecommend}
         isLatest={props.isLatest}
-        isFollowed={false}
+        isFollowed={props.isFollowed}
         style={styles.header}
       />
 
       <View style={[styles.contentContainer, props.contentContainerStyle]}>
         {props?.images && (
           <PhotoList
-            photoList={props.images}
+            photoList={props.images.map(item => generateFullURL(item))}
             isMarginLeft={photoIsMarginLeft}
             style={styles.photoList}
           />
