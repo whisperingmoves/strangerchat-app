@@ -82,6 +82,10 @@ export const openVisibilityPicker = (
         width: '100%',
       },
     },
-    setValue,
+    async selectedIndex => {
+      if ((selectedIndex || selectedIndex === 0) && selectedIndex < 3) {
+        setValue(selectedIndex);
+      }
+    },
   );
 };
