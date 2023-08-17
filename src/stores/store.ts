@@ -19,6 +19,7 @@ import userReducer from '../stores/user/slice';
 import navigationBarReducer from '../modules/navigationBar/store/slice';
 import homeReducer from '../modules/home/store/slice';
 import newPostReducer from '../modules/newPost/store/slice';
+import followingReducer from '../modules/following/store/slice';
 
 export const LOG_OUT = 'LOG_OUT';
 
@@ -40,6 +41,7 @@ const appReducer = combineReducers({
   navigationBar: navigationBarReducer,
   home: homeReducer,
   newPost: newPostReducer,
+  following: followingReducer,
 });
 
 const rootReducer = (state: any, action: any) => {

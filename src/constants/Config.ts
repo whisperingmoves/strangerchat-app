@@ -27,3 +27,7 @@ export const FOLLOW = 'Follow';
 export const COULD_NOT_FIND_IMAGE = 'Could not find image';
 
 export const HOME = 'Home';
+
+export const FOR_YOU = 'For you';
+
+export const USER = 'user';

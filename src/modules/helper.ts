@@ -18,6 +18,7 @@ import avatar_girl_6 from '../assets/images/avatars/female/avatar_girl_6.png';
 import avatar_girl_7 from '../assets/images/avatars/female/avatar_girl_7.png';
 import avatar_girl_8 from '../assets/images/avatars/female/avatar_girl_8.png';
 import {Avatar} from './avatar/store/slice';
+import {USER} from '../constants/Config';
 
 export const generateFullURL = (serverURL: string): string => {
   const baseURL = Config.BASE_URL as string;
@@ -79,3 +80,8 @@ export const AVATAR_GIRL_URL_LIST: Avatar[] = [
   'public/avatars/female/avatar_girl_7.png',
   'public/avatars/female/avatar_girl_8.png',
 ];
+
+export const getUsername = (userId: string): string => {
+  const lastSixDigits = userId.slice(-6);
+  return `${USER}_${lastSixDigits}`;
+};

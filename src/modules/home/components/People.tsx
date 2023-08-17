@@ -15,8 +15,7 @@ import icon_bubble from '../../../assets/images/icons/icon_bubble.png';
 import {Distance, UserId, Username} from '../store/slice';
 import {Avatar} from '../../avatar/store/slice';
 import {AWAY_FROM} from '../../../constants/home/Config';
-import {getUsername} from '../helper';
-import {generateFullURL} from '../../helper';
+import {generateFullURL, getUsername} from '../../helper';
 
 type Props = {
   style: StyleProp<ViewStyle>;

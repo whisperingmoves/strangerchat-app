@@ -12,8 +12,7 @@ import {
 import {Avatar} from '../../avatar/store/slice';
 import Relation from './Relation';
 import Info from './Info';
-import {getUsername} from '../helper';
-import {generateFullURL} from '../../helper';
+import {generateFullURL, getUsername} from '../../helper';
 
 export type Props = {
   relation?: RelationType;

@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from 'react';
-import {FlatList, StyleSheet} from 'react-native';
+import {FlatList, Platform, StyleSheet} from 'react-native';
 
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
@@ -63,7 +63,7 @@ export default (props: Props) => {
       onRefresh={refresh}
       onEndReachedThreshold={0.1}
       onEndReached={load}
-      bounces={false}
+      bounces={bounces}
     />
   );
 };
@@ -76,3 +76,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
 });
+
+const bounces = Platform.OS === 'ios';
