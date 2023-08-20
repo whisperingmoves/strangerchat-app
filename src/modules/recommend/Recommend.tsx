@@ -4,20 +4,15 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {store} from '../../stores/store';
 import {showError} from '../../utils/notification';
 import {
-  getLocationAsync,
   getRecommendedPostsAsync,
   list,
   resetPage,
   resetStatus,
-  scene,
-  setScene,
   status,
 } from './store/slice';
 
 export default () => {
   const statusValue = useAppSelector(status);
-
-  const sceneValue = useAppSelector(scene);
 
   const listValue = useAppSelector(list);
 
@@ -35,23 +30,13 @@ export default () => {
   };
 
   useEffect(() => {
-    dispatch(setScene('getLocation'));
-
-    dispatch(getLocationAsync());
+    refresh();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (statusValue === 'success' && sceneValue === 'getLocation') {
-      dispatch(resetStatus());
-
-      refresh();
-
-      return;
-    }
-
-    if (statusValue === 'success' && sceneValue === 'getRecommendedPosts') {
+    if (statusValue === 'success') {
       dispatch(resetStatus());
 
       return;
