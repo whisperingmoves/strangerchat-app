@@ -10,6 +10,7 @@ import PhotoList from '../../components/PhotoList';
 import {generateFullURL} from '../helper';
 import Location from './components/Location';
 import Footer from './components/Footer';
+import {LatestPostData} from '../../apis/post/getLatestPosts';
 
 type CustomProps = {
   isFollowing?: boolean;
@@ -21,7 +22,7 @@ type CustomProps = {
   footerStyle?: ViewStyle;
 };
 
-type PostDetailProps = FollowedPostData & RecommendedPostData;
+type PostDetailProps = FollowedPostData & RecommendedPostData & LatestPostData;
 
 export type Props = PostDetailProps & CustomProps;
 
@@ -45,6 +46,7 @@ export default (props: Props) => {
         isRecommend={props.isRecommend}
         isLatest={props.isLatest}
         isFollowed={props.isFollowed}
+        conversationId={props.conversationId}
         style={styles.header}
       />
 

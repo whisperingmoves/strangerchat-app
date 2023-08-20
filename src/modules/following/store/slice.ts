@@ -9,6 +9,8 @@ import {
   GetFollowedPostsRequest,
 } from '../../../apis/post/getFollowedPosts';
 
+export type ConversationId = string;
+
 export type CreateTime = number;
 
 export type AuthorName = string;

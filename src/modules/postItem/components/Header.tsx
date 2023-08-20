@@ -15,6 +15,7 @@ import {
   AuthorAvatar,
   AuthorId,
   AuthorName,
+  ConversationId,
   CreateTime,
 } from '../../following/store/slice';
 import {IsFollowed} from '../../recommend/store/slice';
@@ -28,6 +29,7 @@ type Props = {
   isRecommend?: boolean;
   isLatest?: boolean;
   isFollowed?: IsFollowed;
+  conversationId?: ConversationId;
   style: StyleProp<ViewStyle>;
 };
 
@@ -52,7 +54,7 @@ export default (props: Props) => {
         </Text>
       </View>
 
-      {props.isFollowing ? (
+      {props.isFollowing || props.conversationId ? (
         <TouchableOpacity activeOpacity={0.7} style={styles.chatBtn}>
           <Text style={styles.chatTxt}>{CHAT}</Text>
         </TouchableOpacity>
