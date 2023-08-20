@@ -17,8 +17,11 @@ import {
   IsLiked,
   LikeCount,
   likeOrUnlikePostAsync,
+  operationPostId,
   PostId,
   scene,
+  setOperationPostId,
+  setScene,
   status,
 } from '../../following/store/slice';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
@@ -41,9 +44,18 @@ export default (props: Props) => {
   );
   const statusValue = useAppSelector(status);
   const sceneValue = useAppSelector(scene);
+  const operationPostIdValue = useAppSelector(operationPostId);
 
   useEffect(() => {
-    if (statusValue === 'failed' && sceneValue === 'likeOrUnlikePost') {
+    if (
+      statusValue === 'failed' &&
+      sceneValue === 'likeOrUnlikePost' &&
+      operationPostIdValue === props.postId
+    ) {
+      const error = store.getState().following.error;
+
+      showError(error);
+
       LayoutAnimation.easeInEaseOut();
 
       if (isLiked) {
@@ -53,16 +65,16 @@ export default (props: Props) => {
         setIsLiked(1);
         setCount(count + 1);
       }
-
-      const error = store.getState().following.error;
-
-      showError(error);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statusValue]);
 
   const handlePress = () => {
     LayoutAnimation.easeInEaseOut();
+
+    dispatch(setScene('likeOrUnlikePost'));
+
+    dispatch(setOperationPostId(props.postId));
 
     if (isLiked) {
       setIsLiked(0);

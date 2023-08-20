@@ -41,6 +41,7 @@ export type Status = 'idle' | 'loading' | 'failed' | 'success';
 
 export interface State extends GetFollowedPostsRequest {
   list: FollowedPostData[];
+  operationPostId?: PostId;
   error: Error;
   scene: Scene;
   status: Status;
@@ -93,6 +94,10 @@ export const slice = createSlice({
     setScene: (state, action: PayloadAction<Scene>) => {
       state.scene = action.payload;
     },
+
+    setOperationPostId: (state, action: PayloadAction<PostId>) => {
+      state.operationPostId = action.payload;
+    },
   },
 
   extraReducers: builder => {
@@ -125,12 +130,16 @@ export const slice = createSlice({
   },
 });
 
-export const {resetStatus, resetPage, setScene} = slice.actions;
+export const {resetStatus, resetPage, setScene, setOperationPostId} =
+  slice.actions;
 
 export const status = (state: RootState) => state.following.status;
 
 export const list = (state: RootState) => state.following.list;
 
 export const scene = (state: RootState) => state.following.scene;
+
+export const operationPostId = (state: RootState) =>
+  state.following.operationPostId;
 
 export default slice.reducer;
