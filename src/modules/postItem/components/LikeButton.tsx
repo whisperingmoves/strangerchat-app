@@ -1,29 +1,95 @@
-import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  Image,
+  LayoutAnimation,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 import icon_like_outlined from '../../../assets/images/icons/icon_like_outlined.png';
+import icon_like_filled from '../../../assets/images/icons/icon_like_filled.png';
 import {formatNumberWithSuffix} from '../../../utils/number';
-import {LikeCount} from '../../following/store/slice';
+import {
+  IsLiked,
+  LikeCount,
+  likeOrUnlikePostAsync,
+  PostId,
+  scene,
+  status,
+} from '../../following/store/slice';
+import {useAppDispatch, useAppSelector} from '../../../hooks';
+import {store} from '../../../stores/store';
+import {showError} from '../../../utils/notification';
 
 type Props = {
   style: StyleProp<ViewStyle>;
+  postId: PostId;
   count?: LikeCount;
+  isLiked?: IsLiked;
 };
 
 export default (props: Props) => {
-  const showCountTxt = Boolean(props.count && props.count > 0);
+  const dispatch = useAppDispatch();
+
+  const [count, setCount] = useState<number>(props.count ? props.count : 0);
+  const [isLiked, setIsLiked] = useState<number>(
+    props.isLiked ? props.isLiked : 0,
+  );
+  const statusValue = useAppSelector(status);
+  const sceneValue = useAppSelector(scene);
+
+  useEffect(() => {
+    if (statusValue === 'failed' && sceneValue === 'likeOrUnlikePost') {
+      LayoutAnimation.easeInEaseOut();
+
+      if (isLiked) {
+        setIsLiked(0);
+        setCount(count - 1);
+      } else {
+        setIsLiked(1);
+        setCount(count + 1);
+      }
+
+      const error = store.getState().following.error;
+
+      showError(error);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [statusValue]);
+
+  const handlePress = () => {
+    LayoutAnimation.easeInEaseOut();
+
+    if (isLiked) {
+      setIsLiked(0);
+      setCount(count - 1);
+
+      dispatch(likeOrUnlikePostAsync({postId: props.postId, action: 0}));
+
+      return;
+    }
+
+    setIsLiked(1);
+    setCount(count + 1);
+
+    dispatch(likeOrUnlikePostAsync({postId: props.postId, action: 1}));
+  };
+
+  const showCountTxt = Boolean(count > 0);
 
   return (
-    <TouchableOpacity activeOpacity={0.7} style={[styles.root, props.style]}>
-      <Image source={icon_like_outlined} />
+    <TouchableOpacity
+      activeOpacity={0.7}
+      style={[styles.root, props.style]}
+      onPress={handlePress}>
+      <Image source={isLiked ? icon_like_filled : icon_like_outlined} />
 
       {showCountTxt && (
-        <Text style={styles.txt}>
-          {formatNumberWithSuffix(props.count as number)}
-        </Text>
+        <Text style={styles.txt}>{formatNumberWithSuffix(count)}</Text>
       )}
     </TouchableOpacity>
   );

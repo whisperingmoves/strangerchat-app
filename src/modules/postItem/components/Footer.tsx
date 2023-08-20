@@ -6,16 +6,23 @@ import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import PlaceHolder from '../../../components/PlaceHolder';
 import ShareButton from './ShareButton';
 import CollectButton from './CollectButton';
-import {CommentCount, LikeCount} from '../../following/store/slice';
+import {
+  CommentCount,
+  IsLiked,
+  LikeCount,
+  PostId,
+} from '../../following/store/slice';
 import CommentButton from './CommentButton';
 import LikeButton from './LikeButton';
 
 type Props = {
   style: StyleProp<ViewStyle>;
+  postId: PostId;
   showCollect?: boolean;
   shareCount?: number;
   likeCount?: LikeCount;
   commentCount?: CommentCount;
+  isLiked?: IsLiked;
 };
 
 export default (props: Props) => {
@@ -37,7 +44,12 @@ export default (props: Props) => {
         <ShareButton count={props.shareCount} style={styles.likeBtn} />
       )}
 
-      <LikeButton count={props.likeCount} style={styles.likeBtn} />
+      <LikeButton
+        postId={props.postId}
+        isLiked={props.isLiked}
+        count={props.likeCount}
+        style={styles.likeBtn}
+      />
 
       <CommentButton
         style={styles.likeBtn}

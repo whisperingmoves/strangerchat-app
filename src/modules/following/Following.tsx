@@ -8,6 +8,8 @@ import {
   list,
   resetPage,
   resetStatus,
+  scene,
+  setScene,
   status,
 } from './store/slice';
 
@@ -16,16 +18,22 @@ export default () => {
 
   const listValue = useAppSelector(list);
 
+  const sceneValue = useAppSelector(scene);
+
   const dispatch = useAppDispatch();
 
   const refresh = useCallback(() => {
     dispatch(resetPage());
+
+    dispatch(setScene('getFollowedPosts'));
 
     dispatch(getFollowedPostsAsync());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const load = () => {
+    dispatch(setScene('getFollowedPosts'));
+
     dispatch(getFollowedPostsAsync());
   };
 
@@ -36,13 +44,13 @@ export default () => {
   }, []);
 
   useEffect(() => {
-    if (statusValue === 'success') {
+    if (statusValue === 'success' && sceneValue === 'getFollowedPosts') {
       dispatch(resetStatus());
 
       return;
     }
 
-    if (statusValue === 'failed') {
+    if (statusValue === 'failed' && sceneValue === 'getFollowedPosts') {
       dispatch(resetStatus());
 
       const {error} = store.getState().following;
