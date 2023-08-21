@@ -1,13 +1,18 @@
-import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  Image,
+  LayoutAnimation,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
-import {CHAT, FOR_YOU} from '../../../constants/Config';
-
-import icon_more from '../../../assets/images/icons/icon_more.png';
+import {FOR_YOU} from '../../../constants/Config';
 import FollowButton from '../../../components/FollowButton';
 import {generateFullURL, getUsername} from '../../helper';
 import {formatTimeAgo} from '../../../utils/date';
@@ -19,10 +24,28 @@ import {
   CreateTime,
 } from '../../following/store/slice';
 import {IsFollowed} from '../../recommend/store/slice';
+import ChatButton from './ChatButton';
+import {useAppDispatch, useAppSelector} from '../../../hooks';
+import {
+  followOrUnfollowUserAsync,
+  operationUserId,
+  scene,
+  setOperationUserId,
+  setScene,
+  status,
+} from '../../../stores/user/slice';
+import {store} from '../../../stores/store';
+import {showError} from '../../../utils/notification';
+import {
+  operationPostId,
+  PostId,
+  setOperationPostId,
+} from '../../../stores/post/slice';
 
 type Props = {
   authorId: AuthorId;
   authorAvatar: AuthorAvatar;
+  postId: PostId;
   authorName?: AuthorName;
   createTime?: CreateTime;
   isFollowing?: boolean;
@@ -34,6 +57,61 @@ type Props = {
 };
 
 export default (props: Props) => {
+  const dispatch = useAppDispatch();
+
+  const [isFollowed, setIsFollowed] = useState<IsFollowed>(
+    props.isFollowed ? props.isFollowed : 0,
+  );
+
+  const statusValue = useAppSelector(status);
+  const sceneValue = useAppSelector(scene);
+  const operationUserIdValue = useAppSelector(operationUserId);
+  const operationPostIdValue = useAppSelector(operationPostId);
+
+  useEffect(() => {
+    if (
+      statusValue === 'failed' &&
+      sceneValue === 'postItem' &&
+      operationUserIdValue === props.authorId &&
+      operationPostIdValue === props.postId
+    ) {
+      const error = store.getState().user.error;
+
+      showError(error);
+
+      LayoutAnimation.easeInEaseOut();
+
+      if (isFollowed) {
+        setIsFollowed(0);
+
+        return;
+      }
+
+      setIsFollowed(1);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [statusValue]);
+
+  const handleFollow = () => {
+    LayoutAnimation.easeInEaseOut();
+
+    dispatch(setScene('postItem'));
+    dispatch(setOperationUserId(props.authorId));
+    dispatch(setOperationPostId(props.postId));
+
+    if (isFollowed) {
+      setIsFollowed(0);
+
+      dispatch(followOrUnfollowUserAsync(0));
+
+      return;
+    }
+
+    setIsFollowed(1);
+
+    dispatch(followOrUnfollowUserAsync(1));
+  };
+
   return (
     <View style={[styles.root, props.style]}>
       <TouchableOpacity activeOpacity={0.7}>
@@ -49,21 +127,17 @@ export default (props: Props) => {
         </Text>
         <Text style={styles.createTimeTxt}>
           {props.isFollowing || props.isLatest
-            ? formatTimeAgo(props.createTime as number)
+            ? formatTimeAgo(props.createTime as CreateTime)
             : FOR_YOU}
         </Text>
       </View>
 
       {props.isFollowing || props.conversationId ? (
-        <TouchableOpacity activeOpacity={0.7} style={styles.chatBtn}>
-          <Text style={styles.chatTxt}>{CHAT}</Text>
-        </TouchableOpacity>
-      ) : props.isFollowed ? (
-        <TouchableOpacity activeOpacity={0.7}>
-          <Image source={icon_more} />
-        </TouchableOpacity>
+        <ChatButton />
+      ) : isFollowed ? (
+        <ChatButton />
       ) : (
-        <FollowButton />
+        <FollowButton onPress={handleFollow} />
       )}
     </View>
   );

@@ -40,6 +40,7 @@ export default (props: Props) => {
       <Header
         authorId={props.authorId}
         authorAvatar={props.authorAvatar}
+        postId={props.postId}
         authorName={props.authorName}
         createTime={props.createTime}
         isFollowing={props.isFollowing}

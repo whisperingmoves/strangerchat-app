@@ -4,9 +4,13 @@ import LinearGradient from 'react-native-linear-gradient';
 
 import {FOLLOW} from '../constants/Config';
 
-export default () => {
+type Props = {
+  onPress: () => void;
+};
+
+export default (props: Props) => {
   return (
-    <TouchableOpacity activeOpacity={0.7}>
+    <TouchableOpacity activeOpacity={0.7} onPress={props.onPress}>
       <LinearGradient
         colors={['#D988FF', '#8B5CFF']}
         start={{x: 0, y: 0}}

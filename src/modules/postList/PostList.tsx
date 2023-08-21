@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 import {FlatList, Platform, StyleSheet} from 'react-native';
 
 import Item, {Props as ItemProps} from '../postItem/PostItem';
@@ -6,7 +6,9 @@ import Item, {Props as ItemProps} from '../postItem/PostItem';
 import Separator from './components/Separator';
 
 const keyExtractor = (item: ItemProps, index: number) =>
-  `${item.authorId}-${index}`;
+  `${item.postId}-${index}`;
+
+const renderItem = ({item}: {item: ItemProps}) => <Item {...item} />;
 
 type Props = {
   data: ItemProps[];
@@ -20,18 +22,6 @@ type Props = {
 };
 
 export default (props: Props) => {
-  const renderItem = useCallback(
-    ({item}: {item: ItemProps}) => {
-      item.isFollowing = props.isFollowing;
-      item.isRecommend = props.isRecommend;
-      item.isLatest = props.isLatest;
-      item.showCollect = props.showCollect;
-
-      return <Item {...item} />;
-    },
-    [props.isFollowing, props.isRecommend, props.isLatest, props.showCollect],
-  );
-
   return (
     <FlatList
       style={styles.root}

@@ -16,6 +16,13 @@ export default () => {
 
   const listValue = useAppSelector(list);
 
+  const data = listValue.map(item => {
+    return {
+      ...item,
+      isRecommend: true,
+    };
+  });
+
   const dispatch = useAppDispatch();
 
   const refresh = useCallback(() => {
@@ -54,7 +61,7 @@ export default () => {
 
   return (
     <PostList
-      data={listValue}
+      data={data}
       refreshing={statusValue === 'loading'}
       refresh={refresh}
       load={load}

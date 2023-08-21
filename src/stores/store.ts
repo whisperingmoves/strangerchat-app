@@ -16,6 +16,7 @@ import genderReducer from '../modules/gender/store/slice';
 import birthdayReducer from '../modules/birthday/store/slice';
 import avatarReducer from '../modules/avatar/store/slice';
 import userReducer from '../stores/user/slice';
+import postReducer from '../stores/post/slice';
 import navigationBarReducer from '../modules/navigationBar/store/slice';
 import homeReducer from '../modules/home/store/slice';
 import newPostReducer from '../modules/newPost/store/slice';
@@ -46,6 +47,7 @@ const appReducer = combineReducers({
   following: followingReducer,
   recommend: recommendReducer,
   latest: latestReducer,
+  post: postReducer,
 });
 
 const rootReducer = (state: any, action: any) => {

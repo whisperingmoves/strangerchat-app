@@ -5,18 +5,21 @@ import {
 } from '../../apis/user/registerUser';
 import {copy} from '../../utils/object';
 import {RootState} from '../store';
-import {registerUser} from './api';
+import {followOrUnfollowUser, registerUser} from './api';
 import {VerifyCodeResponse} from '../../apis/verification/verifyCode';
 import {Mobile} from '../../modules/login/store/slice';
 
+export type UserId = string;
+
 export type Error = string;
 
-export type Scene = 'avatar' | undefined;
+export type Scene = 'avatar' | 'postItem' | undefined;
 
 export type Status = 'idle' | 'loading' | 'failed' | 'success';
 
 export interface State extends RegisterUserResponse, VerifyCodeResponse {
   mobile: Mobile;
+  operationUserId?: UserId;
   error: Error;
   scene: Scene;
   status: Status;
@@ -51,6 +54,16 @@ export const registerUserAsync = createAsyncThunk<
   return await registerUser(request);
 });
 
+export const followOrUnfollowUserAsync = createAsyncThunk<
+  void,
+  number,
+  {state: {user: State}}
+>('user/followOrUnfollowUser', async (action, {getState}) => {
+  const {token, operationUserId: userId} = getState().user;
+
+  return await followOrUnfollowUser({userId: userId as UserId, action}, token);
+});
+
 export const slice = createSlice({
   name: 'user',
 
@@ -67,6 +80,10 @@ export const slice = createSlice({
 
     setUser: (state, action: PayloadAction<any>) => {
       copy(state, action.payload);
+    },
+
+    setOperationUserId: (state, action: PayloadAction<UserId>) => {
+      state.operationUserId = action.payload;
     },
   },
 
@@ -86,11 +103,28 @@ export const slice = createSlice({
         state.status = 'failed';
 
         state.error = action.error.message || '';
+      })
+
+      .addCase(followOrUnfollowUserAsync.pending, state => {
+        state.status = 'loading';
+      })
+
+      .addCase(followOrUnfollowUserAsync.fulfilled, (state, action) => {
+        state.status = 'success';
+
+        copy(state, action.payload);
+      })
+
+      .addCase(followOrUnfollowUserAsync.rejected, (state, action) => {
+        state.status = 'failed';
+
+        state.error = action.error.message || '';
       });
   },
 });
 
-export const {resetStatus, setScene, setUser} = slice.actions;
+export const {resetStatus, setScene, setUser, setOperationUserId} =
+  slice.actions;
 
 export const status = (state: RootState) => state.user.status;
 
@@ -101,5 +135,7 @@ export const userId = (state: RootState) => state.user.userId;
 export const checkedDays = (state: RootState) => state.user.checkedDays;
 
 export const lastCheckDate = (state: RootState) => state.user.lastCheckDate;
+
+export const operationUserId = (state: RootState) => state.user.operationUserId;
 
 export default slice.reducer;

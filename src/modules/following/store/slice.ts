@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 import {RootState} from '../../../stores/store';
 import {getFollowedPosts} from './api';
@@ -8,12 +8,6 @@ import {
   FollowedPostData,
   GetFollowedPostsRequest,
 } from '../../../apis/post/getFollowedPosts';
-import {
-  likeOrUnlikePost,
-  LikePostRequest,
-} from '../../../apis/post/likeOrUnlikePost';
-
-export type PostId = string;
 
 export type IsLiked = number;
 
@@ -35,15 +29,11 @@ export type CommentCount = number;
 
 export type Error = string;
 
-export type Scene = 'getFollowedPosts' | 'likeOrUnlikePost' | undefined;
-
 export type Status = 'idle' | 'loading' | 'failed' | 'success';
 
 export interface State extends GetFollowedPostsRequest {
   list: FollowedPostData[];
-  operationPostId?: PostId;
   error: Error;
-  scene: Scene;
   status: Status;
 }
 
@@ -52,7 +42,6 @@ const initialState: State = {
   page: 1,
   pageSize: 10,
   error: '',
-  scene: undefined,
   status: 'idle',
 };
 
@@ -65,16 +54,6 @@ export const getFollowedPostsAsync = createAsyncThunk<
   const {token} = getState().user;
 
   return await getFollowedPosts({page, pageSize}, token);
-});
-
-export const likeOrUnlikePostAsync = createAsyncThunk<
-  void,
-  LikePostRequest,
-  {state: {following: State; user: UserState}}
->('following/likeOrUnlikePost', async (request, {getState}) => {
-  const {token} = getState().user;
-
-  return await likeOrUnlikePost(request, token);
 });
 
 export const slice = createSlice({
@@ -90,14 +69,6 @@ export const slice = createSlice({
     resetPage: state => {
       state.page = initialState.page;
     },
-
-    setScene: (state, action: PayloadAction<Scene>) => {
-      state.scene = action.payload;
-    },
-
-    setOperationPostId: (state, action: PayloadAction<PostId>) => {
-      state.operationPostId = action.payload;
-    },
   },
 
   extraReducers: builder => {
@@ -112,34 +83,14 @@ export const slice = createSlice({
         state.status = 'failed';
 
         state.error = action.error.message || '';
-      })
-
-      .addCase(likeOrUnlikePostAsync.pending, state => {
-        state.status = 'loading';
-      })
-
-      .addCase(likeOrUnlikePostAsync.fulfilled, state => {
-        state.status = 'success';
-      })
-
-      .addCase(likeOrUnlikePostAsync.rejected, (state, action) => {
-        state.status = 'failed';
-
-        state.error = action.error.message || '';
       });
   },
 });
 
-export const {resetStatus, resetPage, setScene, setOperationPostId} =
-  slice.actions;
+export const {resetStatus, resetPage} = slice.actions;
 
 export const status = (state: RootState) => state.following.status;
 
 export const list = (state: RootState) => state.following.list;
-
-export const scene = (state: RootState) => state.following.scene;
-
-export const operationPostId = (state: RootState) =>
-  state.following.operationPostId;
 
 export default slice.reducer;

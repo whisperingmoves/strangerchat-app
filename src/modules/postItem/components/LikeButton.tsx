@@ -13,20 +13,17 @@ import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 import icon_like_outlined from '../../../assets/images/icons/icon_like_outlined.png';
 import icon_like_filled from '../../../assets/images/icons/icon_like_filled.png';
 import {formatNumberWithSuffix} from '../../../utils/number';
-import {
-  IsLiked,
-  LikeCount,
-  likeOrUnlikePostAsync,
-  operationPostId,
-  PostId,
-  scene,
-  setOperationPostId,
-  setScene,
-  status,
-} from '../../following/store/slice';
+import {IsLiked, LikeCount} from '../../following/store/slice';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {store} from '../../../stores/store';
 import {showError} from '../../../utils/notification';
+import {
+  likeOrUnlikePostAsync,
+  operationPostId,
+  PostId,
+  setOperationPostId,
+  status,
+} from '../../../stores/post/slice';
 
 type Props = {
   style: StyleProp<ViewStyle>;
@@ -38,21 +35,16 @@ type Props = {
 export default (props: Props) => {
   const dispatch = useAppDispatch();
 
-  const [count, setCount] = useState<number>(props.count ? props.count : 0);
-  const [isLiked, setIsLiked] = useState<number>(
+  const [count, setCount] = useState<LikeCount>(props.count ? props.count : 0);
+  const [isLiked, setIsLiked] = useState<IsLiked>(
     props.isLiked ? props.isLiked : 0,
   );
   const statusValue = useAppSelector(status);
-  const sceneValue = useAppSelector(scene);
   const operationPostIdValue = useAppSelector(operationPostId);
 
   useEffect(() => {
-    if (
-      statusValue === 'failed' &&
-      sceneValue === 'likeOrUnlikePost' &&
-      operationPostIdValue === props.postId
-    ) {
-      const error = store.getState().following.error;
+    if (statusValue === 'failed' && operationPostIdValue === props.postId) {
+      const error = store.getState().post.error;
 
       showError(error);
 
@@ -72,15 +64,13 @@ export default (props: Props) => {
   const handlePress = () => {
     LayoutAnimation.easeInEaseOut();
 
-    dispatch(setScene('likeOrUnlikePost'));
-
     dispatch(setOperationPostId(props.postId));
 
     if (isLiked) {
       setIsLiked(0);
       setCount(count - 1);
 
-      dispatch(likeOrUnlikePostAsync({postId: props.postId, action: 0}));
+      dispatch(likeOrUnlikePostAsync(0));
 
       return;
     }
@@ -88,7 +78,7 @@ export default (props: Props) => {
     setIsLiked(1);
     setCount(count + 1);
 
-    dispatch(likeOrUnlikePostAsync({postId: props.postId, action: 1}));
+    dispatch(likeOrUnlikePostAsync(1));
   };
 
   const showCountTxt = Boolean(count > 0);
