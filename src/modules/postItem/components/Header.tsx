@@ -59,7 +59,6 @@ type Props = {
 
 export default (props: Props) => {
   const dispatch = useAppDispatch();
-
   const [isFollowed, setIsFollowed] = useState<IsFollowed>(
     props.isFollowed ? props.isFollowed : 0,
   );
@@ -68,10 +67,17 @@ export default (props: Props) => {
   const sceneValue = useAppSelector(scene);
   const operationUserIdValue = useAppSelector(operationUserId);
   const operationPostIdValue = useAppSelector(operationPostId);
+  const userId = store.getState().user.userId;
 
   useEffect(() => {
     const isSameAuthor = operationUserIdValue === props.authorId;
     const isSamePost = operationPostIdValue === props.postId;
+
+    const handleStatusChange = () => {
+      dispatch(resetStatus());
+      LayoutAnimation.easeInEaseOut();
+      setIsFollowed(isFollowed ? 0 : 1);
+    };
 
     if (
       statusValue === 'failed' &&
@@ -79,11 +85,9 @@ export default (props: Props) => {
       isSameAuthor &&
       isSamePost
     ) {
-      dispatch(resetStatus());
-      const error = store.getState().user.error;
+      const error = useAppSelector(state => state.user.error);
       showError(error);
-      LayoutAnimation.easeInEaseOut();
-      setIsFollowed(isFollowed ? 0 : 1);
+      handleStatusChange();
     }
 
     if (
@@ -92,9 +96,7 @@ export default (props: Props) => {
       isSameAuthor &&
       !isSamePost
     ) {
-      dispatch(resetStatus());
-      LayoutAnimation.easeInEaseOut();
-      setIsFollowed(isFollowed ? 0 : 1);
+      handleStatusChange();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statusValue]);
@@ -106,17 +108,20 @@ export default (props: Props) => {
     dispatch(setOperationUserId(props.authorId));
     dispatch(setOperationPostId(props.postId));
 
-    if (isFollowed) {
-      setIsFollowed(0);
+    const followValue = isFollowed ? 0 : 1;
+    setIsFollowed(followValue);
+    dispatch(followOrUnfollowUserAsync(followValue));
+  };
 
-      dispatch(followOrUnfollowUserAsync(0));
-
-      return;
+  const renderActionButton = () => {
+    if (props.authorId !== userId) {
+      if (props.isFollowing || props.isLatest || isFollowed) {
+        return <ChatButton />;
+      } else {
+        return <FollowButton onPress={handleFollow} />;
+      }
     }
-
-    setIsFollowed(1);
-
-    dispatch(followOrUnfollowUserAsync(1));
+    return null;
   };
 
   return (
@@ -139,13 +144,7 @@ export default (props: Props) => {
         </Text>
       </View>
 
-      {props.isFollowing || props.conversationId ? (
-        <ChatButton />
-      ) : isFollowed ? (
-        <ChatButton />
-      ) : (
-        <FollowButton onPress={handleFollow} />
-      )}
+      {renderActionButton()}
     </View>
   );
 };
