@@ -29,6 +29,7 @@ import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {
   followOrUnfollowUserAsync,
   operationUserId,
+  resetStatus,
   scene,
   setOperationUserId,
   setScene,
@@ -69,25 +70,31 @@ export default (props: Props) => {
   const operationPostIdValue = useAppSelector(operationPostId);
 
   useEffect(() => {
+    const isSameAuthor = operationUserIdValue === props.authorId;
+    const isSamePost = operationPostIdValue === props.postId;
+
     if (
       statusValue === 'failed' &&
       sceneValue === 'postItem' &&
-      operationUserIdValue === props.authorId &&
-      operationPostIdValue === props.postId
+      isSameAuthor &&
+      isSamePost
     ) {
+      dispatch(resetStatus());
       const error = store.getState().user.error;
-
       showError(error);
-
       LayoutAnimation.easeInEaseOut();
+      setIsFollowed(isFollowed ? 0 : 1);
+    }
 
-      if (isFollowed) {
-        setIsFollowed(0);
-
-        return;
-      }
-
-      setIsFollowed(1);
+    if (
+      statusValue === 'success' &&
+      sceneValue === 'postItem' &&
+      isSameAuthor &&
+      !isSamePost
+    ) {
+      dispatch(resetStatus());
+      LayoutAnimation.easeInEaseOut();
+      setIsFollowed(isFollowed ? 0 : 1);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statusValue]);
