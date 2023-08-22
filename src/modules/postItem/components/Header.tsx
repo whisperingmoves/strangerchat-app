@@ -59,15 +59,17 @@ type Props = {
 
 export default (props: Props) => {
   const dispatch = useAppDispatch();
-  const [isFollowed, setIsFollowed] = useState<IsFollowed>(
-    props.isFollowed ? props.isFollowed : 0,
-  );
+  const [isFollowed, setIsFollowed] = useState<IsFollowed>(0);
 
   const statusValue = useAppSelector(status);
   const sceneValue = useAppSelector(scene);
   const operationUserIdValue = useAppSelector(operationUserId);
   const operationPostIdValue = useAppSelector(operationPostId);
   const userId = store.getState().user.userId;
+
+  useEffect(() => {
+    setIsFollowed(props.isFollowed ? props.isFollowed : 0);
+  }, [props.isFollowed]);
 
   useEffect(() => {
     const isSameAuthor = operationUserIdValue === props.authorId;

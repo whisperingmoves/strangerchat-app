@@ -6,14 +6,10 @@ import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import PlaceHolder from '../../../components/PlaceHolder';
 import ShareButton from './ShareButton';
 import CollectButton from './CollectButton';
-import {
-  CommentCount,
-  IsLiked,
-  LikeCount,
-  PostId,
-} from '../../following/store/slice';
+import {CommentCount, IsLiked, LikeCount} from '../../following/store/slice';
 import CommentButton from './CommentButton';
 import LikeButton from './LikeButton';
+import {PostId} from '../../../stores/post/slice';
 
 type Props = {
   style: StyleProp<ViewStyle>;

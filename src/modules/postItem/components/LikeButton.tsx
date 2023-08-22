@@ -35,12 +35,18 @@ type Props = {
 export default (props: Props) => {
   const dispatch = useAppDispatch();
 
-  const [count, setCount] = useState<LikeCount>(props.count ? props.count : 0);
-  const [isLiked, setIsLiked] = useState<IsLiked>(
-    props.isLiked ? props.isLiked : 0,
-  );
+  const [count, setCount] = useState<LikeCount>(0);
+  const [isLiked, setIsLiked] = useState<IsLiked>(0);
   const statusValue = useAppSelector(status);
   const operationPostIdValue = useAppSelector(operationPostId);
+
+  useEffect(() => {
+    setCount(props.count ? props.count : 0);
+  }, [props.count]);
+
+  useEffect(() => {
+    setIsLiked(props.isLiked ? props.isLiked : 0);
+  }, [props.isLiked]);
 
   useEffect(() => {
     if (statusValue === 'failed' && operationPostIdValue === props.postId) {
