@@ -18,6 +18,7 @@ import NavigationBar from './src/modules/navigationBar/NavigationBar';
 import NewPost from './src/modules/newPost/NewPost';
 import Loading from './src/components/Loading';
 import useLoading from './src/hooks/useLoading';
+import Search from './src/modules/search/Search';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -28,6 +29,7 @@ export type RootStackParamList = {
   Avatar: {gender: GenderType; mobile: Mobile; birthday: BirthdayType};
   NavigationBar: undefined;
   NewPost: undefined;
+  Search: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -119,6 +121,15 @@ function App(): Element {
             options={{
               headerShown: false,
               ...TransitionPresets.ModalSlideFromBottomIOS,
+            }}
+          />
+
+          <Stack.Screen
+            name="Search"
+            component={Search}
+            options={{
+              headerShown: false,
+              ...TransitionPresets.SlideFromRightIOS,
             }}
           />
         </Stack.Navigator>

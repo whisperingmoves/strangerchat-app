@@ -9,6 +9,10 @@ export const formatNumber = (num: number) => {
 };
 
 export const formatNumberWithSuffix = (number: number): string => {
+  if (number === 0) {
+    return '0';
+  }
+
   const suffixes = ['', 'K', 'M', 'B', 'T'];
   const suffixIndex = Math.floor(Math.log10(number) / 3);
   const formattedNumber = (number / Math.pow(1000, suffixIndex)).toFixed(0);

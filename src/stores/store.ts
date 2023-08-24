@@ -23,6 +23,7 @@ import newPostReducer from '../modules/newPost/store/slice';
 import followingReducer from '../modules/following/store/slice';
 import recommendReducer from '../modules/recommend/store/slice';
 import latestReducer from '../modules/latest/store/slice';
+import searchReducer from '../modules/search/store/slice';
 
 export const LOG_OUT = 'LOG_OUT';
 
@@ -48,6 +49,7 @@ const appReducer = combineReducers({
   recommend: recommendReducer,
   latest: latestReducer,
   post: postReducer,
+  search: searchReducer,
 });
 
 const rootReducer = (state: any, action: any) => {

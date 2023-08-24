@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {MaterialTopTabBarProps} from '@react-navigation/material-top-tabs';
 import {
-  Alert,
   Image,
   LayoutChangeEvent,
   LayoutRectangle,
@@ -59,9 +58,7 @@ export default ({
   };
 
   const handleSearchPress = () => {
-    Alert.alert(
-      "navigation.navigate({name: 'Search', params: {}, merge: true});",
-    );
+    navigation.navigate({name: 'Search', params: {}, merge: true});
   };
 
   return (
