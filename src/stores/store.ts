@@ -24,6 +24,7 @@ import followingReducer from '../modules/following/store/slice';
 import recommendReducer from '../modules/recommend/store/slice';
 import latestReducer from '../modules/latest/store/slice';
 import searchReducer from '../modules/search/store/slice';
+import chatReducer from '../modules/chat/store/slice';
 
 export const LOG_OUT = 'LOG_OUT';
 
@@ -50,6 +51,7 @@ const appReducer = combineReducers({
   latest: latestReducer,
   post: postReducer,
   search: searchReducer,
+  chat: chatReducer,
 });
 
 const rootReducer = (state: any, action: any) => {
