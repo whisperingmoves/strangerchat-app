@@ -3,19 +3,21 @@ import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 import icon_backtrack from '../../../assets/images/icons/icon_backtrack.png';
 import SearchInput from './SearchInput';
+import {Keyword} from '../store/slice';
 
 type Props = {
   onPress: () => void;
+  keyword?: Keyword;
 };
 
-export default ({onPress}: Props) => {
+export default ({onPress, keyword}: Props) => {
   return (
     <View style={styles.root}>
       <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
         <Image style={styles.img} source={icon_backtrack} />
       </TouchableOpacity>
 
-      <SearchInput />
+      <SearchInput keyword={keyword} />
     </View>
   );
 };

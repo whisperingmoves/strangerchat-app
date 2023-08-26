@@ -10,6 +10,8 @@ import {
 import {listPageReducer} from '../../../stores/helper';
 import {getLatestPosts} from '../../latest/store/api';
 
+export type Keyword = string;
+
 export type Error = string;
 
 export type Scene = 'getHotPosts' | 'getLatestPosts' | undefined;
@@ -17,15 +19,16 @@ export type Scene = 'getHotPosts' | 'getLatestPosts' | undefined;
 export type Status = 'idle' | 'loading' | 'failed' | 'success';
 
 export interface State extends GetLatestPostsRequest {
-  latestPostList: LatestPostData[];
+  list: LatestPostData[];
   hotPostList: HotPost[];
+  keyword?: Keyword;
   error: Error;
   scene: Scene;
   status: Status;
 }
 
 const initialState: State = {
-  latestPostList: [],
+  list: [],
   hotPostList: [],
   page: 1,
   pageSize: 10,
@@ -49,10 +52,10 @@ export const getLatestPostsAsync = createAsyncThunk<
   void,
   {state: {search: State; user: UserState}}
 >('search/getLatestPosts', async (_, {getState}) => {
-  const {page, pageSize} = getState().search;
+  const {page, pageSize, keyword} = getState().search;
   const {token} = getState().user;
 
-  return await getLatestPosts({page, pageSize}, token);
+  return await getLatestPosts({page, pageSize, keyword}, token);
 });
 
 export const slice = createSlice({
@@ -71,6 +74,10 @@ export const slice = createSlice({
 
     setScene: (state, action: PayloadAction<Scene>) => {
       state.scene = action.payload;
+    },
+
+    setKeyword: (state, action: PayloadAction<Keyword>) => {
+      state.keyword = action.payload;
     },
   },
 
@@ -106,14 +113,16 @@ export const slice = createSlice({
   },
 });
 
-export const {resetStatus, resetPage, setScene} = slice.actions;
+export const {resetStatus, resetPage, setScene, setKeyword} = slice.actions;
 
 export const status = (state: RootState) => state.search.status;
 
 export const scene = (state: RootState) => state.search.scene;
 
+export const keyword = (state: RootState) => state.search.keyword;
+
 export const hotPostList = (state: RootState) => state.search.hotPostList;
 
-export const latestPostList = (state: RootState) => state.search.latestPostList;
+export const list = (state: RootState) => state.search.list;
 
 export default slice.reducer;

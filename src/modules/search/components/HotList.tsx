@@ -61,7 +61,7 @@ export default (props: Props) => {
       return;
     }
 
-    if (statusValue === 'failed') {
+    if (statusValue === 'failed' && sceneValue === 'getHotPosts') {
       dispatch(resetStatus());
 
       const {error} = store.getState().search;

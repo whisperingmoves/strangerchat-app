@@ -10,11 +10,16 @@ import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 import HotList from './components/HotList';
 import Header from './components/Header';
+import SearchList from './components/SearchList';
+import {useAppSelector} from '../../hooks';
+import {keyword} from './store/slice';
 
 export default () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   const insets = useSafeAreaInsets();
+
+  const keywordValue = useAppSelector(keyword);
 
   const statusBarStyle: StyleProp<ViewStyle> = {paddingTop: insets.top};
 
@@ -24,9 +29,9 @@ export default () => {
 
   return (
     <View style={[styles.root, statusBarStyle]}>
-      <Header onPress={handlePress} />
+      <Header onPress={handlePress} keyword={keywordValue} />
 
-      <HotList style={styles.hotList} />
+      {keywordValue ? <SearchList /> : <HotList style={styles.hotList} />}
     </View>
   );
 };
