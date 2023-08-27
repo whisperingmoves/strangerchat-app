@@ -6,7 +6,7 @@ import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 import Header from './components/Header';
 import {RecommendedPostData} from '../../apis/post/getRecommendedPosts';
 import {FollowedPostData} from '../../apis/post/getFollowedPosts';
-import PhotoList from '../../components/PhotoList';
+import PhotoList from '../../components/photoList/PhotoList';
 import {generateFullURL} from '../helper';
 import Location from './components/Location';
 import Footer from './components/Footer';

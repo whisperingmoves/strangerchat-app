@@ -6,9 +6,9 @@ import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 import {PLACE_HOLDER} from '../../../constants/newPost/Config';
-import {content, images, setState} from '../store/slice';
+import {content, images, removeImageByIndex, setState} from '../store/slice';
 import {useAppSelector} from '../../../hooks';
-import PhotoList from '../../../components/PhotoList';
+import PhotoList from '../../../components/photoList/PhotoList';
 import {generateFullURL} from '../../helper';
 
 export interface InputRef {
@@ -38,6 +38,10 @@ export default forwardRef((props: Props, ref) => {
     };
   });
 
+  const handleDelete = (index: number) => {
+    dispatch(removeImageByIndex(index));
+  };
+
   return (
     <ScrollView
       style={[styles.root, props.style]}
@@ -62,6 +66,7 @@ export default forwardRef((props: Props, ref) => {
         <PhotoList
           photoList={imagesValue.map(item => generateFullURL(item))}
           isMarginLeft={false}
+          onDelete={handleDelete}
         />
       )}
     </ScrollView>

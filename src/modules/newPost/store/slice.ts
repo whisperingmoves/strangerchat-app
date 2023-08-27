@@ -15,7 +15,7 @@ import {getLocation} from '../../../utils/geolocation';
 import {PRIVATE, PUBLIC} from '../../../constants/newPost/Config';
 import {HOME} from '../../../constants/Config';
 
-export type Visibility = number | undefined;
+export type Visibility = number;
 
 export type Photo = string;
 
@@ -108,6 +108,14 @@ export const slice = createSlice({
     setVisibility: (state, action: PayloadAction<Visibility>) => {
       state.visibility = action.payload;
     },
+
+    removeImageByIndex: (state, action: PayloadAction<number>) => {
+      const index = action.payload;
+
+      if (state.images && index >= 0 && index < state.images.length) {
+        state.images = state.images.filter((_, i) => i !== index);
+      }
+    },
   },
 
   extraReducers: builder => {
@@ -176,8 +184,14 @@ export const slice = createSlice({
   },
 });
 
-export const {resetStatus, setState, resetState, setScene, setVisibility} =
-  slice.actions;
+export const {
+  resetStatus,
+  setState,
+  resetState,
+  setScene,
+  setVisibility,
+  removeImageByIndex,
+} = slice.actions;
 
 export const status = (state: RootState) => state.newPost.status;
 

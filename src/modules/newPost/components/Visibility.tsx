@@ -13,7 +13,7 @@ import {PRIVATE, PUBLIC} from '../../../constants/newPost/Config';
 import {CANCEL, HOME} from '../../../constants/Config';
 
 type Props = {
-  visibility: Visibility;
+  visibility?: Visibility;
   style: StyleProp<ViewStyle>;
   blurInput: () => void;
 };
@@ -41,7 +41,7 @@ export default (props: Props) => {
       <Image source={icon_earth} />
 
       <Text style={styles.txt}>
-        {VISIBILITY_MAP[props.visibility as number]}
+        {VISIBILITY_MAP[props.visibility ? props.visibility : 0]}
       </Text>
     </TouchableOpacity>
   );
