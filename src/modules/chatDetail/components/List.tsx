@@ -64,6 +64,7 @@ export default (props: Props) => {
     const isSelf = message.senderId === store.getState().user.userId;
 
     return {
+      conversionId: message.conversationId,
       messageId: message.messageId,
       senderId: message.senderId,
       sentTime: message.sentTime,

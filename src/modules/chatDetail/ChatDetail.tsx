@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import {StyleSheet, View} from 'react-native';
 
@@ -11,10 +11,14 @@ import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import Info from './components/Info';
 import List from './components/List';
 import Footer from './components/Footer';
-import {ConversationId, conversationList} from '../chat/store/slice';
+import {
+  ConversationId,
+  conversationList,
+  setConversation,
+} from '../chat/store/slice';
 import {Route} from '@react-navigation/native';
 import DetailHeader from '../../components/DetailHeader';
-import {useAppSelector} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import {avatar} from '../../stores/user/slice';
 
 type Props = {
@@ -28,6 +32,8 @@ export default (props: Props) => {
   const insets = useSafeAreaInsets();
 
   const conversationListValue = useAppSelector(conversationList);
+
+  const dispatch = useAppDispatch();
 
   const {conversationId, clientConversationId} = props.route.params;
 
@@ -44,6 +50,17 @@ export default (props: Props) => {
   const statusBarStyle: StyleProp<ViewStyle> = {
     paddingTop: insets.top,
   };
+
+  useEffect(() => {
+    dispatch(
+      setConversation({
+        clientConversationId: clientConversationId,
+        conversationId: conversationId,
+        unreadCount: 0,
+      }),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <View style={[styles.root, statusBarStyle]}>

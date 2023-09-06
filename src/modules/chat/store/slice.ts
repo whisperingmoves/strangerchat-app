@@ -205,8 +205,9 @@ export const slice = createSlice({
       action: PayloadAction<{
         clientConversationId?: ConversationId;
         conversationId?: ConversationId;
-        lastMessageTime: LastMessageTime;
-        lastMessageContent: LastMessageContent;
+        lastMessageTime?: LastMessageTime;
+        lastMessageContent?: LastMessageContent;
+        unreadCount?: UnreadCount;
       }>,
     ) => {
       const conversation = action.payload;

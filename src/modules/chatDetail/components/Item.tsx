@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
 import {
   Image,
   StyleSheet,
@@ -16,6 +16,8 @@ import icon_have_read from '../../../assets/images/icons/icon_have_read.png';
 import ResizeImage from '../../../components/ResizeImage';
 import {
   Content,
+  ConversationId,
+  markMessageAsReadAsync,
   MessageId,
   ReadStatus,
   SenderId,
@@ -25,8 +27,11 @@ import {
 import {OpponentAvatar} from '../../chat/store/slice';
 import {generateFullURL} from '../../helper';
 import {formatTimestamp} from '../../../utils/date';
+import {useAppDispatch} from '../../../hooks';
+import {SocketContext} from '../../../contexts/SocketContext';
 
 export type Props = {
+  conversionId: ConversationId;
   messageId: MessageId;
   senderId: SenderId;
   sentTime?: SentTime;
@@ -39,6 +44,10 @@ export type Props = {
 
 export default (props: Props) => {
   const {width: windowWidth} = useWindowDimensions();
+
+  const dispatch = useAppDispatch();
+
+  const socket = useContext(SocketContext);
 
   const isSelf = props.isSelf;
 
@@ -61,6 +70,27 @@ export default (props: Props) => {
       ? 'center'
       : 'flex-start',
   };
+
+  useEffect(() => {
+    if (
+      !isSelf &&
+      props.conversionId &&
+      props.messageId &&
+      props.readStatus !== 1
+    ) {
+      dispatch(
+        markMessageAsReadAsync({
+          data: {
+            conversationId: props.conversionId,
+            messageId: props.messageId,
+          },
+          socket,
+        }),
+      );
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <View style={styles.root}>
