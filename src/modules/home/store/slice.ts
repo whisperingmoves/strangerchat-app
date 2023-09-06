@@ -7,9 +7,9 @@ import {State as UserState} from '../../../stores/user/slice';
 import {listPageReducer} from '../../../stores/helper';
 import {
   NearestUser,
-  NearestUsersResponse,
+  NearestUsers,
 } from '../../../apis/notification/nearestUsers';
-import {OnlineUsersResponse} from '../../../apis/notification/onlineUsers';
+import {OnlineUsers} from '../../../apis/notification/onlineUsers';
 import {MUTUAL, NEW} from '../../../constants/home/Config';
 import {FOLLOW, FOLLOWING} from '../../../constants/Config';
 
@@ -82,13 +82,13 @@ export const slice = createSlice({
       state.page = initialState.page;
     },
 
-    setNearestUsers: (state, action: PayloadAction<NearestUsersResponse>) => {
+    setNearestUsers: (state, action: PayloadAction<NearestUsers>) => {
       if (action.payload.users) {
         state.nearestUsers = action.payload.users;
       }
     },
 
-    setOnlineUsers: (state, action: PayloadAction<OnlineUsersResponse>) => {
+    setOnlineUsers: (state, action: PayloadAction<OnlineUsers>) => {
       if (action.payload.online) {
         state.onlineUsers = action.payload.online;
       }

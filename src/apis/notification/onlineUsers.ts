@@ -1,3 +1,3 @@
-export interface OnlineUsersResponse {
+export interface OnlineUsers {
   online?: number;
 }

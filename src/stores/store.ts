@@ -25,6 +25,9 @@ import recommendReducer from '../modules/recommend/store/slice';
 import latestReducer from '../modules/latest/store/slice';
 import searchReducer from '../modules/search/store/slice';
 import chatReducer from '../modules/chat/store/slice';
+import chatDetailReducer from '../modules/chatDetail/store/slice';
+import giftReducer from '../modules/gift/store/slice';
+import topUpReducer from '../modules/topUp/store/slice';
 
 export const LOG_OUT = 'LOG_OUT';
 
@@ -33,7 +36,7 @@ export const STORAGE_KEY = 'strangerchat';
 const persistConfig = {
   key: STORAGE_KEY,
   storage: AsyncStorage,
-  whitelist: ['user', 'newPost'],
+  whitelist: ['user', 'newPost', 'chat', 'chatDetail', 'gift'],
 };
 
 const appReducer = combineReducers({
@@ -52,6 +55,9 @@ const appReducer = combineReducers({
   post: postReducer,
   search: searchReducer,
   chat: chatReducer,
+  chatDetail: chatDetailReducer,
+  gift: giftReducer,
+  topUp: topUpReducer,
 });
 
 const rootReducer = (state: any, action: any) => {

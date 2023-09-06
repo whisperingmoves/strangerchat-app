@@ -5,6 +5,6 @@ export interface NearestUser {
   distance?: number;
 }
 
-export interface NearestUsersResponse {
+export interface NearestUsers {
   users?: NearestUser[];
 }

@@ -19,6 +19,8 @@ import NewPost from './src/modules/newPost/NewPost';
 import Loading from './src/components/Loading';
 import useLoading from './src/hooks/useLoading';
 import Search from './src/modules/search/Search';
+import ChatDetail from './src/modules/chatDetail/ChatDetail';
+import {ConversationId} from './src/modules/chat/store/slice';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -30,6 +32,10 @@ export type RootStackParamList = {
   NavigationBar: undefined;
   NewPost: undefined;
   Search: undefined;
+  ChatDetail: {
+    conversationId: ConversationId;
+    clientConversationId?: ConversationId;
+  };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -127,6 +133,15 @@ function App(): Element {
           <Stack.Screen
             name="Search"
             component={Search}
+            options={{
+              headerShown: false,
+              ...TransitionPresets.SlideFromRightIOS,
+            }}
+          />
+
+          <Stack.Screen
+            name="ChatDetail"
+            component={ChatDetail}
             options={{
               headerShown: false,
               ...TransitionPresets.SlideFromRightIOS,

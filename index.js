@@ -8,6 +8,7 @@ import ErrorBoundary from './src/components/ErrorBoundary';
 import {persistor, store} from './src/stores/store';
 import {PersistGate} from 'redux-persist/integration/react';
 import {ActionSheetProvider} from '@expo/react-native-action-sheet';
+import {SocketProvider} from './src/contexts/SocketContext';
 
 // 普通 JavaScript 报错的收集
 const defaultHandler =
@@ -54,7 +55,9 @@ AppRegistry.registerComponent(appName, () => () => (
     <PersistGate loading={null} persistor={persistor}>
       <ActionSheetProvider>
         <ErrorBoundary>
-          <App />
+          <SocketProvider>
+            <App />
+          </SocketProvider>
         </ErrorBoundary>
       </ActionSheetProvider>
     </PersistGate>

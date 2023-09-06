@@ -42,6 +42,7 @@ import {
   PostId,
   setOperationPostId,
 } from '../../../stores/post/slice';
+import {conversationList} from '../../chat/store/slice';
 
 type Props = {
   authorId: AuthorId;
@@ -65,7 +66,28 @@ export default (props: Props) => {
   const sceneValue = useAppSelector(scene);
   const operationUserIdValue = useAppSelector(operationUserId);
   const operationPostIdValue = useAppSelector(operationPostId);
+  const conversationListValue = useAppSelector(conversationList);
+
   const userId = store.getState().user.userId;
+
+  let conversationId = props.conversationId;
+  let clientConversationId: ConversationId | undefined;
+
+  const conversationIndex = conversationListValue.findIndex(
+    item => item.opponentUserId === props.authorId,
+  );
+
+  if (conversationIndex !== -1) {
+    const conversation = conversationListValue[conversationIndex];
+
+    if (!conversationId && conversation.conversationId) {
+      conversationId = conversation.conversationId;
+    }
+
+    if (conversation.clientConversationId) {
+      clientConversationId = conversation.clientConversationId;
+    }
+  }
 
   useEffect(() => {
     setIsFollowed(props.isFollowed ? props.isFollowed : 0);
@@ -118,7 +140,14 @@ export default (props: Props) => {
   const renderActionButton = () => {
     if (props.authorId !== userId) {
       if (props.isFollowing || props.isLatest || isFollowed) {
-        return <ChatButton />;
+        return (
+          <ChatButton
+            conversationId={conversationId}
+            clientConversationId={clientConversationId}
+            opponentUserId={props.authorId}
+            opponentAvatar={props.authorAvatar}
+          />
+        );
       } else {
         return <FollowButton onPress={handleFollow} />;
       }

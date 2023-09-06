@@ -13,8 +13,26 @@ import NewStories from './components/NewStories';
 import {SocketContext} from '../../contexts/SocketContext';
 import {useAppDispatch} from '../../hooks';
 import {setNearestUsers, setOnlineUsers} from './store/slice';
-import {NearestUsersResponse} from '../../apis/notification/nearestUsers';
-import {OnlineUsersResponse} from '../../apis/notification/onlineUsers';
+import {
+  setConversationDetails,
+  setCreatedConversation,
+  setRecentConversations,
+  setUnreadNotificationsCount,
+} from '../chat/store/slice';
+import {
+  markedAsReadMessage,
+  setRecentMessages,
+  setSentMessage,
+} from '../chatDetail/store/slice';
+import {UnreadNotificationsCount} from '../../apis/notification/unreadNotificationsCount';
+import {CreatedConversation} from '../../apis/notification/createdConversation';
+import {RecentConversation} from '../../apis/notification/recentConversations';
+import {ConversationDetails} from '../../apis/notification/conversationDetails';
+import {RecentMessage} from '../../apis/notification/recentMessages';
+import {SentMessage} from '../../apis/notification/sentMessage';
+import {MarkedAsReadMessage} from '../../apis/notification/markedAsReadMessage';
+import {NearestUsers} from '../../apis/notification/nearestUsers';
+import {OnlineUsers} from '../../apis/notification/onlineUsers';
 
 export default () => {
   const insets = useSafeAreaInsets();
@@ -31,10 +49,35 @@ export default () => {
 
       switch (type) {
         case 0:
-          dispatch(setNearestUsers(messageData as NearestUsersResponse));
+          dispatch(setNearestUsers(messageData as NearestUsers));
           break;
         case 1:
-          dispatch(setOnlineUsers(messageData as OnlineUsersResponse));
+          dispatch(setOnlineUsers(messageData as OnlineUsers));
+          break;
+        case 2:
+          dispatch(
+            setUnreadNotificationsCount(
+              messageData as UnreadNotificationsCount,
+            ),
+          );
+          break;
+        case 3:
+          dispatch(setCreatedConversation(messageData as CreatedConversation));
+          break;
+        case 4:
+          dispatch(setRecentConversations(messageData as RecentConversation[]));
+          break;
+        case 5:
+          dispatch(setConversationDetails(messageData as ConversationDetails));
+          break;
+        case 6:
+          dispatch(setRecentMessages(messageData as RecentMessage[]));
+          break;
+        case 7:
+          dispatch(setSentMessage(messageData as SentMessage));
+          break;
+        case 8:
+          dispatch(markedAsReadMessage(messageData as MarkedAsReadMessage));
           break;
         default:
           break;

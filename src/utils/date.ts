@@ -14,6 +14,7 @@ import {
   YEAR_AGO,
   YEARS_AGO,
 } from '../constants/home/Config';
+import {YESTERDAY} from '../constants/Config';
 
 export const isTimestampToday = (timestamp: number): boolean => {
   const currentDate = new Date();
@@ -67,5 +68,36 @@ export const formatTimeAgo = (unixTimestamp: number) => {
     const years = Math.floor(diff / (60 * 60 * 24 * 365));
 
     return `${years === 1 ? YEAR_AGO(years) : YEARS_AGO(years)} ago`;
+  }
+};
+
+export const formatTimestamp = (timestamp: number): string => {
+  const now = Math.floor(Date.now() / 1000);
+
+  const secondsInDay = 86400;
+  const millisecondsInSecond = 1000;
+
+  const diff = now - timestamp;
+
+  if (diff < secondsInDay) {
+    const date = new Date(timestamp * millisecondsInSecond);
+
+    const hours = date.getHours().toString().padStart(2, '0');
+
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+
+    return `${hours}:${minutes}`;
+  } else if (diff < secondsInDay * 2) {
+    return YESTERDAY;
+  } else {
+    const date = new Date(timestamp * millisecondsInSecond);
+
+    const year = date.getFullYear();
+
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+
+    const day = date.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   }
 };

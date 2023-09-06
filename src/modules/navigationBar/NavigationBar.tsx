@@ -13,11 +13,18 @@ import DailyAttendance, {
   DailyAttendanceRef,
 } from './components/DailyAttendance';
 import {CHAT, HOME} from '../../constants/Config';
-import {SocketProvider} from '../../contexts/SocketContext';
 import {isTimestampToday} from '../../utils/date';
 import {store} from '../../stores/store';
 
-const BottomTab = createBottomTabNavigator();
+export type RootBottomTabParamList = {
+  Home: undefined;
+  Explore: undefined;
+  Post: undefined;
+  Chat: {height: number};
+  Profile: undefined;
+};
+
+const BottomTab = createBottomTabNavigator<RootBottomTabParamList>();
 
 export default () => {
   const dailyAttendanceRef = useRef<DailyAttendanceRef>(null);
@@ -38,59 +45,57 @@ export default () => {
   }, []);
 
   return (
-    <SocketProvider>
-      <View style={styles.root}>
-        {/* eslint-disable-next-line react/no-unstable-nested-components */}
-        <BottomTab.Navigator tabBar={props => <TabBar {...props} />}>
-          <BottomTab.Screen
-            name="Home"
-            component={Home}
-            options={{
-              title: HOME,
-              headerShown: false,
-            }}
-          />
+    <View style={styles.root}>
+      {/* eslint-disable-next-line react/no-unstable-nested-components */}
+      <BottomTab.Navigator tabBar={props => <TabBar {...props} />}>
+        <BottomTab.Screen
+          name="Home"
+          component={Home}
+          options={{
+            title: HOME,
+            headerShown: false,
+          }}
+        />
 
-          <BottomTab.Screen
-            name="Explore"
-            component={Explore}
-            options={{
-              title: EXPLORE,
-              headerShown: false,
-            }}
-          />
+        <BottomTab.Screen
+          name="Explore"
+          component={Explore}
+          options={{
+            title: EXPLORE,
+            headerShown: false,
+          }}
+        />
 
-          <BottomTab.Screen
-            name="Post"
-            component={Empty}
-            options={{
-              title: POST,
-              headerShown: false,
-            }}
-          />
+        <BottomTab.Screen
+          name="Post"
+          component={Empty}
+          options={{
+            title: POST,
+            headerShown: false,
+          }}
+        />
 
-          <BottomTab.Screen
-            name="Chat"
-            component={Chat}
-            options={{
-              title: CHAT,
-              headerShown: false,
-            }}
-          />
+        <BottomTab.Screen
+          name="Chat"
+          component={Chat}
+          options={{
+            title: CHAT,
+            headerShown: false,
+          }}
+        />
 
-          <BottomTab.Screen
-            name="Profile"
-            component={Profile}
-            options={{
-              title: PROFILE,
-              headerShown: false,
-            }}
-          />
-        </BottomTab.Navigator>
+        <BottomTab.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            title: PROFILE,
+            headerShown: false,
+          }}
+        />
+      </BottomTab.Navigator>
 
-        <DailyAttendance ref={dailyAttendanceRef} />
-      </View>
-    </SocketProvider>
+      <DailyAttendance ref={dailyAttendanceRef} />
+    </View>
   );
 };
 

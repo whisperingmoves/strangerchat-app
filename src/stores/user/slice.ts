@@ -17,6 +17,8 @@ export type Scene = 'avatar' | 'postItem' | undefined;
 
 export type Status = 'idle' | 'loading' | 'failed' | 'success';
 
+export type Avatar = string;
+
 export interface State extends RegisterUserResponse, VerifyCodeResponse {
   mobile: Mobile;
   operationUserId?: UserId;
@@ -132,10 +134,16 @@ export const scene = (state: RootState) => state.user.scene;
 
 export const userId = (state: RootState) => state.user.userId;
 
+export const token = (state: RootState) => state.user.token;
+
 export const checkedDays = (state: RootState) => state.user.checkedDays;
 
 export const lastCheckDate = (state: RootState) => state.user.lastCheckDate;
 
 export const operationUserId = (state: RootState) => state.user.operationUserId;
+
+export const coinBalance = (state: RootState) => state.user.coinBalance;
+
+export const avatar = (state: RootState) => state.user.avatar;
 
 export default slice.reducer;
