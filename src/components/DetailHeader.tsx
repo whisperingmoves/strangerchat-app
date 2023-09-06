@@ -2,8 +2,6 @@ import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 import icon_more from '../assets/images/icons/icon_more.png';
@@ -13,19 +11,14 @@ import {getUsername} from '../modules/helper';
 type Props = {
   userId: string;
   username?: string;
+  onPress: () => void;
   style: StyleProp<ViewStyle>;
 };
 
 export default (props: Props) => {
-  const navigation = useNavigation<StackNavigationProp<any>>();
-
-  const handlePress = () => {
-    navigation.goBack();
-  };
-
   return (
     <View style={[styles.root, props.style]}>
-      <TouchableOpacity activeOpacity={0.7} onPress={handlePress}>
+      <TouchableOpacity activeOpacity={0.7} onPress={props.onPress}>
         <Image source={icon_backtrack} />
       </TouchableOpacity>
 

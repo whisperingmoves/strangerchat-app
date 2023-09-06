@@ -16,10 +16,15 @@ import {
   conversationList,
   setConversation,
 } from '../chat/store/slice';
-import {Route} from '@react-navigation/native';
+import {Route, useNavigation} from '@react-navigation/native';
 import DetailHeader from '../../components/DetailHeader';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {avatar} from '../../stores/user/slice';
+import {
+  resetCurrentConversationId,
+  setCurrentConversationId,
+} from './store/slice';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 type Props = {
   route: Route<
@@ -30,6 +35,8 @@ type Props = {
 
 export default (props: Props) => {
   const insets = useSafeAreaInsets();
+
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   const conversationListValue = useAppSelector(conversationList);
 
@@ -54,13 +61,25 @@ export default (props: Props) => {
   useEffect(() => {
     dispatch(
       setConversation({
-        clientConversationId: clientConversationId,
-        conversationId: conversationId,
+        clientConversationId: conversation.clientConversationId,
+        conversationId: conversation.conversationId,
         unreadCount: 0,
       }),
     );
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    dispatch(setCurrentConversationId(conversation.conversationId));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [conversation]);
+
+  const handleBackPress = () => {
+    navigation.goBack();
+
+    dispatch(resetCurrentConversationId());
+  };
 
   return (
     <View style={[styles.root, statusBarStyle]}>
@@ -68,6 +87,7 @@ export default (props: Props) => {
         username={conversation.opponentUsername}
         style={styles.header}
         userId={conversation.opponentUserId}
+        onPress={handleBackPress}
       />
 
       <Info

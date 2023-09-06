@@ -233,6 +233,36 @@ export const slice = createSlice({
         state.conversationList = conversationList;
       }
     },
+
+    inCreConversationUnreadCount: (
+      state: State,
+      action: PayloadAction<{
+        clientConversationId?: ConversationId;
+        conversationId?: ConversationId;
+        unreadCount?: UnreadCount;
+      }>,
+    ) => {
+      const conversation = action.payload;
+
+      let conversationList = state.conversationList;
+
+      const existingConversationIndex = conversationList.findIndex(item =>
+        conversation.clientConversationId
+          ? item.clientConversationId === conversation.clientConversationId
+          : item.conversationId === conversation.conversationId,
+      );
+
+      if (existingConversationIndex !== -1) {
+        conversationList[existingConversationIndex].unreadCount =
+          (conversationList[existingConversationIndex].unreadCount || 0) + 1;
+
+        conversationList = sortBy(conversationList, [
+          'lastMessageTime',
+        ]).reverse();
+
+        state.conversationList = conversationList;
+      }
+    },
   },
 
   extraReducers: builder => {
@@ -289,6 +319,7 @@ export const {
   setRecentConversations,
   setConversationDetails,
   setConversation,
+  inCreConversationUnreadCount,
 } = slice.actions;
 
 export const error = (state: RootState) => state.chat.error;

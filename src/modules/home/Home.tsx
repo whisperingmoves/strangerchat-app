@@ -14,6 +14,8 @@ import {SocketContext} from '../../contexts/SocketContext';
 import {useAppDispatch} from '../../hooks';
 import {setNearestUsers, setOnlineUsers} from './store/slice';
 import {
+  inCreConversationUnreadCount,
+  setConversation,
   setConversationDetails,
   setCreatedConversation,
   setRecentConversations,
@@ -33,6 +35,7 @@ import {SentMessage} from '../../apis/notification/sentMessage';
 import {MarkedAsReadMessage} from '../../apis/notification/markedAsReadMessage';
 import {NearestUsers} from '../../apis/notification/nearestUsers';
 import {OnlineUsers} from '../../apis/notification/onlineUsers';
+import {store} from '../../stores/store';
 
 export default () => {
   const insets = useSafeAreaInsets();
@@ -75,6 +78,33 @@ export default () => {
           break;
         case 7:
           dispatch(setSentMessage(messageData as SentMessage));
+
+          if (messageData.senderId === store.getState().user.userId) {
+            return;
+          }
+
+          dispatch(
+            setConversation({
+              conversationId: messageData.conversationId,
+              lastMessageTime: messageData.sentTime,
+              lastMessageContent: messageData.content,
+            }),
+          );
+
+          if (
+            messageData.conversationId ===
+            store.getState().chatDetail.currentConversationId
+          ) {
+            return;
+          }
+
+          dispatch(
+            inCreConversationUnreadCount({
+              clientConversationId: messageData.clientConversationId,
+              conversationId: messageData.conversationId,
+              unreadCount: 1,
+            }),
+          );
           break;
         case 8:
           dispatch(markedAsReadMessage(messageData as MarkedAsReadMessage));

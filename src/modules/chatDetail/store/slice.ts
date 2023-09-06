@@ -32,6 +32,7 @@ export type ReadStatus = number;
 export interface State {
   messageMap: Record<ConversationId, Message[]>;
   error: Error;
+  currentConversationId?: ConversationId;
   status: Status;
 }
 
@@ -68,6 +69,17 @@ export const slice = createSlice({
   initialState,
 
   reducers: {
+    setCurrentConversationId: (
+      state,
+      action: PayloadAction<ConversationId>,
+    ) => {
+      state.currentConversationId = action.payload;
+    },
+
+    resetCurrentConversationId: state => {
+      state.currentConversationId = initialState?.currentConversationId;
+    },
+
     setRecentMessages: (
       state: State,
       action: PayloadAction<RecentMessage[]>,
@@ -225,8 +237,13 @@ export const slice = createSlice({
   },
 });
 
-export const {setRecentMessages, setSentMessage, markedAsReadMessage} =
-  slice.actions;
+export const {
+  setRecentMessages,
+  setSentMessage,
+  markedAsReadMessage,
+  setCurrentConversationId,
+  resetCurrentConversationId,
+} = slice.actions;
 
 export const status = (state: RootState) => state.chatDetail.status;
 
