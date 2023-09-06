@@ -20,9 +20,18 @@ import icon_home_filled from '../../../assets/images/icons/icon_home_filled.png'
 import icon_explore_filled from '../../../assets/images/icons/icon_explore_filled.png';
 import icon_chat_filled from '../../../assets/images/icons/icon_chat_filled.png';
 import icon_profile_filled from '../../../assets/images/icons/icon_profile_filled.png';
+import {useAppSelector} from '../../../hooks';
+import {conversationList} from '../../chat/store/slice';
+import Badge from '../../../components/Badge';
+import {convertNumberToString} from '../../../utils/number';
+import {calculateTotalUnreadCount} from '../helper';
 
 export default ({state, descriptors, navigation}: BottomTabBarProps) => {
   const [height, setHeight] = useState(30);
+
+  const conversationListValue = useAppSelector(conversationList);
+
+  const unreadCount = calculateTotalUnreadCount(conversationListValue);
 
   const {routes, index} = state;
 
@@ -67,9 +76,18 @@ export default ({state, descriptors, navigation}: BottomTabBarProps) => {
             key={label}
             style={styles.item}
             onPress={handlePress}>
-            <Image
-              source={isFocused ? filledIconList[i] : outlinedIconList[i]}
-            />
+            <View>
+              <Image
+                source={isFocused ? filledIconList[i] : outlinedIconList[i]}
+              />
+
+              {i === 3 && unreadCount > 0 && (
+                <Badge
+                  style={styles.badge}
+                  text={convertNumberToString(unreadCount)}
+                />
+              )}
+            </View>
 
             {i !== 2 && (
               <Text
@@ -114,5 +132,15 @@ const styles = StyleSheet.create({
   },
   focusedLabel: {
     color: '#8B5CFF',
+  },
+  badge: {
+    position: 'absolute',
+    top: -8,
+    right: -8,
+    transform: [
+      {
+        scale: 1.2,
+      },
+    ],
   },
 });
