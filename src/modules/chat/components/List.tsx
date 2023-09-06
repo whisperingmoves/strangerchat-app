@@ -65,6 +65,7 @@ export default (props: Props) => {
         username: conversation.opponentUsername,
         updateTime: conversation.lastMessageTime,
         content: conversation.lastMessageContent,
+        unreadCount: conversation.unreadCount,
       };
     });
 

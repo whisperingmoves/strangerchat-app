@@ -29,7 +29,7 @@ export default (props: Props) => {
         </Text>
       </View>
 
-      <Text style={styles.contentTxt} numberOfLines={0}>
+      <Text style={styles.contentTxt} numberOfLines={1}>
         {props.content}
       </Text>
     </View>

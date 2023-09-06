@@ -11,7 +11,7 @@ import {
   OpponentUsername,
   setCreatedConversation,
 } from '../../chat/store/slice';
-import {generateUniqueId} from '../../../utils/idGenerator';
+import {generateUniqueId} from '../../../utils/id';
 import {SocketContext} from '../../../contexts/SocketContext';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';

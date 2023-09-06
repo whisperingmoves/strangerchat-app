@@ -9,7 +9,7 @@ import {
   OpponentUserId,
   setConversation,
 } from '../../chat/store/slice';
-import {generateUniqueId} from '../../../utils/idGenerator';
+import {generateUniqueId} from '../../../utils/id';
 import {useAppDispatch} from '../../../hooks';
 import {SentMessage} from '../../../apis/notification/sentMessage';
 import {store} from '../../../stores/store';

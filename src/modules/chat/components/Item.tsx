@@ -14,6 +14,7 @@ import {
   OpponentOnlineStatus,
   OpponentUserId,
   OpponentUsername,
+  UnreadCount,
 } from '../store/slice';
 
 export type Props = {
@@ -24,6 +25,7 @@ export type Props = {
   username?: OpponentUsername;
   updateTime: LastMessageTime;
   content: LastMessageContent;
+  unreadCount?: UnreadCount;
 };
 
 export default (props: Props) => {
@@ -38,7 +40,11 @@ export default (props: Props) => {
       activeOpacity={0.7}
       style={styles.root}
       onPress={handlePress}>
-      <Avatar avatar={props.avatar} online={props.online} />
+      <Avatar
+        avatar={props.avatar}
+        online={props.online}
+        unreadCount={props.unreadCount}
+      />
 
       <Content
         username={props.username}

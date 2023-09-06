@@ -18,3 +18,11 @@ export const formatNumberWithSuffix = (number: number): string => {
   const formattedNumber = (number / Math.pow(1000, suffixIndex)).toFixed(0);
   return formattedNumber + suffixes[suffixIndex];
 };
+
+export const convertNumberToString = (num: number): string => {
+  if (num > 99) {
+    return '99+';
+  } else {
+    return num.toString();
+  }
+};

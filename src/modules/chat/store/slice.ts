@@ -42,6 +42,8 @@ export type Keyword = string;
 
 export type ConversationId = string;
 
+export type UnreadCount = number;
+
 export interface State {
   unreadNotificationsCount: Count;
   conversationList: Conversation[];
