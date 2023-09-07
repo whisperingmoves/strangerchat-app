@@ -139,7 +139,7 @@ export default (props: Props) => {
 
   const renderActionButton = () => {
     if (props.authorId !== userId) {
-      if (props.isFollowing || props.isLatest || isFollowed) {
+      if (isFollowed || conversationId || clientConversationId) {
         return (
           <ChatButton
             conversationId={conversationId}
@@ -152,6 +152,7 @@ export default (props: Props) => {
         return <FollowButton onPress={handleFollow} />;
       }
     }
+
     return null;
   };
 
