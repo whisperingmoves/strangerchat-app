@@ -82,9 +82,7 @@ export default (props: Props) => {
         }),
       );
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch, isSelf, props.conversionId, props.messageId, props.readStatus]);
 
   return (
     <View style={styles.root}>
