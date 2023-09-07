@@ -1,6 +1,7 @@
 import React, {forwardRef, useImperativeHandle, useRef, useState} from 'react';
 import {
   Image,
+  ImageStyle,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -9,7 +10,7 @@ import {
 
 import {SAY_SOMETHING} from '../constants/chatDetail/Config';
 
-import icon_emoji from '../assets/images/icons/icon_emoji.png';
+import icon_send from '../assets/images/icons/icon_send.png';
 
 export interface InputRef {
   blur: () => void;
@@ -49,6 +50,10 @@ export default forwardRef((props: Props, ref) => {
     };
   });
 
+  const sendIconStyle: ImageStyle = {
+    tintColor: value ? '#8B5CFF' : '#C7C4CC',
+  };
+
   return (
     <View style={styles.root}>
       <TextInput
@@ -66,7 +71,7 @@ export default forwardRef((props: Props, ref) => {
         activeOpacity={0.7}
         onPress={handlePress}
         disabled={!value}>
-        <Image source={icon_emoji} />
+        <Image source={icon_send} style={[sendIconStyle, styles.icon]} />
       </TouchableOpacity>
     </View>
   );
@@ -90,5 +95,10 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
     color: '#554C5F',
     padding: 0,
+  },
+  icon: {
+    width: 20,
+    height: 20,
+    resizeMode: 'cover',
   },
 });
