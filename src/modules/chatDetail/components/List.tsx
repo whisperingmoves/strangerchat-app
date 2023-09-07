@@ -50,7 +50,6 @@ export default (props: Props) => {
       return;
     }
 
-    ref.current?.scrollToEnd();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messageList]);
 
@@ -79,8 +78,9 @@ export default (props: Props) => {
       contentContainerStyle={[styles.contentContainer, props.style]}
       keyExtractor={keyExtractor}
       showsVerticalScrollIndicator={false}
-      ListFooterComponent={<ListFooter tabBarHeight={90 + 60} />}
+      ListHeaderComponent={<ListFooter tabBarHeight={90 + 60} />}
       ref={ref}
+      inverted
     />
   );
 };

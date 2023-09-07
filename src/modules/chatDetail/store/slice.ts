@@ -109,7 +109,7 @@ export const slice = createSlice({
               updatedMessages.push(recentMessage);
             }
 
-            updatedMessages.sort((a, b) => a.sentTime - b.sentTime);
+            updatedMessages.sort((a, b) => b.sentTime - a.sentTime);
 
             updatedMessageMap[conversationId] = updatedMessages;
           } else {
@@ -155,7 +155,7 @@ export const slice = createSlice({
           updatedMessages.push(sentMessage);
         }
 
-        updatedMessages.sort((a, b) => a.sentTime - b.sentTime);
+        updatedMessages.sort((a, b) => b.sentTime - a.sentTime);
 
         updatedMessageMap[conversationId] = updatedMessages;
       } else {
