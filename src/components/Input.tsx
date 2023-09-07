@@ -28,6 +28,8 @@ export default (props: Props) => {
       return;
     }
 
+    setValue('');
+
     props.onSend(value);
   };
 
