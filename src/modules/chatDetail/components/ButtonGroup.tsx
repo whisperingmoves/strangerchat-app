@@ -9,7 +9,6 @@ import icon_pic from '../../../assets/images/icons/icon_picture.png';
 import icon_camera from '../../../assets/images/icons/icon_camera.png';
 import icon_mic from '../../../assets/images/icons/icon_mic.png';
 import icon_gift from '../../../assets/images/icons/icon_gift.png';
-import icon_add from '../../../assets/images/icons/icon_add_outlined.png';
 import Gift, {GiftRef} from '../../gift/Gift';
 
 type Props = {
@@ -58,5 +57,4 @@ const btnList: ImageSourcePropType[] = [
   icon_camera,
   icon_mic,
   icon_gift,
-  icon_add,
 ];
