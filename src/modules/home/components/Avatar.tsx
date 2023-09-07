@@ -12,7 +12,7 @@ type Props = {
 
 export default (props: Props) => {
   return (
-    <TouchableOpacity style={styles.root} activeOpacity={0.7}>
+    <TouchableOpacity activeOpacity={0.7}>
       <Image
         source={{uri: generateFullURL(props.avatar)}}
         style={styles.avatar}
@@ -24,15 +24,11 @@ export default (props: Props) => {
 };
 
 const styles = StyleSheet.create({
-  root: {
+  avatar: {
     width: 30,
     height: 30,
     borderRadius: 15,
     backgroundColor: '#AFE6F5',
-  },
-  avatar: {
-    width: '100%',
-    height: '100%',
     resizeMode: 'cover',
   },
   onlineIndicator: {
