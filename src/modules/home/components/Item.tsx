@@ -13,6 +13,7 @@ import {Avatar} from '../../avatar/store/slice';
 import Relation from './Relation';
 import Info from './Info';
 import {generateFullURL, getUsername} from '../../helper';
+import LinearGradient from 'react-native-linear-gradient';
 
 export type Props = {
   relation?: RelationType;
@@ -35,16 +36,22 @@ export default (props: Props) => {
             : generateFullURL(props.avatar),
         }}
         imageStyle={styles.bg}>
-        {props.relation && (
-          <Relation relation={props.relation} style={styles.relation} />
-        )}
+        <LinearGradient
+          colors={['#FFFFFF00', '#00000090']}
+          style={styles.container}>
+          {props.relation && (
+            <Relation relation={props.relation} style={styles.relation} />
+          )}
 
-        <Info
-          style={styles.info}
-          avatar={props.avatar}
-          username={props.username ? props.username : getUsername(props.userId)}
-          createTime={props.createTime}
-        />
+          <Info
+            style={styles.info}
+            avatar={props.avatar}
+            username={
+              props.username ? props.username : getUsername(props.userId)
+            }
+            createTime={props.createTime}
+          />
+        </LinearGradient>
       </ImageBackground>
     </TouchableOpacity>
   );
@@ -55,6 +62,9 @@ const styles = StyleSheet.create({
     width: 126,
     height: 176,
     borderRadius: 10,
+  },
+  container: {
+    flex: 1,
   },
   bg: {
     width: '100%',
