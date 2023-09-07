@@ -1,4 +1,3 @@
-import {Socket} from 'socket.io-client';
 import {emitMessages} from '../socket';
 
 export interface SendMessage {
@@ -9,11 +8,8 @@ export interface SendMessage {
   type?: number;
 }
 
-export const sendMessage = async (
-  data: SendMessage,
-  socket: Socket | undefined,
-): Promise<void> => {
-  return await emitMessages(socket, {
+export const sendMessage = async (data: SendMessage): Promise<void> => {
+  return await emitMessages({
     type: 4,
     data,
   });

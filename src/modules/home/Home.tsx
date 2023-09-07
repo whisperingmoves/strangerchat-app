@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -10,7 +10,6 @@ import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 import Online from './components/Online';
 import OnlineTxt from './components/OnlineTxt';
 import NewStories from './components/NewStories';
-import {SocketContext} from '../../contexts/SocketContext';
 import {useAppDispatch} from '../../hooks';
 import {setNearestUsers, setOnlineUsers} from './store/slice';
 import {
@@ -36,18 +35,17 @@ import {MarkedAsReadMessage} from '../../apis/notification/markedAsReadMessage';
 import {NearestUsers} from '../../apis/notification/nearestUsers';
 import {OnlineUsers} from '../../apis/notification/onlineUsers';
 import {store} from '../../stores/store';
+import {socket} from '../../apis/socket';
 
 export default () => {
   const insets = useSafeAreaInsets();
 
   const statusBarStyle: StyleProp<ViewStyle> = {paddingTop: insets.top};
 
-  const socket = useContext(SocketContext);
-
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    socket?.on('notifications', data => {
+    socket.on('notifications', data => {
       const {type, data: messageData} = data;
 
       switch (type) {
@@ -115,7 +113,8 @@ export default () => {
     });
 
     return () => {
-      socket?.off('notifications');
+      socket.off('notifications');
+      socket.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);

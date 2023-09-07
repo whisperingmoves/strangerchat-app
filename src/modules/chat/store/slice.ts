@@ -11,7 +11,6 @@ import {
   getRecentChatConversations,
 } from './api';
 import {CreateChatConversation} from '../../../apis/message/createChatConversation';
-import {Socket} from 'socket.io-client';
 import {GetRecentChatConversations} from '../../../apis/message/getRecentChatConversations';
 import {GetChatConversationDetails} from '../../../apis/message/getChatConversationDetails';
 
@@ -62,23 +61,23 @@ const initialState: State = {
 
 export const createChatConversationAsync = createAsyncThunk<
   void,
-  {data: CreateChatConversation; socket: Socket | undefined}
+  CreateChatConversation
 >('chat/createChatConversation', async param => {
-  await createChatConversation(param.data, param.socket);
+  await createChatConversation(param);
 });
 
 export const getRecentChatConversationsAsync = createAsyncThunk<
   void,
-  {data: GetRecentChatConversations; socket: Socket | undefined}
+  GetRecentChatConversations
 >('chat/getRecentChatConversations', async param => {
-  await getRecentChatConversations(param.data, param.socket);
+  await getRecentChatConversations(param);
 });
 
 export const getChatConversationDetailsAsync = createAsyncThunk<
   void,
-  {data: GetChatConversationDetails; socket: Socket | undefined}
+  GetChatConversationDetails
 >('chat/getChatConversationDetails', async param => {
-  await getChatConversationDetails(param.data, param.socket);
+  await getChatConversationDetails(param);
 });
 
 export const slice = createSlice({

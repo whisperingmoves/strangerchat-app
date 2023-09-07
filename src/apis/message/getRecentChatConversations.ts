@@ -1,4 +1,3 @@
-import {Socket} from 'socket.io-client';
 import {emitMessages} from '../socket';
 
 export interface GetRecentChatConversations {
@@ -7,9 +6,8 @@ export interface GetRecentChatConversations {
 
 export const getRecentChatConversations = async (
   data: GetRecentChatConversations,
-  socket: Socket | undefined,
 ): Promise<void> => {
-  return await emitMessages(socket, {
+  return await emitMessages({
     type: 1,
     data,
   });

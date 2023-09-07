@@ -1,4 +1,3 @@
-import {Socket} from 'socket.io-client';
 import {
   CreateChatConversation,
   createChatConversation as createChatConversationApi,
@@ -14,21 +13,18 @@ import {
 
 export const createChatConversation = async (
   data: CreateChatConversation,
-  socket: Socket | undefined,
 ): Promise<void> => {
-  await createChatConversationApi(data, socket);
+  await createChatConversationApi(data);
 };
 
 export const getRecentChatConversations = async (
   data: GetRecentChatConversations,
-  socket: Socket | undefined,
 ): Promise<void> => {
-  await GetRecentChatConversationsApi(data, socket);
+  await GetRecentChatConversationsApi(data);
 };
 
 export const getChatConversationDetails = async (
   data: GetChatConversationDetails,
-  socket: Socket | undefined,
 ): Promise<void> => {
-  await getChatConversationDetailsApi(data, socket);
+  await getChatConversationDetailsApi(data);
 };

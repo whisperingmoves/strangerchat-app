@@ -1,4 +1,3 @@
-import {Socket} from 'socket.io-client';
 import {emitMessages} from '../socket';
 
 export interface MarkMessageAsRead {
@@ -8,9 +7,8 @@ export interface MarkMessageAsRead {
 
 export const markMessageAsRead = async (
   data: MarkMessageAsRead,
-  socket: Socket | undefined,
 ): Promise<void> => {
-  return await emitMessages(socket, {
+  return await emitMessages({
     type: 5,
     data,
   });

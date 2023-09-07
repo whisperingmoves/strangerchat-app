@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {FlatList, StyleSheet} from 'react-native';
 
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
@@ -15,7 +15,6 @@ import {
   getRecentChatConversationsAsync,
   keyword,
 } from '../store/slice';
-import {SocketContext} from '../../../contexts/SocketContext';
 
 const renderItem = ({item}: {item: ItemProps}) => <Item {...item} />;
 
@@ -32,14 +31,12 @@ export default (props: Props) => {
 
   const dispatch = useAppDispatch();
 
-  const socket = useContext(SocketContext);
-
   useEffect(() => {
     if (conversationListValue.length) {
       return;
     }
 
-    dispatch(getRecentChatConversationsAsync({data: {}, socket}));
+    dispatch(getRecentChatConversationsAsync({}));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversationListValue]);
 

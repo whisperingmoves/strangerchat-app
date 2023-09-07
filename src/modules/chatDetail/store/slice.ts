@@ -4,7 +4,6 @@ import {SentMessage} from '../../../apis/notification/sentMessage';
 import {RootState} from '../../../stores/store';
 import {MarkedAsReadMessage} from '../../../apis/notification/markedAsReadMessage';
 import {getRecentChatMessages, markMessageAsRead, sendMessage} from './api';
-import {Socket} from 'socket.io-client';
 import {GetRecentChatMessages} from '../../../apis/message/getRecentChatMessages';
 import {SendMessage} from '../../../apis/message/sendMessage';
 import {MarkMessageAsRead} from '../../../apis/message/markMessageAsRead';
@@ -44,24 +43,24 @@ const initialState: State = {
 
 export const getRecentChatMessagesAsync = createAsyncThunk<
   void,
-  {data: GetRecentChatMessages; socket: Socket | undefined}
+  GetRecentChatMessages
 >('chatDetail/getRecentChatMessages', async param => {
-  await getRecentChatMessages(param.data, param.socket);
+  await getRecentChatMessages(param);
 });
 
-export const sendMessageAsync = createAsyncThunk<
-  void,
-  {data: SendMessage; socket: Socket | undefined}
->('chatDetail/sendMessage', async param => {
-  await sendMessage(param.data, param.socket);
-});
+export const sendMessageAsync = createAsyncThunk<void, SendMessage>(
+  'chatDetail/sendMessage',
+  async param => {
+    await sendMessage(param);
+  },
+);
 
-export const markMessageAsReadAsync = createAsyncThunk<
-  void,
-  {data: MarkMessageAsRead; socket: Socket | undefined}
->('chatDetail/markMessageAsRead', async param => {
-  await markMessageAsRead(param.data, param.socket);
-});
+export const markMessageAsReadAsync = createAsyncThunk<void, MarkMessageAsRead>(
+  'chatDetail/markMessageAsRead',
+  async param => {
+    await markMessageAsRead(param);
+  },
+);
 
 export const slice = createSlice({
   name: 'chatDetail',

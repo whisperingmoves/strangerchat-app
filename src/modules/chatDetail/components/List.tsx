@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useMemo, useRef} from 'react';
+import React, {useEffect, useMemo, useRef} from 'react';
 import {FlatList, StyleSheet} from 'react-native';
 
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
@@ -13,7 +13,6 @@ import {getRecentChatMessagesAsync, messageMap} from '../store/slice';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {store} from '../../../stores/store';
 import ListFooter from '../../../components/ListFooter';
-import {SocketContext} from '../../../contexts/SocketContext';
 
 type Props = {
   conversationId?: ConversationId;
@@ -33,8 +32,6 @@ export default (props: Props) => {
 
   const dispatch = useAppDispatch();
 
-  const socket = useContext(SocketContext);
-
   const conversationId = (props.conversationId ||
     props.clientConversationId) as ConversationId;
 
@@ -47,10 +44,7 @@ export default (props: Props) => {
     if (!messageList.length) {
       props.conversationId &&
         dispatch(
-          getRecentChatMessagesAsync({
-            data: {conversationId: props.conversationId},
-            socket,
-          }),
+          getRecentChatMessagesAsync({conversationId: props.conversationId}),
         );
 
       return;

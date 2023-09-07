@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {StyleSheet, View} from 'react-native';
 
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
@@ -15,7 +15,6 @@ import {SentMessage} from '../../../apis/notification/sentMessage';
 import {store} from '../../../stores/store';
 import {getCurrentUnixTimestampInSeconds} from '../../../utils/date';
 import {sendMessageAsync, setSentMessage} from '../store/slice';
-import {SocketContext} from '../../../contexts/SocketContext';
 
 type Props = {
   style: ViewStyle;
@@ -26,8 +25,6 @@ type Props = {
 
 export default (props: Props) => {
   const dispatch = useAppDispatch();
-
-  const socket = useContext(SocketContext);
 
   const userId = store.getState().user.userId;
 
@@ -63,13 +60,10 @@ export default (props: Props) => {
 
     dispatch(
       sendMessageAsync({
-        data: {
-          conversationId: props.conversationId as ConversationId,
-          clientMessageId: clientMessageId,
-          opponentUserId: props.opponentUserId,
-          content: value,
-        },
-        socket,
+        conversationId: props.conversationId as ConversationId,
+        clientMessageId: clientMessageId,
+        opponentUserId: props.opponentUserId,
+        content: value,
       }),
     );
   };

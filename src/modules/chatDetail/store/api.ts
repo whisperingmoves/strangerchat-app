@@ -1,4 +1,3 @@
-import {Socket} from 'socket.io-client';
 import {
   GetRecentChatMessages,
   getRecentChatMessages as getRecentChatMessagesApi,
@@ -14,21 +13,16 @@ import {
 
 export const getRecentChatMessages = async (
   data: GetRecentChatMessages,
-  socket: Socket | undefined,
 ): Promise<void> => {
-  await getRecentChatMessagesApi(data, socket);
+  await getRecentChatMessagesApi(data);
 };
 
-export const sendMessage = async (
-  data: SendMessage,
-  socket: Socket | undefined,
-): Promise<void> => {
-  await sendMessageApi(data, socket);
+export const sendMessage = async (data: SendMessage): Promise<void> => {
+  await sendMessageApi(data);
 };
 
 export const markMessageAsRead = async (
   data: MarkMessageAsRead,
-  socket: Socket | undefined,
 ): Promise<void> => {
-  await markMessageAsReadApi(data, socket);
+  await markMessageAsReadApi(data);
 };

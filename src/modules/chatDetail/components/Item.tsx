@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {
   Image,
   StyleSheet,
@@ -28,7 +28,6 @@ import {OpponentAvatar} from '../../chat/store/slice';
 import {generateFullURL} from '../../helper';
 import {formatTimestamp} from '../../../utils/date';
 import {useAppDispatch} from '../../../hooks';
-import {SocketContext} from '../../../contexts/SocketContext';
 
 export type Props = {
   conversionId: ConversationId;
@@ -46,8 +45,6 @@ export default (props: Props) => {
   const {width: windowWidth} = useWindowDimensions();
 
   const dispatch = useAppDispatch();
-
-  const socket = useContext(SocketContext);
 
   const isSelf = props.isSelf;
 
@@ -80,11 +77,8 @@ export default (props: Props) => {
     ) {
       dispatch(
         markMessageAsReadAsync({
-          data: {
-            conversationId: props.conversionId,
-            messageId: props.messageId,
-          },
-          socket,
+          conversationId: props.conversionId,
+          messageId: props.messageId,
         }),
       );
     }

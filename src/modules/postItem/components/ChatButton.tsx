@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {CHAT} from '../../../constants/Config';
 import {ConversationId} from '../../following/store/slice';
@@ -12,7 +12,6 @@ import {
   setCreatedConversation,
 } from '../../chat/store/slice';
 import {generateUniqueId} from '../../../utils/id';
-import {SocketContext} from '../../../contexts/SocketContext';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
@@ -26,8 +25,6 @@ type Props = {
 
 export default (props: Props) => {
   const dispatch = useAppDispatch();
-
-  const socket = useContext(SocketContext);
 
   const navigation = useNavigation<StackNavigationProp<any>>();
 
@@ -49,11 +46,8 @@ export default (props: Props) => {
 
       dispatch(
         createChatConversationAsync({
-          data: {
-            clientConversationId,
-            opponentUserId: props.opponentUserId,
-          },
-          socket,
+          clientConversationId,
+          opponentUserId: props.opponentUserId,
         }),
       );
 
@@ -61,10 +55,7 @@ export default (props: Props) => {
     } else {
       dispatch(
         getChatConversationDetailsAsync({
-          data: {
-            conversationId: props.conversationId,
-          },
-          socket,
+          conversationId: props.conversationId,
         }),
       );
 
