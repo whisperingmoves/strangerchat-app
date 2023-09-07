@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 
-import {StyleSheet, View} from 'react-native';
+import {KeyboardAvoidingView, Platform, StyleSheet, View} from 'react-native';
 
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -82,35 +82,38 @@ export default (props: Props) => {
   };
 
   return (
-    <View style={[styles.root, statusBarStyle]}>
-      <DetailHeader
-        username={conversation.opponentUsername}
-        style={styles.header}
-        userId={conversation.opponentUserId}
-        onPress={handleBackPress}
-      />
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <View style={[styles.root, statusBarStyle]}>
+        <DetailHeader
+          username={conversation.opponentUsername}
+          style={styles.header}
+          userId={conversation.opponentUserId}
+          onPress={handleBackPress}
+        />
 
-      <Info
-        tag={'Same hobby'}
-        percentage={'93%'}
-        userAvatar={avatarValue}
-        opponentAvatar={conversation.opponentAvatar}
-      />
+        <Info
+          tag={'Same hobby'}
+          percentage={'93%'}
+          userAvatar={avatarValue}
+          opponentAvatar={conversation.opponentAvatar}
+        />
 
-      <List
-        opponentAvatar={conversation.opponentAvatar}
-        conversationId={conversation.conversationId}
-        clientConversationId={conversation.clientConversationId}
-        style={styles.list}
-      />
+        <List
+          opponentAvatar={conversation.opponentAvatar}
+          conversationId={conversation.conversationId}
+          clientConversationId={conversation.clientConversationId}
+          style={styles.list}
+        />
 
-      <Footer
-        style={styles.footer}
-        conversationId={conversation.conversationId}
-        clientConversationId={conversation.clientConversationId}
-        opponentUserId={conversation.opponentUserId}
-      />
-    </View>
+        <Footer
+          style={styles.footer}
+          conversationId={conversation.conversationId}
+          clientConversationId={conversation.clientConversationId}
+          opponentUserId={conversation.opponentUserId}
+        />
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
