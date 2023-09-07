@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {forwardRef} from 'react';
 import {StyleSheet, View} from 'react-native';
 
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
@@ -23,7 +23,7 @@ type Props = {
   opponentUserId: OpponentUserId;
 };
 
-export default (props: Props) => {
+export default forwardRef((props: Props, ref) => {
   const dispatch = useAppDispatch();
 
   const userId = store.getState().user.userId;
@@ -70,12 +70,12 @@ export default (props: Props) => {
 
   return (
     <View style={[styles.root, props.style]}>
-      <Input onSend={handleSend} />
+      <Input onSend={handleSend} ref={ref} />
 
       <ButtonGroup style={styles.btnGroup} />
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   root: {

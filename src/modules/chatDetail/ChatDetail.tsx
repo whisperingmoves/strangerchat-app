@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 
 import {KeyboardAvoidingView, Platform, StyleSheet, View} from 'react-native';
 
@@ -25,6 +25,7 @@ import {
   setCurrentConversationId,
 } from './store/slice';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {InputRef} from '../../components/Input';
 
 type Props = {
   route: Route<
@@ -35,6 +36,8 @@ type Props = {
 
 export default (props: Props) => {
   const insets = useSafeAreaInsets();
+
+  const inputRef = useRef<InputRef>(null);
 
   const navigation = useNavigation<StackNavigationProp<any>>();
 
@@ -75,10 +78,18 @@ export default (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversation]);
 
-  const handleBackPress = () => {
-    navigation.goBack();
+  const blurInput = () => {
+    inputRef.current?.blur();
+  };
 
-    dispatch(resetCurrentConversationId());
+  const handleBackPress = () => {
+    blurInput();
+
+    setTimeout(() => {
+      navigation.goBack();
+
+      dispatch(resetCurrentConversationId());
+    }, 200);
   };
 
   return (
@@ -111,6 +122,7 @@ export default (props: Props) => {
           conversationId={conversation.conversationId}
           clientConversationId={conversation.clientConversationId}
           opponentUserId={conversation.opponentUserId}
+          ref={inputRef}
         />
       </View>
     </KeyboardAvoidingView>

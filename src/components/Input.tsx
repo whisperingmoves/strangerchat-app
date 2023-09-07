@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {forwardRef, useImperativeHandle, useRef, useState} from 'react';
 import {
   Image,
   StyleSheet,
@@ -11,13 +11,19 @@ import {SAY_SOMETHING} from '../constants/chatDetail/Config';
 
 import icon_emoji from '../assets/images/icons/icon_emoji.png';
 
+export interface InputRef {
+  blur: () => void;
+}
+
 type Props = {
   placeholder?: string;
   onSend: (value: string) => void;
 };
 
-export default (props: Props) => {
+export default forwardRef((props: Props, ref) => {
   const [value, setValue] = useState<string>('');
+
+  const inputRef = useRef<TextInput>(null);
 
   const handleChangeText = (text: string) => {
     setValue(text);
@@ -33,6 +39,16 @@ export default (props: Props) => {
     props.onSend(value);
   };
 
+  const blur = () => {
+    inputRef.current?.blur();
+  };
+
+  useImperativeHandle(ref, () => {
+    return {
+      blur,
+    };
+  });
+
   return (
     <View style={styles.root}>
       <TextInput
@@ -43,6 +59,7 @@ export default (props: Props) => {
         selectionColor={'#8B5CFF'}
         value={value}
         onChangeText={handleChangeText}
+        ref={inputRef}
       />
 
       <TouchableOpacity
@@ -53,7 +70,7 @@ export default (props: Props) => {
       </TouchableOpacity>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   root: {
