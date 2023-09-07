@@ -32,8 +32,6 @@ export const FOR_YOU = 'For you';
 
 export const USER = 'user';
 
-export const CONNECTION_DISCONNECTED = 'Connection disconnected.';
-
 export const SEND = 'Send';
 
 export const TOP_UP = 'Top up';

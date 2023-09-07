@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {FlatList, StyleSheet} from 'react-native';
 
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
@@ -9,12 +9,8 @@ import Item, {Props as ItemProps} from './Item';
 
 import Separator from './Separator';
 import Footer from '../../../components/ListFooter';
-import {useAppDispatch, useAppSelector} from '../../../hooks';
-import {
-  conversationList,
-  getRecentChatConversationsAsync,
-  keyword,
-} from '../store/slice';
+import {useAppSelector} from '../../../hooks';
+import {conversationList, keyword} from '../store/slice';
 
 const renderItem = ({item}: {item: ItemProps}) => <Item {...item} />;
 
@@ -28,17 +24,6 @@ type Props = {
 
 export default (props: Props) => {
   const conversationListValue = useAppSelector(conversationList);
-
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (conversationListValue.length) {
-      return;
-    }
-
-    dispatch(getRecentChatConversationsAsync({}));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [conversationListValue]);
 
   const keywordValue = useAppSelector(keyword);
 

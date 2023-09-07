@@ -1,5 +1,4 @@
 import io from 'socket.io-client';
-import {CONNECTION_DISCONNECTED} from '../constants/Config';
 import Config from 'react-native-config';
 import {store} from '../stores/store';
 import {showError} from '../utils/notification';
@@ -21,9 +20,5 @@ socket.on('disconnect', reason => {
 });
 
 export const emitMessages = async (args: any) => {
-  if (!socket || socket.disconnected) {
-    throw new Error(CONNECTION_DISCONNECTED);
-  }
-
   socket.emit('messages', args);
 };
