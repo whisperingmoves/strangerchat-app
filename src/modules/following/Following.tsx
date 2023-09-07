@@ -11,7 +11,11 @@ import {
   status,
 } from './store/slice';
 
-export default () => {
+type Props = {tabBarHeight: number};
+
+export default (props: Props) => {
+  const {tabBarHeight} = props;
+
   const statusValue = useAppSelector(status);
 
   const listValue = useAppSelector(list);
@@ -66,6 +70,7 @@ export default () => {
       refresh={refresh}
       load={load}
       isFollowing={true}
+      tabBarHeight={tabBarHeight}
     />
   );
 };

@@ -13,7 +13,7 @@ import FAB from './components/FAB';
 import List from './components/List';
 
 type Props = {
-  route: Route<string, {height: number}>;
+  route: Route<string, {tabBarHeight: number}>;
 };
 
 export default (props: Props) => {
@@ -21,7 +21,7 @@ export default (props: Props) => {
 
   const statusBarStyle: StyleProp<ViewStyle> = {paddingTop: insets.top};
 
-  const {height: tabBarHeight} = props.route.params;
+  const {tabBarHeight} = props.route.params;
 
   return (
     <View style={[styles.root, statusBarStyle]}>

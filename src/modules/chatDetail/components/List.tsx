@@ -78,7 +78,7 @@ export default (props: Props) => {
       contentContainerStyle={[styles.contentContainer, props.style]}
       keyExtractor={keyExtractor}
       showsVerticalScrollIndicator={false}
-      ListHeaderComponent={<ListFooter tabBarHeight={90 + 60} />}
+      ListHeaderComponent={<ListFooter tabBarHeight={90} />}
       ref={ref}
       inverted
     />

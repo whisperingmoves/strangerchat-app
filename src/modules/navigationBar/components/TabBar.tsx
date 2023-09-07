@@ -27,7 +27,7 @@ import {convertNumberToString} from '../../../utils/number';
 import {calculateTotalUnreadCount} from '../helper';
 
 export default ({state, descriptors, navigation}: BottomTabBarProps) => {
-  const [height, setHeight] = useState(30);
+  const [tabBarHeight, setTabBarHeight] = useState(30);
 
   const conversationListValue = useAppSelector(conversationList);
 
@@ -52,7 +52,7 @@ export default ({state, descriptors, navigation}: BottomTabBarProps) => {
   ];
 
   const handleLayout = (event: LayoutChangeEvent) => {
-    setHeight(event.nativeEvent.layout.height);
+    setTabBarHeight(event.nativeEvent.layout.height);
   };
 
   return (
@@ -66,7 +66,7 @@ export default ({state, descriptors, navigation}: BottomTabBarProps) => {
           if (i === 2) {
             navigation.navigate('NewPost');
           } else {
-            navigation.navigate(route.name, {height});
+            navigation.navigate(route.name, {tabBarHeight});
           }
         };
 

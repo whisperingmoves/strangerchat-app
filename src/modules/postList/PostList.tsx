@@ -4,6 +4,7 @@ import {FlatList, Platform, StyleSheet} from 'react-native';
 import Item, {Props as ItemProps} from '../postItem/PostItem';
 
 import Separator from './components/Separator';
+import Footer from '../../components/ListFooter';
 
 const keyExtractor = (item: ItemProps, index: number) =>
   `${item.postId}-${index}`;
@@ -19,6 +20,7 @@ type Props = {
   refreshing: boolean;
   refresh: () => void;
   load: () => void;
+  tabBarHeight: number;
 };
 
 export default (props: Props) => {
@@ -36,6 +38,7 @@ export default (props: Props) => {
       onEndReachedThreshold={0.1}
       onEndReached={props.load}
       bounces={bounces}
+      ListFooterComponent={<Footer tabBarHeight={props.tabBarHeight} />}
     />
   );
 };

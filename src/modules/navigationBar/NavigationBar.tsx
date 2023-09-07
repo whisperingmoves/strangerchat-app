@@ -45,9 +45,9 @@ import {MarkedAsReadMessage} from '../../apis/notification/markedAsReadMessage';
 
 export type RootBottomTabParamList = {
   Home: undefined;
-  Explore: undefined;
+  Explore: {tabBarHeight: number};
   Post: undefined;
-  Chat: {height: number};
+  Chat: {tabBarHeight: number};
   Profile: undefined;
 };
 

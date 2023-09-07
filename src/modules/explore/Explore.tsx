@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 import Following from '../following/Following';
@@ -7,16 +7,43 @@ import Latest from '../latest/Latest';
 import TabBar from './components/TabBar';
 import {FOLLOWING} from '../../constants/Config';
 import {LATEST, RECOMMEND} from '../../constants/explore/Config';
+import {Route} from '@react-navigation/native';
+import {MaterialTopTabBarProps} from '@react-navigation/material-top-tabs/lib/typescript/src/types';
 
 const Tab = createMaterialTopTabNavigator();
 
-export default () => {
+type Props = {
+  route: Route<string, {tabBarHeight: number}>;
+};
+
+export default (props: Props) => {
+  const {tabBarHeight} = props.route.params;
+
+  const following = useCallback(
+    () => <Following tabBarHeight={tabBarHeight} />,
+    [tabBarHeight],
+  );
+
+  const recommend = useCallback(
+    () => <Recommend tabBarHeight={tabBarHeight} />,
+    [tabBarHeight],
+  );
+
+  const latest = useCallback(
+    () => <Latest tabBarHeight={tabBarHeight} />,
+    [tabBarHeight],
+  );
+
+  const tabBar = useCallback(
+    (tabBarProps: MaterialTopTabBarProps) => <TabBar {...tabBarProps} />,
+    [],
+  );
+
   return (
-    // eslint-disable-next-line react/no-unstable-nested-components
-    <Tab.Navigator tabBar={props => <TabBar {...props} />}>
+    <Tab.Navigator tabBar={tabBar}>
       <Tab.Screen
         name="Following"
-        component={Following}
+        component={following}
         options={{
           title: FOLLOWING,
         }}
@@ -24,7 +51,7 @@ export default () => {
 
       <Tab.Screen
         name="Recommend"
-        component={Recommend}
+        component={recommend}
         options={{
           title: RECOMMEND,
         }}
@@ -32,7 +59,7 @@ export default () => {
 
       <Tab.Screen
         name="Latest"
-        component={Latest}
+        component={latest}
         options={{
           title: LATEST,
         }}
