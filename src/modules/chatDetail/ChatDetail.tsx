@@ -115,6 +115,7 @@ export default (props: Props) => {
           conversationId={conversation.conversationId}
           clientConversationId={conversation.clientConversationId}
           style={styles.list}
+          inputRef={inputRef}
         />
 
         <Footer

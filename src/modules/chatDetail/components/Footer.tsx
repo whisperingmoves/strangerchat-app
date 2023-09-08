@@ -15,6 +15,7 @@ import {SentMessage} from '../../../apis/notification/sentMessage';
 import {store} from '../../../stores/store';
 import {getCurrentUnixTimestampInSeconds} from '../../../utils/date';
 import {sendMessageAsync, setSentMessage} from '../store/slice';
+import {socket} from '../../../apis/socket';
 
 type Props = {
   style: ViewStyle;
@@ -34,7 +35,8 @@ export default forwardRef((props: Props, ref) => {
     const currentTimestamp = getCurrentUnixTimestampInSeconds();
 
     const message: SentMessage = {
-      conversationId: props.conversationId || props.clientConversationId || '',
+      conversationId: (props.conversationId ||
+        props.clientConversationId) as ConversationId,
       clientMessageId,
       messageId: '',
       senderId: userId,
@@ -42,8 +44,6 @@ export default forwardRef((props: Props, ref) => {
       content: value,
       sentTime: currentTimestamp,
     };
-
-    dispatch(setSentMessage(message));
 
     dispatch(
       setConversation({
@@ -54,9 +54,15 @@ export default forwardRef((props: Props, ref) => {
       }),
     );
 
-    if (!props.conversationId) {
+    if (!props.conversationId || !socket.connected) {
+      message.sendStatus = 1;
+
+      dispatch(setSentMessage(message));
+
       return;
     }
+
+    dispatch(setSentMessage(message));
 
     dispatch(
       sendMessageAsync({

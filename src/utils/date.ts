@@ -101,3 +101,14 @@ export const formatTimestamp = (timestamp: number): string => {
     return `${year}-${month}-${day}`;
   }
 };
+
+export const isTimestampExpired = (
+  timestampSeconds: number,
+  timeoutMillis: number,
+): boolean => {
+  const currentTimestampMillis = new Date().getTime();
+
+  const expirationTimestampMillis = timestampSeconds * 1000 + timeoutMillis;
+
+  return currentTimestampMillis >= expirationTimestampMillis;
+};

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {RefObject, useEffect} from 'react';
 import {
   Image,
   StyleSheet,
@@ -17,10 +17,12 @@ import ResizeImage from '../../../components/ResizeImage';
 import {
   Content,
   ConversationId,
+  deleteMessage,
   markMessageAsReadAsync,
   MessageId,
   ReadStatus,
   SenderId,
+  SendStatus,
   SentTime,
   Type,
 } from '../store/slice';
@@ -28,17 +30,22 @@ import {OpponentAvatar} from '../../chat/store/slice';
 import {generateFullURL} from '../../helper';
 import {formatTimestamp} from '../../../utils/date';
 import {useAppDispatch} from '../../../hooks';
+import MessageStatusIndicator from '../../../components/MessageStatusIndicator';
+import {InputRef} from '../../../components/Input';
 
 export type Props = {
-  conversionId: ConversationId;
+  conversationId: ConversationId;
   messageId: MessageId;
+  clientMessageId?: MessageId;
   senderId: SenderId;
   sentTime?: SentTime;
   content: Content;
   type?: Type;
   avatar?: OpponentAvatar;
   readStatus?: ReadStatus;
+  sendStatus?: SendStatus;
   isSelf?: boolean;
+  inputRef: RefObject<InputRef>;
 };
 
 export default (props: Props) => {
@@ -61,28 +68,49 @@ export default (props: Props) => {
 
   const contentContainerStyle: StyleProp<ViewStyle> = {
     flexDirection: isSelf ? 'row-reverse' : 'row',
-    alignItems: isSelf
-      ? 'flex-end'
-      : props.type === 0 && props.content
-      ? 'center'
-      : 'flex-start',
+    alignItems:
+      isSelf && props.sendStatus !== 1
+        ? 'flex-end'
+        : isSelf && props.sendStatus === 1
+        ? 'center'
+        : props.type === 0 && props.content
+        ? 'center'
+        : 'flex-start',
+  };
+
+  const handleResend = () => {
+    dispatch(
+      deleteMessage({
+        clientMessageId: props.clientMessageId,
+        messageId: props.messageId,
+        conversationId: props.conversationId,
+      }),
+    );
+
+    props.inputRef.current?.setText(props.content);
   };
 
   useEffect(() => {
     if (
       !isSelf &&
-      props.conversionId &&
+      props.conversationId &&
       props.messageId &&
       props.readStatus !== 1
     ) {
       dispatch(
         markMessageAsReadAsync({
-          conversationId: props.conversionId,
+          conversationId: props.conversationId,
           messageId: props.messageId,
         }),
       );
     }
-  }, [dispatch, isSelf, props.conversionId, props.messageId, props.readStatus]);
+  }, [
+    dispatch,
+    isSelf,
+    props.conversationId,
+    props.messageId,
+    props.readStatus,
+  ]);
 
   return (
     <View style={styles.root}>
@@ -108,7 +136,16 @@ export default (props: Props) => {
           </View>
         )}
 
-        {isSelf && props.readStatus === 1 && <Image source={icon_have_read} />}
+        {isSelf && props.readStatus === 1 && props.sendStatus !== 1 && (
+          <Image source={icon_have_read} />
+        )}
+
+        {isSelf && props.sendStatus === 1 && (
+          <MessageStatusIndicator
+            style={styles.messageStatusIndicator}
+            onPress={handleResend}
+          />
+        )}
 
         {props.type === 2 && (
           <ResizeImage
@@ -155,5 +192,13 @@ const styles = StyleSheet.create({
   image: {
     width: 80,
     borderRadius: 10,
+  },
+  messageStatusIndicator: {
+    transform: [
+      {
+        scale: 1.5,
+      },
+    ],
+    marginRight: 12,
   },
 });

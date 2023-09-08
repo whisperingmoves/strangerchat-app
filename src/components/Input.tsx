@@ -14,6 +14,7 @@ import icon_send from '../assets/images/icons/icon_send.png';
 
 export interface InputRef {
   blur: () => void;
+  setText: (text: string) => void;
 }
 
 type Props = {
@@ -44,9 +45,16 @@ export default forwardRef((props: Props, ref) => {
     inputRef.current?.blur();
   };
 
+  const setText = (text: string) => {
+    setValue(text);
+
+    inputRef.current?.focus();
+  };
+
   useImperativeHandle(ref, () => {
     return {
       blur,
+      setText,
     };
   });
 

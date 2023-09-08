@@ -8,4 +8,5 @@ export interface SentMessage {
   type?: number;
   sentTime: number;
   readStatus?: number;
+  sendStatus?: number;
 }

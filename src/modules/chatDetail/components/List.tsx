@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef} from 'react';
+import React, {RefObject, useEffect, useMemo, useRef} from 'react';
 import {FlatList, StyleSheet} from 'react-native';
 
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
@@ -13,12 +13,16 @@ import {getRecentChatMessagesAsync, messageMap} from '../store/slice';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {store} from '../../../stores/store';
 import ListFooter from '../../../components/ListFooter';
+import {isTimestampExpired} from '../../../utils/date';
+import Config from 'react-native-config';
+import {InputRef} from '../../../components/Input';
 
 type Props = {
   conversationId?: ConversationId;
   clientConversationId?: ConversationId;
   opponentAvatar: OpponentAvatar;
   style: StyleProp<ViewStyle>;
+  inputRef: RefObject<InputRef>;
 };
 
 const renderItem = ({item}: {item: ItemProps}) => <Item {...item} />;
@@ -56,16 +60,30 @@ export default (props: Props) => {
   const data: ItemProps[] = messageList.map(message => {
     const isSelf = message.senderId === store.getState().user.userId;
 
+    const sendStatus = message.sendStatus
+      ? message.sendStatus
+      : !message.messageId
+      ? isTimestampExpired(
+          message.sentTime,
+          parseInt(Config.TIME_OUT as string, 10),
+        )
+        ? 1
+        : 0
+      : 0;
+
     return {
-      conversionId: message.conversationId,
+      conversationId: message.conversationId,
       messageId: message.messageId,
+      clientMessageId: message.clientMessageId,
       senderId: message.senderId,
       sentTime: message.sentTime,
       content: message.content,
       type: message.type,
       avatar: isSelf ? undefined : props.opponentAvatar,
       readStatus: message.readStatus,
+      sendStatus: sendStatus,
       isSelf,
+      inputRef: props.inputRef,
     };
   });
 

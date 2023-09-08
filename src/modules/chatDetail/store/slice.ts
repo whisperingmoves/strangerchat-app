@@ -28,6 +28,8 @@ export type Type = number;
 
 export type ReadStatus = number;
 
+export type SendStatus = number;
+
 export interface State {
   messageMap: Record<ConversationId, Message[]>;
   error: Error;
@@ -188,6 +190,31 @@ export const slice = createSlice({
         state.messageMap = updatedMessageMap;
       }
     },
+
+    deleteMessage: (
+      state: State,
+      action: PayloadAction<{
+        clientMessageId?: MessageId;
+        messageId: MessageId;
+        conversationId: MessageId;
+      }>,
+    ) => {
+      const {clientMessageId, messageId, conversationId} = action.payload;
+      const updatedMessageMap = {...state.messageMap};
+
+      const conversationMessages = updatedMessageMap[conversationId];
+
+      if (conversationMessages) {
+        updatedMessageMap[conversationId] = conversationMessages.filter(
+          message =>
+            message.clientMessageId
+              ? message.clientMessageId !== clientMessageId
+              : message.messageId !== messageId,
+        );
+      }
+
+      state.messageMap = updatedMessageMap;
+    },
   },
 
   extraReducers: builder => {
@@ -242,6 +269,7 @@ export const {
   markedAsReadMessage,
   setCurrentConversationId,
   resetCurrentConversationId,
+  deleteMessage,
 } = slice.actions;
 
 export const status = (state: RootState) => state.chatDetail.status;
