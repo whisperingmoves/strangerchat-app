@@ -45,17 +45,16 @@ export default (props: Props) => {
   );
 
   useEffect(() => {
-    if (!messageList.length) {
-      props.conversationId &&
-        dispatch(
-          getRecentChatMessagesAsync({conversationId: props.conversationId}),
-        );
-
-      return;
-    }
+    props.conversationId &&
+      dispatch(
+        getRecentChatMessagesAsync({
+          conversationId: props.conversationId,
+          timestamp: messageList.length ? messageList[0].sentTime : undefined,
+        }),
+      );
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messageList]);
+  }, []);
 
   const data: ItemProps[] = messageList.map(message => {
     const isSelf = message.senderId === store.getState().user.userId;

@@ -163,13 +163,18 @@ export default () => {
   const conversationListValue = useAppSelector(conversationList);
 
   useEffect(() => {
-    if (conversationListValue.length) {
-      return;
-    }
-
-    dispatch(getRecentChatConversationsAsync({}));
+    dispatch(
+      getRecentChatConversationsAsync({
+        timestamp: conversationListValue.length
+          ? conversationListValue.filter(
+              conversation =>
+                conversation.lastMessageTime && conversation.lastMessageContent,
+            )[0].lastMessageTime
+          : undefined,
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [conversationListValue]);
+  }, []);
 
   return (
     <View style={styles.root}>
