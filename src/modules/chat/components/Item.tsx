@@ -8,6 +8,8 @@ import Content from './Content';
 import Avatar from './Avatar';
 import {
   ConversationId,
+  createChatConversationAsync,
+  getChatConversationDetailsAsync,
   LastMessageContent,
   LastMessageTime,
   OpponentAvatar,
@@ -16,9 +18,11 @@ import {
   OpponentUsername,
   UnreadCount,
 } from '../store/slice';
+import {useAppDispatch} from '../../../hooks';
 
 export type Props = {
   conversationId: ConversationId;
+  clientConversationId?: ConversationId;
   userId: OpponentUserId;
   avatar: OpponentAvatar;
   online?: OpponentOnlineStatus;
@@ -31,8 +35,29 @@ export type Props = {
 export default (props: Props) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
+  const dispatch = useAppDispatch();
+
   const handlePress = () => {
-    navigation.push('ChatDetail', {conversationId: props.conversationId});
+    if (!props.conversationId) {
+      dispatch(
+        createChatConversationAsync({
+          clientConversationId: props.clientConversationId as ConversationId,
+          opponentUserId: props.userId,
+        }),
+      );
+
+      navigation.push('ChatDetail', {
+        clientConversationId: props.clientConversationId as ConversationId,
+      });
+    } else {
+      dispatch(
+        getChatConversationDetailsAsync({
+          conversationId: props.conversationId,
+        }),
+      );
+
+      navigation.push('ChatDetail', {conversationId: props.conversationId});
+    }
   };
 
   return (

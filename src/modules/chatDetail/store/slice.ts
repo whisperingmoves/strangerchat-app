@@ -211,6 +211,36 @@ export const slice = createSlice({
               ? message.clientMessageId !== clientMessageId
               : message.messageId !== messageId,
         );
+
+        if (!updatedMessageMap[conversationId].length) {
+          delete updatedMessageMap[conversationId];
+        }
+      }
+
+      state.messageMap = updatedMessageMap;
+    },
+
+    updateMessageConversationId: (
+      state: State,
+      action: PayloadAction<{
+        clientConversationId: ConversationId;
+        conversationId: ConversationId;
+      }>,
+    ) => {
+      const {clientConversationId, conversationId} = action.payload;
+      const updatedMessageMap = {...state.messageMap};
+
+      const conversationMessages = updatedMessageMap[clientConversationId];
+
+      if (conversationMessages) {
+        updatedMessageMap[conversationId] = conversationMessages.map(
+          message => ({
+            ...message,
+            conversationId: conversationId,
+          }),
+        );
+
+        delete updatedMessageMap[clientConversationId];
       }
 
       state.messageMap = updatedMessageMap;
@@ -270,6 +300,7 @@ export const {
   setCurrentConversationId,
   resetCurrentConversationId,
   deleteMessage,
+  updateMessageConversationId,
 } = slice.actions;
 
 export const status = (state: RootState) => state.chatDetail.status;

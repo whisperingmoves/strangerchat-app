@@ -90,8 +90,10 @@ export default (props: Props) => {
   }
 
   useEffect(() => {
-    setIsFollowed(props.isFollowed ? props.isFollowed : 0);
-  }, [props.isFollowed]);
+    setIsFollowed(
+      props.isFollowing ? 1 : props.isFollowed ? props.isFollowed : 0,
+    );
+  }, [props.isFollowed, props.isFollowing]);
 
   useEffect(() => {
     const isSameAuthor = operationUserIdValue === props.authorId;

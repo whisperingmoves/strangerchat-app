@@ -38,6 +38,7 @@ import {
   markedAsReadMessage,
   setRecentMessages,
   setSentMessage,
+  updateMessageConversationId,
 } from '../chatDetail/store/slice';
 import {RecentMessage} from '../../apis/notification/recentMessages';
 import {SentMessage} from '../../apis/notification/sentMessage';
@@ -93,6 +94,17 @@ export default () => {
           break;
         case 3:
           dispatch(setCreatedConversation(messageData as CreatedConversation));
+
+          if (!messageData.clientConversationId) {
+            return;
+          }
+
+          dispatch(
+            updateMessageConversationId({
+              clientConversationId: messageData.clientConversationId,
+              conversationId: messageData.conversationId,
+            }),
+          );
           break;
         case 4:
           dispatch(setRecentConversations(messageData as RecentConversation[]));

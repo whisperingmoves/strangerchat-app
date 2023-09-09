@@ -107,11 +107,7 @@ export const slice = createSlice({
       state,
       action: PayloadAction<CreatedConversation>,
     ) => {
-      const conversation: Conversation = {
-        ...action.payload,
-        lastMessageContent: '',
-        lastMessageTime: 0,
-      };
+      const conversation = action.payload;
 
       let conversationList = state.conversationList;
 
@@ -127,7 +123,11 @@ export const slice = createSlice({
           ...conversation,
         };
       } else {
-        conversationList.push(conversation);
+        conversationList.push({
+          ...conversation,
+          lastMessageContent: '',
+          lastMessageTime: 0,
+        });
       }
 
       conversationList = sortBy(conversationList, [

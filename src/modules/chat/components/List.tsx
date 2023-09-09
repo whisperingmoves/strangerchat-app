@@ -41,6 +41,7 @@ export default (props: Props) => {
     .map(conversation => {
       return {
         conversationId: conversation.conversationId,
+        clientConversationId: conversation.clientConversationId,
         userId: conversation.opponentUserId,
         avatar: conversation.opponentAvatar,
         online: conversation.opponentOnlineStatus,
