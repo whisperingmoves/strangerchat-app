@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {ImageSourcePropType} from 'react-native/Libraries/Image/Image';
 
@@ -10,13 +10,82 @@ import icon_camera from '../../../assets/images/icons/icon_camera.png';
 import icon_mic from '../../../assets/images/icons/icon_mic.png';
 import icon_gift from '../../../assets/images/icons/icon_gift.png';
 import Gift, {GiftRef} from '../../gift/Gift';
+import {
+  Content,
+  Photo,
+  resetStatus,
+  scene,
+  setScene,
+  status,
+  Type,
+  uploadMessageAsync,
+} from '../store/slice';
+import {checkFileExistence} from '../../../utils/file';
+import {useAppDispatch, useAppSelector} from '../../../hooks';
+import {showError} from '../../../utils/notification';
+import {COULD_NOT_FIND_IMAGE} from '../../../constants/Config';
+import {selectPhoto} from '../../../utils/image';
+import {store} from '../../../stores/store';
 
 type Props = {
   style: ViewStyle;
+  blurInput: () => void;
+  handleSend: (value: Content, type?: Type) => void;
 };
 
 export default (props: Props) => {
   const giftRef = useRef<GiftRef>(null);
+
+  const dispatch = useAppDispatch();
+
+  const sceneValue = useAppSelector(scene);
+
+  const statusValue = useAppSelector(status);
+
+  useEffect(() => {
+    if (statusValue === 'success' && sceneValue === 'uploadMessage') {
+      dispatch(resetStatus());
+
+      props.handleSend(store.getState().chatDetail.messageImage as Content, 2);
+
+      return;
+    }
+
+    if (statusValue === 'failed' && sceneValue === 'uploadMessage') {
+      dispatch(resetStatus());
+
+      showError(store.getState().chatDetail.error);
+
+      return;
+    }
+  }, [dispatch, props, sceneValue, statusValue]);
+
+  const uploadMessage = useCallback(
+    (messageImage: Photo) => {
+      checkFileExistence(messageImage)
+        .then(result => {
+          if (result) {
+            dispatch(setScene('uploadMessage'));
+
+            dispatch(uploadMessageAsync(messageImage));
+          } else {
+            showError(COULD_NOT_FIND_IMAGE);
+          }
+        })
+        .catch(() => {
+          showError(COULD_NOT_FIND_IMAGE);
+        });
+    },
+    [dispatch],
+  );
+
+  const handleSelectPhoto = useCallback(() => {
+    props.blurInput();
+
+    setTimeout(async () => {
+      uploadMessage(await selectPhoto());
+    }, 200);
+  }, [props, uploadMessage]);
 
   return (
     <View style={[styles.root, props.style]}>
@@ -24,6 +93,8 @@ export default (props: Props) => {
         const handlePress = () => {
           if (index === 4) {
             giftRef.current?.show();
+          } else if (index === 1) {
+            handleSelectPhoto();
           }
         };
 

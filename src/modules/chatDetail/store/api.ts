@@ -10,6 +10,10 @@ import {
   MarkMessageAsRead,
   markMessageAsRead as markMessageAsReadApi,
 } from '../../../apis/message/markMessageAsRead';
+import {
+  uploadMessage as uploadMessageApi,
+  UploadMessageResponse,
+} from '../../../apis/resource/uploadMessage';
 
 export const getRecentChatMessages = async (
   data: GetRecentChatMessages,
@@ -25,4 +29,10 @@ export const markMessageAsRead = async (
   data: MarkMessageAsRead,
 ): Promise<void> => {
   await markMessageAsReadApi(data);
+};
+
+export const uploadMessage = async (
+  photo: string,
+): Promise<UploadMessageResponse> => {
+  return await uploadMessageApi(photo);
 };

@@ -124,6 +124,7 @@ export default (props: Props) => {
           clientConversationId={conversation.clientConversationId}
           opponentUserId={conversation.opponentUserId}
           ref={inputRef}
+          blurInput={blurInput}
         />
       </View>
     </KeyboardAvoidingView>

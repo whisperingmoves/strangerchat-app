@@ -94,7 +94,7 @@ const takePhoto = async () => {
   return uri;
 };
 
-const selectPhoto = async () => {
+export const selectPhoto = async () => {
   const result = await checkPhotoPermission();
   if (result !== RESULTS.GRANTED) {
     openSettings(ALLOW_ACCESS_STORAGE);

@@ -1,4 +1,4 @@
-import React, {RefObject, useEffect} from 'react';
+import React, {RefObject, useCallback, useEffect} from 'react';
 import {
   Image,
   StyleSheet,
@@ -24,6 +24,7 @@ import {
   SenderId,
   SendStatus,
   SentTime,
+  setScene,
   Type,
 } from '../store/slice';
 import {OpponentAvatar, setConversation} from '../../chat/store/slice';
@@ -33,6 +34,7 @@ import {useAppDispatch} from '../../../hooks';
 import MessageStatusIndicator from '../../../components/MessageStatusIndicator';
 import {InputRef} from '../../../components/Input';
 import {store} from '../../../stores/store';
+import {IMAGE} from '../../../constants/chatDetail/Config';
 
 export type Props = {
   conversationId: ConversationId;
@@ -47,6 +49,8 @@ export type Props = {
   sendStatus?: SendStatus;
   isSelf?: boolean;
   inputRef: RefObject<InputRef>;
+  imageIndex?: number;
+  onImageClick?: (imageIndex: number) => void;
 };
 
 export default (props: Props) => {
@@ -91,15 +95,23 @@ export default (props: Props) => {
     const lastMessage =
       store.getState().chatDetail.messageMap[props.conversationId][0];
 
+    let lastMessageContent = lastMessage.content;
+
+    if (lastMessage.type === 2) {
+      lastMessageContent = `[${IMAGE}]`;
+    }
+
     dispatch(
       setConversation({
         conversationId: props.conversationId,
         lastMessageTime: lastMessage.sentTime,
-        lastMessageContent: lastMessage.content,
+        lastMessageContent,
       }),
     );
 
-    props.inputRef.current?.setText(props.content);
+    if (!props.type) {
+      props.inputRef.current?.setText(props.content);
+    }
   };
 
   useEffect(() => {
@@ -109,6 +121,8 @@ export default (props: Props) => {
       props.messageId &&
       props.readStatus !== 1
     ) {
+      dispatch(setScene('markMessageAsRead'));
+
       dispatch(
         markMessageAsReadAsync({
           conversationId: props.conversationId,
@@ -123,6 +137,14 @@ export default (props: Props) => {
     props.messageId,
     props.readStatus,
   ]);
+
+  const handleImageMessageClick = useCallback(() => {
+    if (!props.onImageClick) {
+      return;
+    }
+
+    props.onImageClick(props.imageIndex as number);
+  }, [props]);
 
   return (
     <View style={styles.root}>
@@ -148,6 +170,18 @@ export default (props: Props) => {
           </View>
         )}
 
+        {props.type === 2 && (
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={handleImageMessageClick}>
+            <ResizeImage
+              photoUri={generateFullURL(props.content)}
+              defaultHeight={120}
+              styles={styles.image}
+            />
+          </TouchableOpacity>
+        )}
+
         {isSelf && props.readStatus === 1 && props.sendStatus !== 1 && (
           <Image source={icon_have_read} />
         )}
@@ -156,14 +190,6 @@ export default (props: Props) => {
           <MessageStatusIndicator
             style={styles.messageStatusIndicator}
             onPress={handleResend}
-          />
-        )}
-
-        {props.type === 2 && (
-          <ResizeImage
-            photoUri={generateFullURL(props.content)}
-            defaultHeight={120}
-            styles={styles.image}
           />
         )}
       </View>

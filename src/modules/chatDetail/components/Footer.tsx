@@ -14,14 +14,16 @@ import {useAppDispatch} from '../../../hooks';
 import {SentMessage} from '../../../apis/notification/sentMessage';
 import {store} from '../../../stores/store';
 import {getCurrentUnixTimestampInSeconds} from '../../../utils/date';
-import {sendMessageAsync, setSentMessage} from '../store/slice';
+import {sendMessageAsync, setScene, setSentMessage, Type} from '../store/slice';
 import {socket} from '../../../apis/socket';
+import {IMAGE} from '../../../constants/chatDetail/Config';
 
 type Props = {
   style: ViewStyle;
   conversationId?: ConversationId;
   clientConversationId?: ConversationId;
   opponentUserId: OpponentUserId;
+  blurInput: () => void;
 };
 
 export default forwardRef((props: Props, ref) => {
@@ -29,7 +31,7 @@ export default forwardRef((props: Props, ref) => {
 
   const userId = store.getState().user.userId;
 
-  const handleSend = (value: string) => {
+  const handleSend = (value: string, type?: Type) => {
     const clientMessageId = generateUniqueId();
 
     const currentTimestamp = getCurrentUnixTimestampInSeconds();
@@ -43,14 +45,21 @@ export default forwardRef((props: Props, ref) => {
       recipientId: props.opponentUserId,
       content: value,
       sentTime: currentTimestamp,
+      type,
     };
+
+    let lastMessageContent = value;
+
+    if (type === 2) {
+      lastMessageContent = `[${IMAGE}]`;
+    }
 
     dispatch(
       setConversation({
         clientConversationId: props.clientConversationId,
         conversationId: props.conversationId,
         lastMessageTime: currentTimestamp,
-        lastMessageContent: value,
+        lastMessageContent,
       }),
     );
 
@@ -64,12 +73,15 @@ export default forwardRef((props: Props, ref) => {
 
     dispatch(setSentMessage(message));
 
+    dispatch(setScene('sendMessage'));
+
     dispatch(
       sendMessageAsync({
         conversationId: props.conversationId as ConversationId,
         clientMessageId: clientMessageId,
         opponentUserId: props.opponentUserId,
         content: value,
+        type,
       }),
     );
   };
@@ -78,7 +90,11 @@ export default forwardRef((props: Props, ref) => {
     <View style={[styles.root, props.style]}>
       <Input onSend={handleSend} ref={ref} />
 
-      <ButtonGroup style={styles.btnGroup} />
+      <ButtonGroup
+        style={styles.btnGroup}
+        handleSend={handleSend}
+        blurInput={props.blurInput}
+      />
     </View>
   );
 });

@@ -3,14 +3,28 @@ import {RecentMessage} from '../../../apis/notification/recentMessages';
 import {SentMessage} from '../../../apis/notification/sentMessage';
 import {RootState} from '../../../stores/store';
 import {MarkedAsReadMessage} from '../../../apis/notification/markedAsReadMessage';
-import {getRecentChatMessages, markMessageAsRead, sendMessage} from './api';
+import {
+  getRecentChatMessages,
+  markMessageAsRead,
+  sendMessage,
+  uploadMessage,
+} from './api';
 import {GetRecentChatMessages} from '../../../apis/message/getRecentChatMessages';
 import {SendMessage} from '../../../apis/message/sendMessage';
 import {MarkMessageAsRead} from '../../../apis/message/markMessageAsRead';
 
 export interface Message extends RecentMessage, SentMessage {}
 
+export type Photo = string;
+
 export type Error = string;
+
+export type Scene =
+  | 'getRecentChatMessages'
+  | 'sendMessage'
+  | 'markMessageAsRead'
+  | 'uploadMessage'
+  | undefined;
 
 export type Status = 'idle' | 'loading' | 'failed' | 'success';
 
@@ -32,7 +46,9 @@ export type SendStatus = number;
 
 export interface State {
   messageMap: Record<ConversationId, Message[]>;
+  messageImage?: Photo;
   error: Error;
+  scene?: Scene;
   currentConversationId?: ConversationId;
   status: Status;
 }
@@ -61,6 +77,15 @@ export const markMessageAsReadAsync = createAsyncThunk<void, MarkMessageAsRead>(
   'chatDetail/markMessageAsRead',
   async param => {
     await markMessageAsRead(param);
+  },
+);
+
+export const uploadMessageAsync = createAsyncThunk<Photo, Photo>(
+  'chatDetail/uploadMessage',
+  async photo => {
+    const uploadMessageResponse = await uploadMessage(photo);
+
+    return uploadMessageResponse.url;
   },
 );
 
@@ -245,6 +270,14 @@ export const slice = createSlice({
 
       state.messageMap = updatedMessageMap;
     },
+
+    setScene: (state, action: PayloadAction<Scene>) => {
+      state.scene = action.payload;
+    },
+
+    resetStatus: state => {
+      state.status = initialState.status;
+    },
   },
 
   extraReducers: builder => {
@@ -289,6 +322,25 @@ export const slice = createSlice({
         state.status = 'failed';
 
         state.error = action.error.message || '';
+      })
+
+      .addCase(uploadMessageAsync.pending, state => {
+        state.status = 'loading';
+      })
+
+      .addCase(
+        uploadMessageAsync.fulfilled,
+        (state, action: PayloadAction<Photo>) => {
+          state.messageImage = action.payload;
+
+          state.status = 'success';
+        },
+      )
+
+      .addCase(uploadMessageAsync.rejected, (state, action) => {
+        state.status = 'failed';
+
+        state.error = action.error.message || '';
       });
   },
 });
@@ -301,9 +353,13 @@ export const {
   resetCurrentConversationId,
   deleteMessage,
   updateMessageConversationId,
+  setScene,
+  resetStatus,
 } = slice.actions;
 
 export const status = (state: RootState) => state.chatDetail.status;
+
+export const scene = (state: RootState) => state.chatDetail.scene;
 
 export const messageMap = (state: RootState) => state.chatDetail.messageMap;
 
