@@ -24,16 +24,18 @@ const checkCameraPermission = async () => {
 };
 
 const checkPhotoPermission = async () => {
-  const permission =
-    Platform.OS === 'ios'
-      ? PERMISSIONS.IOS.PHOTO_LIBRARY
-      : Number(Platform.Version) > 28
-      ? PERMISSIONS.ANDROID.READ_MEDIA_IMAGES
-      : PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE;
+  if (Platform.OS === 'android') {
+    return RESULTS.GRANTED;
+  }
+
+  const permission = PERMISSIONS.IOS.PHOTO_LIBRARY;
+
   const result = await check(permission);
+
   if (result === RESULTS.DENIED) {
     return request(permission);
   }
+
   return result;
 };
 

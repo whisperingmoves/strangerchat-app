@@ -363,4 +363,6 @@ export const scene = (state: RootState) => state.chatDetail.scene;
 
 export const messageMap = (state: RootState) => state.chatDetail.messageMap;
 
+export const messageImage = (state: RootState) => state.chatDetail.messageImage;
+
 export default slice.reducer;

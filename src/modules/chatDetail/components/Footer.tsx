@@ -16,7 +16,6 @@ import {store} from '../../../stores/store';
 import {getCurrentUnixTimestampInSeconds} from '../../../utils/date';
 import {sendMessageAsync, setScene, setSentMessage, Type} from '../store/slice';
 import {socket} from '../../../apis/socket';
-import {IMAGE} from '../../../constants/chatDetail/Config';
 
 type Props = {
   style: ViewStyle;
@@ -48,18 +47,13 @@ export default forwardRef((props: Props, ref) => {
       type,
     };
 
-    let lastMessageContent = value;
-
-    if (type === 2) {
-      lastMessageContent = `[${IMAGE}]`;
-    }
-
     dispatch(
       setConversation({
         clientConversationId: props.clientConversationId,
         conversationId: props.conversationId,
         lastMessageTime: currentTimestamp,
-        lastMessageContent,
+        lastMessageContent: value,
+        lastMessageType: type,
       }),
     );
 

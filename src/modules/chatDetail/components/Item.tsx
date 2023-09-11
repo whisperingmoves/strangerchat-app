@@ -34,7 +34,6 @@ import {useAppDispatch} from '../../../hooks';
 import MessageStatusIndicator from '../../../components/MessageStatusIndicator';
 import {InputRef} from '../../../components/Input';
 import {store} from '../../../stores/store';
-import {IMAGE} from '../../../constants/chatDetail/Config';
 
 export type Props = {
   conversationId: ConversationId;
@@ -95,17 +94,12 @@ export default (props: Props) => {
     const lastMessage =
       store.getState().chatDetail.messageMap[props.conversationId][0];
 
-    let lastMessageContent = lastMessage.content;
-
-    if (lastMessage.type === 2) {
-      lastMessageContent = `[${IMAGE}]`;
-    }
-
     dispatch(
       setConversation({
         conversationId: props.conversationId,
         lastMessageTime: lastMessage.sentTime,
-        lastMessageContent,
+        lastMessageContent: lastMessage.content,
+        lastMessageType: lastMessage.type,
       }),
     );
 

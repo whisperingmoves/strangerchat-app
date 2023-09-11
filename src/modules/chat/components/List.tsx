@@ -11,6 +11,7 @@ import Separator from './Separator';
 import Footer from '../../../components/ListFooter';
 import {useAppSelector} from '../../../hooks';
 import {conversationList, keyword} from '../store/slice';
+import {IMAGE} from '../../../constants/chatDetail/Config';
 
 const renderItem = ({item}: {item: ItemProps}) => <Item {...item} />;
 
@@ -39,6 +40,12 @@ export default (props: Props) => {
         conversation.lastMessageTime && conversation.lastMessageContent,
     )
     .map(conversation => {
+      let content = conversation.lastMessageContent;
+
+      if (conversation.lastMessageType === 2) {
+        content = `[${IMAGE}]`;
+      }
+
       return {
         conversationId: conversation.conversationId,
         clientConversationId: conversation.clientConversationId,
@@ -47,7 +54,7 @@ export default (props: Props) => {
         online: conversation.opponentOnlineStatus,
         username: conversation.opponentUsername,
         updateTime: conversation.lastMessageTime,
-        content: conversation.lastMessageContent,
+        content,
         unreadCount: conversation.unreadCount,
       };
     });

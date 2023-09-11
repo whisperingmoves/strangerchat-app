@@ -12,6 +12,7 @@ import icon_gift from '../../../assets/images/icons/icon_gift.png';
 import Gift, {GiftRef} from '../../gift/Gift';
 import {
   Content,
+  messageImage,
   Photo,
   resetStatus,
   scene,
@@ -42,11 +43,17 @@ export default (props: Props) => {
 
   const statusValue = useAppSelector(status);
 
+  const messageImageValue = useAppSelector(messageImage);
+
   useEffect(() => {
-    if (statusValue === 'success' && sceneValue === 'uploadMessage') {
+    if (
+      statusValue === 'success' &&
+      sceneValue === 'uploadMessage' &&
+      messageImageValue
+    ) {
       dispatch(resetStatus());
 
-      props.handleSend(store.getState().chatDetail.messageImage as Content, 2);
+      props.handleSend(messageImageValue as Content, 2);
 
       return;
     }
@@ -58,16 +65,16 @@ export default (props: Props) => {
 
       return;
     }
-  }, [dispatch, props, sceneValue, statusValue]);
+  }, [dispatch, props, sceneValue, statusValue, messageImageValue]);
 
   const uploadMessage = useCallback(
-    (messageImage: Photo) => {
-      checkFileExistence(messageImage)
+    (photo: Photo) => {
+      checkFileExistence(photo)
         .then(result => {
           if (result) {
             dispatch(setScene('uploadMessage'));
 
-            dispatch(uploadMessageAsync(messageImage));
+            dispatch(uploadMessageAsync(photo));
           } else {
             showError(COULD_NOT_FIND_IMAGE);
           }

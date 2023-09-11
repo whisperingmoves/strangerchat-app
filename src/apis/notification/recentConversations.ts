@@ -7,5 +7,6 @@ export interface RecentConversation {
   opponentDistance?: number;
   lastMessageTime: number;
   lastMessageContent: string;
+  lastMessageType?: number;
   unreadCount?: number;
 }

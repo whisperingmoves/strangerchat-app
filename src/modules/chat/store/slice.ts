@@ -37,6 +37,8 @@ export type LastMessageTime = number;
 
 export type LastMessageContent = string;
 
+export type LastMessageType = number;
+
 export type Keyword = string;
 
 export type ConversationId = string;
@@ -206,6 +208,7 @@ export const slice = createSlice({
         conversationId?: ConversationId;
         lastMessageTime?: LastMessageTime;
         lastMessageContent?: LastMessageContent;
+        lastMessageType?: LastMessageType;
         unreadCount?: UnreadCount;
       }>,
     ) => {

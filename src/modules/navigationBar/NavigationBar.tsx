@@ -127,6 +127,7 @@ export default () => {
               conversationId: messageData.conversationId,
               lastMessageTime: messageData.sentTime,
               lastMessageContent: messageData.content,
+              lastMessageType: messageData.type,
             }),
           );
 
