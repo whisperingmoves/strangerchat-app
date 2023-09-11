@@ -69,7 +69,7 @@ const openSettings = (message: string) => {
   ]);
 };
 
-const takePhoto = async () => {
+export const takePhoto = async () => {
   let result = await checkCameraPermission();
   if (result !== RESULTS.GRANTED) {
     openSettings(ALLOW_ACCESS_CAMERA);

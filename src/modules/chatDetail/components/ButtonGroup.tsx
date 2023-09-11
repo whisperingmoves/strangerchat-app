@@ -26,7 +26,7 @@ import {checkFileExistence} from '../../../utils/file';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {showError} from '../../../utils/notification';
 import {COULD_NOT_FIND_IMAGE} from '../../../constants/Config';
-import {selectPhoto} from '../../../utils/image';
+import {selectPhoto, takePhoto} from '../../../utils/image';
 import {store} from '../../../stores/store';
 import Loading from '../../../components/Loading';
 
@@ -100,6 +100,14 @@ export default (props: Props) => {
     }, 200);
   }, [props, uploadMessage]);
 
+  const handleTakePhoto = useCallback(() => {
+    props.blurInput();
+
+    setTimeout(async () => {
+      uploadMessage(await takePhoto());
+    }, 200);
+  }, [props, uploadMessage]);
+
   return (
     <View style={[styles.root, props.style]}>
       {btnList.map((value, index) => {
@@ -108,6 +116,8 @@ export default (props: Props) => {
             giftRef.current?.show();
           } else if (index === 1) {
             handleSelectPhoto();
+          } else if (index === 2) {
+            handleTakePhoto();
           }
         };
 
