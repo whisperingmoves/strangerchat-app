@@ -278,6 +278,10 @@ export const slice = createSlice({
     resetStatus: state => {
       state.status = initialState.status;
     },
+
+    resetMessageImage: state => {
+      state.messageImage = initialState.messageImage;
+    },
   },
 
   extraReducers: builder => {
@@ -355,6 +359,7 @@ export const {
   updateMessageConversationId,
   setScene,
   resetStatus,
+  resetMessageImage,
 } = slice.actions;
 
 export const status = (state: RootState) => state.chatDetail.status;

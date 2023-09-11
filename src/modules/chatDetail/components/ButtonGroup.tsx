@@ -14,6 +14,7 @@ import {
   Content,
   messageImage,
   Photo,
+  resetMessageImage,
   resetStatus,
   scene,
   setScene,
@@ -52,6 +53,8 @@ export default (props: Props) => {
       messageImageValue
     ) {
       dispatch(resetStatus());
+
+      dispatch(resetMessageImage());
 
       props.handleSend(messageImageValue as Content, 2);
 

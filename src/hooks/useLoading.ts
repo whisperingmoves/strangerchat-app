@@ -6,10 +6,6 @@ import {status as userStatus} from '../stores/user/slice';
 import {status as navigationBarStatus} from '../modules/navigationBar/store/slice';
 import {status as homeStatus} from '../modules/home/store/slice';
 import {status as newPostStatus} from '../modules/newPost/store/slice';
-import {
-  scene as chatDetailScene,
-  status as chatDetailStatus,
-} from '../modules/chatDetail/store/slice';
 import {useAppSelector} from './index';
 
 const useLoading = () => {
@@ -20,8 +16,6 @@ const useLoading = () => {
   const navigationBarStatusValue = useAppSelector(navigationBarStatus);
   const homeStatusValue = useAppSelector(homeStatus);
   const newPostStatusValue = useAppSelector(newPostStatus);
-  const chatDetailStatusValue = useAppSelector(chatDetailStatus);
-  const chatDetailSceneValue = useAppSelector(chatDetailScene);
 
   const loading =
     loginStatusValue === 'loading' ||
@@ -30,9 +24,7 @@ const useLoading = () => {
     userStatusValue === 'loading' ||
     navigationBarStatusValue === 'loading' ||
     homeStatusValue === 'loading' ||
-    newPostStatusValue === 'loading' ||
-    (chatDetailStatusValue === 'loading' &&
-      chatDetailSceneValue === 'uploadMessage');
+    newPostStatusValue === 'loading';
 
   useEffect(() => {
     return () => {};
