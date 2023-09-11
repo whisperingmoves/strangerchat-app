@@ -28,6 +28,7 @@ import {showError} from '../../../utils/notification';
 import {COULD_NOT_FIND_IMAGE} from '../../../constants/Config';
 import {selectPhoto} from '../../../utils/image';
 import {store} from '../../../stores/store';
+import Loading from '../../../components/Loading';
 
 type Props = {
   style: ViewStyle;
@@ -45,6 +46,8 @@ export default (props: Props) => {
   const statusValue = useAppSelector(status);
 
   const messageImageValue = useAppSelector(messageImage);
+
+  const loading = statusValue === 'idle' && sceneValue === 'uploadMessage';
 
   useEffect(() => {
     if (
@@ -119,6 +122,8 @@ export default (props: Props) => {
       })}
 
       <Gift ref={giftRef} />
+
+      <Loading visible={loading} />
     </View>
   );
 };
