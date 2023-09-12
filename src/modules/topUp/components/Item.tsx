@@ -3,13 +3,15 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import icon_coin from '../../../assets/images/icons/icon_coin.png';
 import PlaceHolder from '../../../components/PlaceHolder';
-import {Coins, Price, ProductId} from '../store/slice';
+import {Coins, Currency, Price, ProductId} from '../store/slice';
+import {formatPrice} from '../../../utils/currency';
 
 export type Props = {
   productId: ProductId;
   coins: Coins;
   originalPrice?: Price;
   price: Price;
+  currency: Currency;
 };
 
 export default (props: Props) => {
@@ -23,10 +25,14 @@ export default (props: Props) => {
 
       <View style={styles.priceContainer}>
         {props.originalPrice && (
-          <Text style={styles.originalPriceTxt}>{props.originalPrice}</Text>
+          <Text style={styles.originalPriceTxt}>
+            {formatPrice(props.originalPrice, props.currency)}
+          </Text>
         )}
 
-        <Text style={styles.priceTxt}>{props.price}</Text>
+        <Text style={styles.priceTxt}>
+          {formatPrice(props.price, props.currency)}
+        </Text>
       </View>
     </TouchableOpacity>
   );

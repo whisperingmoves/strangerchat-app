@@ -20,6 +20,8 @@ export type Price = number;
 
 export type ProductId = string;
 
+export type Currency = string;
+
 export type Scene = 'getCoinProducts' | 'buyCoinProduct';
 
 export interface State {
