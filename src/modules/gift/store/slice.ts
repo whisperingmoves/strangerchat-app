@@ -20,12 +20,15 @@ export type Id = string;
 
 export type Image = string;
 
+export type Name = string;
+
 export type Value = number;
 
 export interface State {
   list: GiftData[];
   page: Page;
   pageSize: PageSize;
+  selectedGift?: GiftData;
   scene?: Scene;
   error: Error;
   status: Status;
@@ -77,6 +80,14 @@ export const slice = createSlice({
     resetPage: state => {
       state.page = initialState.page;
     },
+
+    setSelectedGift: (state, action: PayloadAction<GiftData>) => {
+      state.selectedGift = action.payload;
+    },
+
+    resetSelectedGift: state => {
+      state.selectedGift = initialState.selectedGift;
+    },
   },
 
   extraReducers: builder => {
@@ -109,12 +120,20 @@ export const slice = createSlice({
   },
 });
 
-export const {resetStatus, setScene, resetPage} = slice.actions;
+export const {
+  resetStatus,
+  setScene,
+  resetPage,
+  setSelectedGift,
+  resetSelectedGift,
+} = slice.actions;
 
 export const status = (state: RootState) => state.gift.status;
 
 export const scene = (state: RootState) => state.gift.scene;
 
 export const list = (state: RootState) => state.gift.list;
+
+export const selectedGift = (state: RootState) => state.gift.selectedGift;
 
 export default slice.reducer;

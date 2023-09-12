@@ -14,8 +14,16 @@ import {useAppDispatch} from '../../../hooks';
 import {SentMessage} from '../../../apis/notification/sentMessage';
 import {store} from '../../../stores/store';
 import {getCurrentUnixTimestampInSeconds} from '../../../utils/date';
-import {sendMessageAsync, setScene, setSentMessage, Type} from '../store/slice';
+import {
+  Content,
+  HandleSend,
+  sendMessageAsync,
+  setScene,
+  setSentMessage,
+  Type,
+} from '../store/slice';
 import {socket} from '../../../apis/socket';
+import {Id} from '../../gift/store/slice';
 
 type Props = {
   style: ViewStyle;
@@ -30,7 +38,7 @@ export default forwardRef((props: Props, ref) => {
 
   const userId = store.getState().user.userId;
 
-  const handleSend = (value: string, type?: Type) => {
+  const handleSend: HandleSend = (value: Content, type?: Type, giftId?: Id) => {
     const clientMessageId = generateUniqueId();
 
     const currentTimestamp = getCurrentUnixTimestampInSeconds();
@@ -76,6 +84,7 @@ export default forwardRef((props: Props, ref) => {
         opponentUserId: props.opponentUserId,
         content: value,
         type,
+        giftId,
       }),
     );
   };

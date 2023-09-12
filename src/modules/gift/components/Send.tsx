@@ -2,14 +2,56 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {SEND} from '../../../constants/Config';
+import {resetSelectedGift, selectedGift} from '../store/slice';
+import {useAppDispatch, useAppSelector} from '../../../hooks';
+import {HandleSend} from '../../chatDetail/store/slice';
+import {coinBalance, setUser} from '../../../stores/user/slice';
+import {showError} from '../../../utils/notification';
+import {INSUFFICIENT_GOLD_BALANCE} from '../../../constants/gift/Config';
 
 type Props = {
-  onPress: () => void;
+  handleSend: HandleSend;
+  hide: () => void;
 };
 
 export default (props: Props) => {
+  const gift = useAppSelector(selectedGift);
+
+  const coinBalanceValue = useAppSelector(coinBalance);
+
+  const dispatch = useAppDispatch();
+
+  const handlePress = () => {
+    if (!gift) {
+      return;
+    }
+
+    if (!coinBalanceValue || gift.value > coinBalanceValue) {
+      showError(INSUFFICIENT_GOLD_BALANCE);
+
+      return;
+    }
+
+    props.handleSend(gift.image, 5, gift.id);
+
+    dispatch(
+      setUser({
+        coinBalance: coinBalanceValue - gift.value,
+      }),
+    );
+
+    setTimeout(() => {
+      props.hide();
+
+      dispatch(resetSelectedGift());
+    }, 200);
+  };
+
   return (
-    <TouchableOpacity activeOpacity={0.7} onPress={props.onPress}>
+    <TouchableOpacity
+      activeOpacity={0.7}
+      onPress={handlePress}
+      disabled={!gift}>
       <LinearGradient
         colors={['#D988FF', '#8B5CFF']}
         start={{x: 0, y: 0}}

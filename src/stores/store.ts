@@ -36,7 +36,7 @@ export const STORAGE_KEY = 'strangerchat';
 const persistConfig = {
   key: STORAGE_KEY,
   storage: AsyncStorage,
-  whitelist: ['user', 'newPost', 'chat', 'chatDetail', 'gift'],
+  whitelist: ['user', 'newPost', 'chat', 'chatDetail'],
 };
 
 const appReducer = combineReducers({

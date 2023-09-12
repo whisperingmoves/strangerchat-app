@@ -164,7 +164,7 @@ export default (props: Props) => {
           </View>
         )}
 
-        {props.type === 2 && (
+        {(props.type === 2 || props.type === 5) && (
           <TouchableOpacity
             activeOpacity={0.7}
             onPress={handleImageMessageClick}>

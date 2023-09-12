@@ -1,11 +1,12 @@
-import React from 'react';
-import {FlatList, StyleSheet} from 'react-native';
+import React, {useCallback, useMemo} from 'react';
+import {FlatList, Platform, StyleSheet} from 'react-native';
 
 import Item, {Item as ItemProps} from './Item';
 import Separator from './Separator';
-import {useAppSelector} from '../../../hooks';
-import {list} from '../store/slice';
+import {useAppDispatch, useAppSelector} from '../../../hooks';
+import {getGiftListAsync, list, status} from '../store/slice';
 import {transformItemArray} from '../helper';
+import {resetPage} from '../../latest/store/slice';
 
 const renderItem = ({item}: {item: ItemProps[]}) => <Item itemList={item} />;
 
@@ -14,6 +15,22 @@ const keyExtractor = (item: ItemProps[], index: number) =>
 
 export default () => {
   const listValue = useAppSelector(list);
+
+  const statusValue = useAppSelector(status);
+
+  const refreshing = useMemo(() => statusValue === 'loading', [statusValue]);
+
+  const dispatch = useAppDispatch();
+
+  const refresh = useCallback(() => {
+    dispatch(resetPage());
+
+    dispatch(getGiftListAsync());
+  }, [dispatch]);
+
+  const load = useCallback(() => {
+    dispatch(getGiftListAsync());
+  }, [dispatch]);
 
   const data = transformItemArray(listValue);
 
@@ -27,6 +44,11 @@ export default () => {
       keyExtractor={keyExtractor}
       horizontal={true}
       ItemSeparatorComponent={Separator}
+      refreshing={refreshing}
+      onRefresh={refresh}
+      onEndReachedThreshold={0.1}
+      onEndReached={load}
+      bounces={bounces}
     />
   );
 };
@@ -41,3 +63,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
   },
 });
+
+const bounces = Platform.OS === 'ios';

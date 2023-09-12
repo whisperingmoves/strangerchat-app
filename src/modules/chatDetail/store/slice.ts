@@ -12,6 +12,7 @@ import {
 import {GetRecentChatMessages} from '../../../apis/message/getRecentChatMessages';
 import {SendMessage} from '../../../apis/message/sendMessage';
 import {MarkMessageAsRead} from '../../../apis/message/markMessageAsRead';
+import {Id} from '../../gift/store/slice';
 
 export interface Message extends RecentMessage, SentMessage {}
 
@@ -43,6 +44,8 @@ export type Type = number;
 export type ReadStatus = number;
 
 export type SendStatus = number;
+
+export type HandleSend = (value: Content, type?: Type, giftId?: Id) => void;
 
 export interface State {
   messageMap: Record<ConversationId, Message[]>;

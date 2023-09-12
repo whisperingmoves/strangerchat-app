@@ -10,22 +10,15 @@ import {
   View,
 } from 'react-native';
 
-import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
-
-import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-
 import icon_coin from '../../../assets/images/icons/icon_coin.png';
-import HasNewIndicator from '../../../components/HasNewIndicator';
 import PlaceHolder from '../../../components/PlaceHolder';
-import TabBarIndicator from '../../../components/TabBarIndicator';
+import {coinBalance} from '../../../stores/user/slice';
+import {useAppSelector} from '../../../hooks';
 
-export default ({
-  state,
-  descriptors,
-  navigation,
-  position,
-}: MaterialTopTabBarProps) => {
+export default ({state, descriptors, navigation}: MaterialTopTabBarProps) => {
   const [tabPositions, setTabPositions] = useState<Array<LayoutRectangle>>([]);
+
+  const coinBalanceValue = useAppSelector(coinBalance);
 
   const handleLayoutChange = (event: LayoutChangeEvent, index: number) => {
     const {x, y, width, height} = event.nativeEvent.layout;
@@ -35,23 +28,23 @@ export default ({
     setTabPositions(newTabPositions);
   };
 
-  const inputRange = state.routes.map((_, i) => i);
+  // const inputRange = state.routes.map((_, i) => i);
 
-  const indicatorStyle: StyleProp<ViewStyle> = {
-    transform: [
-      {
-        translateX: position.interpolate({
-          inputRange: inputRange,
-          outputRange: inputRange.map(
-            i =>
-              (i === 0 ? 0 : tabPositions[i]?.x - tabPositions[0]?.x) +
-                tabPositions[i]?.width / 2 -
-                9 || 0,
-          ),
-        }),
-      },
-    ],
-  };
+  // const indicatorStyle: StyleProp<ViewStyle> = {
+  //   transform: [
+  //     {
+  //       translateX: position.interpolate({
+  //         inputRange: inputRange,
+  //         outputRange: inputRange.map(
+  //           i =>
+  //             (i === 0 ? 0 : tabPositions[i]?.x - tabPositions[0]?.x) +
+  //               tabPositions[i]?.width / 2 -
+  //               9 || 0,
+  //         ),
+  //       }),
+  //     },
+  //   ],
+  // };
 
   return (
     <View style={styles.root}>
@@ -89,7 +82,7 @@ export default ({
               {label}
             </Text>
 
-            <HasNewIndicator style={styles.indicator} />
+            {/*<HasNewIndicator style={styles.indicator} />*/}
           </TouchableOpacity>
         );
       })}
@@ -99,15 +92,15 @@ export default ({
       <View style={styles.container}>
         <Image source={icon_coin} style={styles.coinIcon} />
 
-        <Text style={styles.coinTxt}>1573</Text>
+        <Text style={styles.coinTxt}>{coinBalanceValue}</Text>
       </View>
 
-      <TabBarIndicator
-        style={{
-          ...styles.tabBarIndicator,
-          ...indicatorStyle,
-        }}
-      />
+      {/*<TabBarIndicator*/}
+      {/*  style={{*/}
+      {/*    ...styles.tabBarIndicator,*/}
+      {/*    // ...indicatorStyle,*/}
+      {/*  }}*/}
+      {/*/>*/}
     </View>
   );
 };
@@ -156,9 +149,9 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     includeFontPadding: false,
   },
-  tabBarIndicator: {
-    position: 'absolute',
-    left: 0,
-    bottom: 0,
-  },
+  // tabBarIndicator: {
+  //   position: 'absolute',
+  //   left: 0,
+  //   bottom: 0,
+  // },
 });

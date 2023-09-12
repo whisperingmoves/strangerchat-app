@@ -6,6 +6,7 @@ export interface SendMessage {
   opponentUserId: string;
   content: string;
   type?: number;
+  giftId?: string;
 }
 
 export const sendMessage = async (data: SendMessage): Promise<void> => {

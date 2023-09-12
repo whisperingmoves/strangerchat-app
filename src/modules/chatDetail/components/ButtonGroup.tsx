@@ -12,6 +12,7 @@ import icon_gift from '../../../assets/images/icons/icon_gift.png';
 import Gift, {GiftRef} from '../../gift/Gift';
 import {
   Content,
+  HandleSend,
   messageImage,
   Photo,
   resetMessageImage,
@@ -19,7 +20,6 @@ import {
   scene,
   setScene,
   status,
-  Type,
   uploadMessageAsync,
 } from '../store/slice';
 import {checkFileExistence} from '../../../utils/file';
@@ -33,7 +33,7 @@ import Loading from '../../../components/Loading';
 type Props = {
   style: ViewStyle;
   blurInput: () => void;
-  handleSend: (value: Content, type?: Type) => void;
+  handleSend: HandleSend;
 };
 
 export default (props: Props) => {
@@ -47,7 +47,7 @@ export default (props: Props) => {
 
   const messageImageValue = useAppSelector(messageImage);
 
-  const loading = statusValue === 'idle' && sceneValue === 'uploadMessage';
+  const loading = statusValue === 'loading' && sceneValue === 'uploadMessage';
 
   useEffect(() => {
     if (
@@ -131,7 +131,7 @@ export default (props: Props) => {
         );
       })}
 
-      <Gift ref={giftRef} />
+      <Gift ref={giftRef} handleSend={props.handleSend} />
 
       <Loading visible={loading} />
     </View>

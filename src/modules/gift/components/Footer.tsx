@@ -3,19 +3,20 @@ import {StyleSheet, View} from 'react-native';
 
 import TopUp from './TopUp';
 import Send from './Send';
+import {HandleSend} from '../../chatDetail/store/slice';
 
 type Props = {
   handleTopUpPress: () => void;
+  handleSend: HandleSend;
+  hide: () => void;
 };
 
 export default (props: Props) => {
-  const handleSendPress = () => {};
-
   return (
     <View style={styles.root}>
       <TopUp onPress={props.handleTopUpPress} />
 
-      <Send onPress={handleSendPress} />
+      <Send handleSend={props.handleSend} hide={props.hide} />
     </View>
   );
 };

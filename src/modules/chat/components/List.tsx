@@ -12,6 +12,7 @@ import Footer from '../../../components/ListFooter';
 import {useAppSelector} from '../../../hooks';
 import {conversationList, keyword} from '../store/slice';
 import {IMAGE} from '../../../constants/chatDetail/Config';
+import {GIFT} from '../../../constants/Config';
 
 const renderItem = ({item}: {item: ItemProps}) => <Item {...item} />;
 
@@ -44,6 +45,8 @@ export default (props: Props) => {
 
       if (conversation.lastMessageType === 2) {
         content = `[${IMAGE}]`;
+      } else if (conversation.lastMessageType === 5) {
+        content = `[${GIFT}]`;
       }
 
       return {

@@ -17,13 +17,18 @@ import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import Footer from './components/Footer';
 import NavigationBar from './components/NavigationBar';
 import TopUp from '../topUp/TopUp';
+import {HandleSend} from '../chatDetail/store/slice';
 
 export interface GiftRef {
   show: () => void;
   hide: () => void;
 }
 
-export default forwardRef(({}, ref) => {
+type Props = {
+  handleSend: HandleSend;
+};
+
+export default forwardRef((props: Props, ref) => {
   const {height: windowHeight} = useWindowDimensions();
 
   const [visible, setVisible] = useState<boolean>(false);
@@ -34,11 +39,13 @@ export default forwardRef(({}, ref) => {
 
   const show = () => {
     setVisible(true);
+
     setGiftTranslateY(0);
   };
 
   const hide = () => {
     setGiftTranslateY(352);
+
     setVisible(false);
   };
 
@@ -84,6 +91,7 @@ export default forwardRef(({}, ref) => {
   const handleTopUpRelease = (y: number) => {
     if (y > (windowHeight * 0.86) / 2) {
       LayoutAnimation.spring();
+
       setTopUpTranslateY(windowHeight * 0.86);
       // setGiftTranslateY(0);
     }
@@ -109,7 +117,11 @@ export default forwardRef(({}, ref) => {
           <TouchableOpacity style={[styles.gift, giftStyle]} activeOpacity={1}>
             <NavigationBar />
 
-            <Footer handleTopUpPress={handleTopUpPress} />
+            <Footer
+              handleTopUpPress={handleTopUpPress}
+              handleSend={props.handleSend}
+              hide={hide}
+            />
           </TouchableOpacity>
         )}
 
