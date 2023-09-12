@@ -14,6 +14,7 @@ import {
   getCurrentUnixTimestampInSeconds,
   isTimestampToday,
 } from '../../../utils/date';
+import {rewardData} from '../helper';
 
 type Props = {
   style: StyleProp<ViewStyle>;
@@ -32,10 +33,18 @@ export default (props: Props) => {
     if (statusValue === 'success') {
       dispatch(resetStatus());
 
+      const checkedDays =
+        store.getState().navigationBar.payload?.checkedDays || 0;
+
+      const coinBalance = store.getState().user.coinBalance || 0;
+
+      const coinAmount = rewardData[checkedDays - 1]?.amount || 0;
+
       dispatch(
         setUser({
-          checkedDays: store.getState().navigationBar.payload?.checkedDays,
+          checkedDays,
           lastCheckDate: getCurrentUnixTimestampInSeconds(),
+          coinBalance: coinBalance + coinAmount,
         }),
       );
 

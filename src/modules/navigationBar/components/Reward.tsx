@@ -7,18 +7,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {ImageSourcePropType} from 'react-native/Libraries/Image/Image';
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import {RewardProps} from '../helper';
 
-export type Props = {
-  icon: ImageSourcePropType;
-  amount: number;
-  label: string;
-  active: boolean;
-};
-
-export default (props: Props) => {
+export default (props: RewardProps) => {
   const contentStyle: StyleProp<ViewStyle> = {
     borderWidth: props.active ? 1 : 0,
     borderColor: '#8B5CFF',

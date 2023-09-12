@@ -2,22 +2,11 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 
 import TitleBar from './TitleBar';
-import Reward, {Props as RewardProps} from './Reward';
-
-import icon_coin from '../../../assets/images/icons/icon_coin.png';
-import icon_coin_supreme from '../../../assets/images/icons/icon_coin_supreme.png';
+import Reward from './Reward';
 import MarkButton from './MarkButton';
-import {
-  FIFTH_DAY,
-  FIRST_DAY,
-  FOURTH_DAY,
-  SECOND_DAY,
-  SEVENTH_DAY,
-  SIXTH_DAY,
-  THIRD_DAY,
-} from '../../../constants/navigationBar/Config';
 import {useAppSelector} from '../../../hooks';
 import {checkedDays} from '../../../stores/user/slice';
+import {rewardData} from '../helper';
 
 export default () => {
   const checkedDaysValue = useAppSelector(checkedDays);
@@ -69,48 +58,3 @@ const styles = StyleSheet.create({
     marginHorizontal: 60,
   },
 });
-
-const rewardData: RewardProps[] = [
-  {
-    icon: icon_coin,
-    amount: 10,
-    label: FIRST_DAY,
-    active: false,
-  },
-  {
-    icon: icon_coin,
-    amount: 15,
-    label: SECOND_DAY,
-    active: false,
-  },
-  {
-    icon: icon_coin,
-    amount: 30,
-    label: THIRD_DAY,
-    active: false,
-  },
-  {
-    icon: icon_coin,
-    amount: 50,
-    label: FOURTH_DAY,
-    active: false,
-  },
-  {
-    icon: icon_coin,
-    amount: 70,
-    label: FIFTH_DAY,
-    active: false,
-  },
-  {
-    icon: icon_coin,
-    amount: 100,
-    label: SIXTH_DAY,
-    active: false,
-  },
-  {
-    icon: icon_coin_supreme,
-    amount: 200,
-    label: SEVENTH_DAY,
-    active: false,
-  },
-];
