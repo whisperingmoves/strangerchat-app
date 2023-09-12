@@ -43,6 +43,8 @@ import {
 import {RecentMessage} from '../../apis/notification/recentMessages';
 import {SentMessage} from '../../apis/notification/sentMessage';
 import {MarkedAsReadMessage} from '../../apis/notification/markedAsReadMessage';
+import {CoinBalance} from '../../apis/notification/coinBalance';
+import {setUser} from '../../stores/user/slice';
 
 export type RootBottomTabParamList = {
   Home: undefined;
@@ -148,6 +150,9 @@ export default () => {
           break;
         case 8:
           dispatch(markedAsReadMessage(messageData as MarkedAsReadMessage));
+          break;
+        case 13:
+          dispatch(setUser(messageData as CoinBalance));
           break;
         default:
           break;

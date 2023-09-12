@@ -5,7 +5,7 @@ import {SEND} from '../../../constants/Config';
 import {resetSelectedGift, selectedGift} from '../store/slice';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {HandleSend} from '../../chatDetail/store/slice';
-import {coinBalance, setUser} from '../../../stores/user/slice';
+import {coinBalance} from '../../../stores/user/slice';
 import {showError} from '../../../utils/notification';
 import {INSUFFICIENT_GOLD_BALANCE} from '../../../constants/gift/Config';
 
@@ -33,12 +33,6 @@ export default (props: Props) => {
     }
 
     props.handleSend(gift.image, 5, gift.id);
-
-    dispatch(
-      setUser({
-        coinBalance: coinBalanceValue - gift.value,
-      }),
-    );
 
     setTimeout(() => {
       props.hide();
