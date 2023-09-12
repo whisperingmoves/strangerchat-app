@@ -37,6 +37,10 @@ export default (props: Props) => {
   }, []);
 
   const load = () => {
+    if (statusValue === 'loading') {
+      return;
+    }
+
     dispatch(getLatestPostsAsync());
   };
 

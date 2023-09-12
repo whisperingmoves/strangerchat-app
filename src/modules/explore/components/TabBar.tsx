@@ -19,12 +19,17 @@ import icon_search from '../../../assets/images/icons/icon_search.png';
 import TabBarIndicator from '../../../components/TabBarIndicator';
 import PlaceHolder from '../../../components/PlaceHolder';
 
+type Props = {
+  tabBarHeight: number;
+};
+
 export default ({
   state,
   navigation,
   position,
   descriptors,
-}: MaterialTopTabBarProps) => {
+  tabBarHeight,
+}: MaterialTopTabBarProps & Props) => {
   const insets = useSafeAreaInsets();
 
   const statusBarStyle: StyleProp<ViewStyle> = {paddingTop: insets.top};
@@ -58,7 +63,7 @@ export default ({
   };
 
   const handleSearchPress = () => {
-    navigation.navigate({name: 'Search', params: {}, merge: true});
+    navigation.navigate({name: 'Search', params: {tabBarHeight}, merge: true});
   };
 
   return (

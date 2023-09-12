@@ -35,8 +35,10 @@ export default (props: Props) => {
   );
 
   const tabBar = useCallback(
-    (tabBarProps: MaterialTopTabBarProps) => <TabBar {...tabBarProps} />,
-    [],
+    (tabBarProps: MaterialTopTabBarProps) => (
+      <TabBar {...tabBarProps} tabBarHeight={tabBarHeight} />
+    ),
+    [tabBarHeight],
   );
 
   return (

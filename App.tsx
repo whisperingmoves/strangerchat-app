@@ -31,7 +31,7 @@ export type RootStackParamList = {
   Avatar: {gender: GenderType; mobile: Mobile; birthday: BirthdayType};
   NavigationBar: undefined;
   NewPost: undefined;
-  Search: undefined;
+  Search: {tabBarHeight: number};
   ChatDetail: {
     conversationId: ConversationId;
     clientConversationId?: ConversationId;

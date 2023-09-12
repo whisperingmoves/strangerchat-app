@@ -13,7 +13,11 @@ import {store} from '../../../stores/store';
 import {showError} from '../../../utils/notification';
 import PostList from '../../postList/PostList';
 
-export default () => {
+type Props = {
+  tabBarHeight: number;
+};
+
+export default (props: Props) => {
   const statusValue = useAppSelector(status);
 
   const sceneValue = useAppSelector(scene);
@@ -31,6 +35,10 @@ export default () => {
   };
 
   const load = () => {
+    if (statusValue === 'loading' && sceneValue === 'getLatestPosts') {
+      return;
+    }
+
     dispatch(getLatestPostsAsync());
   };
 
@@ -58,6 +66,7 @@ export default () => {
       refresh={refresh}
       load={load}
       isLatest={true}
+      tabBarHeight={props.tabBarHeight}
     />
   );
 };
