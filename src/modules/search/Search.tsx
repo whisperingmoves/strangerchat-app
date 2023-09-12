@@ -1,5 +1,5 @@
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, {useRef} from 'react';
+import {StyleSheet, TextInput, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {Route, useNavigation} from '@react-navigation/native';
@@ -27,15 +27,25 @@ export default (props: Props) => {
 
   const {tabBarHeight} = props.route.params;
 
+  const inputRef = useRef<TextInput>(null);
+
   const statusBarStyle: StyleProp<ViewStyle> = {paddingTop: insets.top};
 
   const handlePress = () => {
-    navigation.goBack();
+    inputRef.current?.blur();
+
+    setTimeout(() => {
+      navigation.goBack();
+    }, 200);
   };
 
   return (
     <View style={[styles.root, statusBarStyle]}>
-      <Header onPress={handlePress} keyword={keywordValue} />
+      <Header
+        onPress={handlePress}
+        keyword={keywordValue}
+        inputRef={inputRef}
+      />
 
       {keywordValue ? (
         <SearchList tabBarHeight={tabBarHeight} />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {RefObject} from 'react';
 import {
   Image,
   StyleSheet,
@@ -20,6 +20,7 @@ import {
 
 type Props = {
   keyword?: Keyword;
+  inputRef: RefObject<TextInput>;
 };
 
 export default (props: Props) => {
@@ -47,6 +48,7 @@ export default (props: Props) => {
         placeholderTextColor={'#8E8895'}
         value={props.keyword}
         onChangeText={handleChangeText}
+        ref={props.inputRef}
       />
 
       <TouchableOpacity activeOpacity={0.7} disabled={true}>
