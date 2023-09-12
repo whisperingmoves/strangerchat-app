@@ -47,6 +47,8 @@ export default forwardRef((props: Props, ref) => {
     setGiftTranslateY(352);
 
     setVisible(false);
+
+    setTopUpTranslateY(windowHeight * 0.86);
   };
 
   useImperativeHandle(ref, () => {

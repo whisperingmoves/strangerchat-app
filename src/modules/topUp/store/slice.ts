@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {State as UserState} from '../../../stores/user/slice';
 import {listPageReducer} from '../../../stores/helper';
 import {RootState} from '../../../stores/store';
@@ -20,10 +20,13 @@ export type Price = number;
 
 export type ProductId = string;
 
+export type Scene = 'getCoinProducts' | 'buyCoinProduct';
+
 export interface State {
   list: CoinProduct[];
   page: Page;
   pageSize: PageSize;
+  scene?: Scene;
   error: Error;
   status: Status;
 }
@@ -70,6 +73,10 @@ export const slice = createSlice({
     resetPage: state => {
       state.page = initialState.page;
     },
+
+    setScene: (state, action: PayloadAction<Scene>) => {
+      state.scene = action.payload;
+    },
   },
 
   extraReducers: builder => {
@@ -102,10 +109,12 @@ export const slice = createSlice({
   },
 });
 
-export const {resetStatus, resetPage} = slice.actions;
+export const {resetStatus, resetPage, setScene} = slice.actions;
 
 export const status = (state: RootState) => state.topUp.status;
 
 export const list = (state: RootState) => state.topUp.list;
+
+export const scene = (state: RootState) => state.topUp.scene;
 
 export default slice.reducer;

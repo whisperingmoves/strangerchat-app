@@ -1,55 +1,86 @@
-import React from 'react';
-import {ScrollView, StyleSheet} from 'react-native';
+import React, {useCallback} from 'react';
+import {FlatList, Platform, StyleSheet} from 'react-native';
 
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-import Item from './Item';
+import Item, {Props as ItemProps} from './Item';
+import {useAppDispatch, useAppSelector} from '../../../hooks';
+import {
+  getCoinProductsAsync,
+  list,
+  resetPage,
+  scene,
+  setScene,
+  status,
+} from '../store/slice';
+import Separator from './Separator';
 import Footer from './Footer';
-import {useAppSelector} from '../../../hooks';
-import {list} from '../store/slice';
 
 type Props = {
   style: StyleProp<ViewStyle>;
 };
 
+const renderItem = ({item}: {item: ItemProps}) => <Item {...item} />;
+
+const keyExtractor = (item: ItemProps, index: number) =>
+  `${item.productId}-${index}`;
+
 export default (props: Props) => {
   const listValue = useAppSelector(list);
 
-  const itemList = listValue.map((item, index) => {
-    return (
-      <Item
-        key={`${item.productId}-${index}`}
-        productId={item.productId}
-        originalPrice={item.originalPrice}
-        price={item.price}
-        coins={item.coins}
-      />
-    );
-  });
+  const statusValue = useAppSelector(status);
+
+  const sceneValue = useAppSelector(scene);
+
+  const dispatch = useAppDispatch();
+
+  const refresh = useCallback(() => {
+    dispatch(setScene('getCoinProducts'));
+
+    dispatch(resetPage());
+
+    dispatch(getCoinProductsAsync());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const load = () => {
+    if (statusValue === 'loading' && sceneValue === 'getCoinProducts') {
+      return;
+    }
+
+    dispatch(setScene('getCoinProducts'));
+
+    dispatch(getCoinProductsAsync());
+  };
 
   return (
-    <ScrollView
+    <FlatList
       style={[styles.root, props.style]}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={styles.contentContainer}>
-      {itemList}
-
-      <Footer style={styles.footer} />
-    </ScrollView>
+      data={listValue}
+      renderItem={renderItem}
+      keyExtractor={keyExtractor}
+      ItemSeparatorComponent={Separator}
+      refreshing={statusValue === 'loading' && sceneValue === 'getCoinProducts'}
+      onRefresh={refresh}
+      onEndReachedThreshold={0.1}
+      onEndReached={load}
+      bounces={bounces}
+      ListFooterComponent={<Footer style={styles.footer} />}
+    />
   );
 };
 
 const styles = StyleSheet.create({
   root: {
-    flex: 1,
-  },
-  contentContainer: {
     width: '100%',
-    gap: 20,
+    height: '100%',
   },
   footer: {
     marginTop: 12,
   },
 });
+
+const bounces = Platform.OS === 'ios';
