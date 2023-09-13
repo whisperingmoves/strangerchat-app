@@ -16,7 +16,12 @@ import Item, {Props as ItemProps} from './Item';
 
 import Separator from './Separator';
 import {ConversationId, OpponentAvatar} from '../../chat/store/slice';
-import {getRecentChatMessagesAsync, messageMap, setScene} from '../store/slice';
+import {
+  getRecentChatMessagesAsync,
+  messageMap,
+  SentTime,
+  setScene,
+} from '../store/slice';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {store} from '../../../stores/store';
 import ListFooter from '../../../components/ListFooter';
@@ -99,8 +104,18 @@ export default (props: Props) => {
     setIsVisible(true);
   }, []);
 
-  const data: ItemProps[] = messageList.map(message => {
+  const data: ItemProps[] = messageList.map((message, messageIndex) => {
     const isSelf = message.senderId === store.getState().user.userId;
+
+    let sentTime: SentTime | undefined;
+
+    if (
+      (messageIndex < messageList.length - 1 &&
+        message.sentTime - messageList[messageIndex + 1].sentTime > 60) ||
+      messageIndex === messageList.length - 1
+    ) {
+      sentTime = message.sentTime;
+    }
 
     const sendStatus = message.sendStatus
       ? message.sendStatus
@@ -125,7 +140,7 @@ export default (props: Props) => {
       messageId: message.messageId,
       clientMessageId: message.clientMessageId,
       senderId: message.senderId,
-      sentTime: message.sentTime,
+      sentTime,
       content: message.content,
       type: message.type,
       avatar: isSelf ? undefined : props.opponentAvatar,
@@ -158,6 +173,7 @@ export default (props: Props) => {
         keyExtractor={keyExtractor}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={<ListFooter tabBarHeight={90} />}
+        ListFooterComponent={<ListFooter tabBarHeight={106} />}
         ref={ref}
         inverted
       />
