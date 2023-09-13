@@ -12,6 +12,8 @@ import {getLocation} from '../../../utils/geolocation';
 
 export type IsFollowed = number;
 
+export type IsBlocked = number;
+
 export type Error = string;
 
 export type Status = 'idle' | 'loading' | 'failed' | 'success';

@@ -4,10 +4,18 @@ export const MATCH = 'Match';
 
 export const SAY_SOMETHING = 'Say something...';
 
-export const MY_PACKAGE = 'My package';
-
-export const VIP = 'VIP';
-
-export const BALANCE = 'Balance:';
-
 export const IMAGE = 'Image';
+
+export const BLOCK = 'Block';
+
+export const UNBLOCK = 'Unblock';
+
+export const UNFOLLOW = 'Unfollow';
+
+export const FOLLOW_SUCCESSFULLY = 'Follow successfully';
+
+export const UNFOLLOW_SUCCESSFULLY = 'Unfollow successfully';
+
+export const BLOCK_SUCCESSFULLY = 'Block successfully';
+
+export const UNBLOCK_SUCCESSFULLY = 'Unblock successfully';

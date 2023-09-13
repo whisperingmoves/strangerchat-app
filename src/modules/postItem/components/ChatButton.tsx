@@ -14,6 +14,7 @@ import {
 import {generateUniqueId} from '../../../utils/id';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {IsBlocked, IsFollowed} from '../../recommend/store/slice';
 
 type Props = {
   conversationId?: ConversationId;
@@ -21,6 +22,8 @@ type Props = {
   opponentUserId: OpponentUserId;
   opponentAvatar: OpponentAvatar;
   opponentUsername?: OpponentUsername;
+  isFollowed?: IsFollowed;
+  isBlocked?: IsBlocked;
 };
 
 export default (props: Props) => {
@@ -41,6 +44,8 @@ export default (props: Props) => {
           opponentUserId: props.opponentUserId,
           opponentAvatar: props.opponentAvatar,
           opponentUsername: props.opponentUsername,
+          isFollowed: props.isFollowed,
+          isBlocked: props.isBlocked,
         }),
       );
 

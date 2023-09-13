@@ -4,9 +4,9 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 import icon_coin from '../../../assets/images/icons/icon_coin.png';
-import {BALANCE} from '../../../constants/chatDetail/Config';
 import {useAppSelector} from '../../../hooks';
 import {coinBalance} from '../../../stores/user/slice';
+import {BALANCE} from '../../../constants/topUp/Config';
 
 type Props = {
   style: ViewStyle;

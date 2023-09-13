@@ -5,7 +5,7 @@ import {
 } from '../../apis/user/registerUser';
 import {copy} from '../../utils/object';
 import {RootState} from '../store';
-import {followOrUnfollowUser, registerUser} from './api';
+import {blockOrUnblockUser, followOrUnfollowUser, registerUser} from './api';
 import {VerifyCodeResponse} from '../../apis/verification/verifyCode';
 import {Mobile} from '../../modules/login/store/slice';
 
@@ -13,7 +13,14 @@ export type UserId = string;
 
 export type Error = string;
 
-export type Scene = 'avatar' | 'postItem' | undefined;
+export type Scene =
+  | 'avatar'
+  | 'postItem'
+  | 'followUserOnChatDetail'
+  | 'unfollowUserOnChatDetail'
+  | 'blockUserOnChatDetail'
+  | 'unblockUserOnChatDetail'
+  | undefined;
 
 export type Status = 'idle' | 'loading' | 'failed' | 'success';
 
@@ -64,6 +71,16 @@ export const followOrUnfollowUserAsync = createAsyncThunk<
   const {token, operationUserId: userId} = getState().user;
 
   return await followOrUnfollowUser({userId: userId as UserId, action}, token);
+});
+
+export const blockOrUnblockUserAsync = createAsyncThunk<
+  void,
+  number,
+  {state: {user: State}}
+>('user/blockOrUnblockUser', async (action, {getState}) => {
+  const {token, operationUserId: userId} = getState().user;
+
+  return await blockOrUnblockUser({userId: userId as UserId, action}, token);
 });
 
 export const slice = createSlice({
@@ -118,6 +135,22 @@ export const slice = createSlice({
       })
 
       .addCase(followOrUnfollowUserAsync.rejected, (state, action) => {
+        state.status = 'failed';
+
+        state.error = action.error.message || '';
+      })
+
+      .addCase(blockOrUnblockUserAsync.pending, state => {
+        state.status = 'loading';
+      })
+
+      .addCase(blockOrUnblockUserAsync.fulfilled, (state, action) => {
+        state.status = 'success';
+
+        copy(state, action.payload);
+      })
+
+      .addCase(blockOrUnblockUserAsync.rejected, (state, action) => {
         state.status = 'failed';
 
         state.error = action.error.message || '';

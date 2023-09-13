@@ -47,6 +47,7 @@ export default (props: Props) => {
         isRecommend={props.isRecommend}
         isLatest={props.isLatest}
         isFollowed={props.isFollowed}
+        isBlocked={props.isBlocked}
         conversationId={props.conversationId}
         style={styles.header}
       />

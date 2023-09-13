@@ -11,14 +11,15 @@ import {getUsername} from '../modules/helper';
 type Props = {
   userId: string;
   username?: string;
-  onPress: () => void;
+  onBackPress: () => void;
+  onMorePress: () => void;
   style: StyleProp<ViewStyle>;
 };
 
 export default (props: Props) => {
   return (
     <View style={[styles.root, props.style]}>
-      <TouchableOpacity activeOpacity={0.7} onPress={props.onPress}>
+      <TouchableOpacity activeOpacity={0.7} onPress={props.onBackPress}>
         <Image source={icon_backtrack} />
       </TouchableOpacity>
 
@@ -26,7 +27,7 @@ export default (props: Props) => {
         {props.username ? props.username : getUsername(props.userId)}
       </Text>
 
-      <TouchableOpacity activeOpacity={0.7}>
+      <TouchableOpacity activeOpacity={0.7} onPress={props.onMorePress}>
         <Image source={icon_more} />
       </TouchableOpacity>
     </View>

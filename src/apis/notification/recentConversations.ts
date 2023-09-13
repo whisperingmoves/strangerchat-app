@@ -9,4 +9,6 @@ export interface RecentConversation {
   lastMessageContent: string;
   lastMessageType?: number;
   unreadCount?: number;
+  isFollowed?: number;
+  isBlocked?: number;
 }

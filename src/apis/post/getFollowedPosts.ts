@@ -19,6 +19,7 @@ export interface FollowedPostData {
   isLiked?: number;
   conversationId?: string;
   atUsers?: {id: string; username?: string}[];
+  isBlocked?: number;
 }
 
 export const getFollowedPosts = async (

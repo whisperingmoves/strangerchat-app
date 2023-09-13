@@ -6,4 +6,6 @@ export interface CreatedConversation {
   opponentUsername?: string;
   opponentOnlineStatus?: number;
   opponentDistance?: number;
+  isFollowed?: number;
+  isBlocked?: number;
 }

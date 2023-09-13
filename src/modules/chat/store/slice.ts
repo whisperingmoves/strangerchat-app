@@ -13,6 +13,7 @@ import {
 import {CreateChatConversation} from '../../../apis/message/createChatConversation';
 import {GetRecentChatConversations} from '../../../apis/message/getRecentChatConversations';
 import {GetChatConversationDetails} from '../../../apis/message/getChatConversationDetails';
+import {IsBlocked, IsFollowed} from '../../recommend/store/slice';
 
 export type Count = number;
 
@@ -210,6 +211,8 @@ export const slice = createSlice({
         lastMessageContent?: LastMessageContent;
         lastMessageType?: LastMessageType;
         unreadCount?: UnreadCount;
+        isFollowed?: IsFollowed;
+        isBlocked?: IsBlocked;
       }>,
     ) => {
       const conversation = action.payload;

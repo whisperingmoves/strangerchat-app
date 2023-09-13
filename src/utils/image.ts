@@ -124,7 +124,9 @@ export const openImagePicker = (
   setImageUri: (image: string) => void,
 ) => {
   const options = [TAKE_PHOTO, SELECT_PHOTO, CANCEL];
+
   const cancelButtonIndex = 2;
+
   showActionSheetWithOptions(
     {
       options,
@@ -139,9 +141,11 @@ export const openImagePicker = (
       switch (selectedIndex) {
         case 0:
           setImageUri(await takePhoto());
+
           break;
         case 1:
           setImageUri(await selectPhoto());
+
           break;
       }
     },

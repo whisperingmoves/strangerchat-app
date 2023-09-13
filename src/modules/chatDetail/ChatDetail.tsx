@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 
 import {KeyboardAvoidingView, Platform, StyleSheet, View} from 'react-native';
 
@@ -19,13 +19,36 @@ import {
 import {Route, useNavigation} from '@react-navigation/native';
 import DetailHeader from '../../components/DetailHeader';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {avatar} from '../../stores/user/slice';
+import {
+  avatar,
+  blockOrUnblockUserAsync,
+  followOrUnfollowUserAsync,
+  resetStatus as resetUserStatus,
+  scene as userScene,
+  setOperationUserId,
+  setScene,
+  status as userStatus,
+} from '../../stores/user/slice';
 import {
   resetCurrentConversationId,
   setCurrentConversationId,
 } from './store/slice';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {InputRef} from '../../components/Input';
+import {useActionSheet} from '@expo/react-native-action-sheet';
+import {CANCEL, FOLLOW} from '../../constants/Config';
+import {
+  BLOCK,
+  BLOCK_SUCCESSFULLY,
+  FOLLOW_SUCCESSFULLY,
+  UNBLOCK,
+  UNBLOCK_SUCCESSFULLY,
+  UNFOLLOW,
+  UNFOLLOW_SUCCESSFULLY,
+} from '../../constants/chatDetail/Config';
+import {showError, showSuccess} from '../../utils/notification';
+import {store} from '../../stores/store';
+import {IsBlocked, IsFollowed} from '../recommend/store/slice';
 
 type Props = {
   route: Route<
@@ -78,11 +101,82 @@ export default (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversation]);
 
-  const blurInput = () => {
-    inputRef.current?.blur();
-  };
+  const userStatusValue = useAppSelector(userStatus);
 
-  const handleBackPress = () => {
+  const userSceneValue = useAppSelector(userScene);
+
+  useEffect(() => {
+    if (
+      userStatusValue === 'success' &&
+      (userSceneValue === 'followUserOnChatDetail' ||
+        userSceneValue === 'unfollowUserOnChatDetail' ||
+        userSceneValue === 'blockUserOnChatDetail' ||
+        userSceneValue === 'unblockUserOnChatDetail')
+    ) {
+      dispatch(resetUserStatus());
+
+      let successMsg = '';
+
+      let isFollowed: IsFollowed | undefined = conversation.isFollowed;
+
+      if (userSceneValue === 'followUserOnChatDetail') {
+        isFollowed = 1;
+
+        successMsg = FOLLOW_SUCCESSFULLY;
+      } else if (userSceneValue === 'unfollowUserOnChatDetail') {
+        isFollowed = 0;
+
+        successMsg = UNFOLLOW_SUCCESSFULLY;
+      }
+
+      let isBlocked: IsBlocked | undefined = conversation.isBlocked;
+
+      if (userSceneValue === 'blockUserOnChatDetail') {
+        isBlocked = 1;
+
+        successMsg = BLOCK_SUCCESSFULLY;
+      } else if (userSceneValue === 'unblockUserOnChatDetail') {
+        isBlocked = 0;
+
+        successMsg = UNBLOCK_SUCCESSFULLY;
+      }
+
+      dispatch(
+        setConversation({
+          clientConversationId: conversation.clientConversationId,
+          conversationId: conversation.conversationId,
+          isFollowed,
+          isBlocked,
+        }),
+      );
+
+      showSuccess(successMsg);
+
+      return;
+    }
+
+    if (
+      userStatusValue === 'failed' &&
+      (userSceneValue === 'followUserOnChatDetail' ||
+        userSceneValue === 'unfollowUserOnChatDetail' ||
+        userSceneValue === 'blockUserOnChatDetail' ||
+        userSceneValue === 'unblockUserOnChatDetail')
+    ) {
+      dispatch(resetUserStatus());
+
+      showError(store.getState().user.error);
+
+      return;
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userStatusValue]);
+
+  const blurInput = useCallback(() => {
+    inputRef.current?.blur();
+  }, []);
+
+  const handleBackPress = useCallback(() => {
     blurInput();
 
     setTimeout(() => {
@@ -90,7 +184,71 @@ export default (props: Props) => {
 
       dispatch(resetCurrentConversationId());
     }, 200);
-  };
+  }, [blurInput, dispatch, navigation]);
+
+  const {showActionSheetWithOptions} = useActionSheet();
+
+  const handleMorePress = useCallback(() => {
+    const options = [
+      conversation.isFollowed ? UNFOLLOW : FOLLOW,
+      conversation.isBlocked ? UNBLOCK : BLOCK,
+      CANCEL,
+    ];
+
+    const cancelButtonIndex = 2;
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        textStyle: {
+          textAlign: 'center',
+          textAlignVertical: 'center',
+          width: '100%',
+        },
+      },
+      async selectedIndex => {
+        switch (selectedIndex) {
+          case 0:
+            dispatch(
+              setScene(
+                conversation.isFollowed
+                  ? 'unfollowUserOnChatDetail'
+                  : 'followUserOnChatDetail',
+              ),
+            );
+
+            dispatch(setOperationUserId(conversation.opponentUserId));
+
+            dispatch(
+              followOrUnfollowUserAsync(conversation.isFollowed ? 0 : 1),
+            );
+
+            break;
+          case 1:
+            dispatch(
+              setScene(
+                conversation.isBlocked
+                  ? 'unblockUserOnChatDetail'
+                  : 'blockUserOnChatDetail',
+              ),
+            );
+
+            dispatch(setOperationUserId(conversation.opponentUserId));
+
+            dispatch(blockOrUnblockUserAsync(conversation.isBlocked ? 0 : 1));
+
+            break;
+        }
+      },
+    );
+  }, [
+    conversation.isBlocked,
+    conversation.isFollowed,
+    conversation.opponentUserId,
+    dispatch,
+    showActionSheetWithOptions,
+  ]);
 
   return (
     <KeyboardAvoidingView
@@ -100,7 +258,8 @@ export default (props: Props) => {
           username={conversation.opponentUsername}
           style={styles.header}
           userId={conversation.opponentUserId}
-          onPress={handleBackPress}
+          onBackPress={handleBackPress}
+          onMorePress={handleMorePress}
         />
 
         <Info

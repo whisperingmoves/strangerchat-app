@@ -23,7 +23,7 @@ import {
   ConversationId,
   CreateTime,
 } from '../../following/store/slice';
-import {IsFollowed} from '../../recommend/store/slice';
+import {IsBlocked, IsFollowed} from '../../recommend/store/slice';
 import ChatButton from './ChatButton';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {
@@ -54,6 +54,7 @@ type Props = {
   isRecommend?: boolean;
   isLatest?: boolean;
   isFollowed?: IsFollowed;
+  isBlocked?: IsBlocked;
   conversationId?: ConversationId;
   style: StyleProp<ViewStyle>;
 };
@@ -148,6 +149,8 @@ export default (props: Props) => {
             clientConversationId={clientConversationId}
             opponentUserId={props.authorId}
             opponentAvatar={props.authorAvatar}
+            isFollowed={props.isFollowed}
+            isBlocked={props.isBlocked}
           />
         );
       } else {

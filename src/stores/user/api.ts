@@ -7,6 +7,10 @@ import {
   followOrUnfollowUser as followOrUnfollowUserApi,
   FollowUserRequest,
 } from '../../apis/user/followOrUnfollowUser';
+import {
+  blockOrUnblockUser as blockOrUnblockUserApi,
+  BlockUserRequest,
+} from '../../apis/user/blockOrUnblockUser';
 
 export const registerUser = async (
   request: RegisterUserRequest,
@@ -19,4 +23,11 @@ export const followOrUnfollowUser = async (
   token: string,
 ): Promise<void> => {
   return await followOrUnfollowUserApi(request, token);
+};
+
+export const blockOrUnblockUser = async (
+  request: BlockUserRequest,
+  token: string,
+): Promise<void> => {
+  return await blockOrUnblockUserApi(request, token);
 };

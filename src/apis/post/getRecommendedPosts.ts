@@ -20,6 +20,7 @@ export interface RecommendedPostData {
   postId: string;
   isLiked?: number;
   isFollowed?: number;
+  isBlocked?: number;
   conversationId?: string;
   atUsers?: {id: string; username?: string}[];
 }
