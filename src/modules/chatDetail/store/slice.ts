@@ -13,6 +13,7 @@ import {GetRecentChatMessages} from '../../../apis/message/getRecentChatMessages
 import {SendMessage} from '../../../apis/message/sendMessage';
 import {MarkMessageAsRead} from '../../../apis/message/markMessageAsRead';
 import {Id} from '../../gift/store/slice';
+import {socket} from '../../../apis/socket';
 
 export interface Message extends RecentMessage, SentMessage {}
 
@@ -85,10 +86,26 @@ export const markMessageAsReadAsync = createAsyncThunk<void, MarkMessageAsRead>(
 
 export const uploadMessageAsync = createAsyncThunk<Photo, Photo>(
   'chatDetail/uploadMessage',
-  async photo => {
-    const uploadMessageResponse = await uploadMessage(photo);
+  photo => {
+    return new Promise((resolve, reject) => {
+      if (!socket.connected) {
+        socket.connect();
 
-    return uploadMessageResponse.url;
+        socket.on('connect', () => {
+          uploadMessage(photo)
+            .then(uploadMessageResponse => resolve(uploadMessageResponse.url))
+            .catch(error => reject(error));
+        });
+
+        socket.on('connect_error', err => {
+          reject(err);
+        });
+      } else {
+        uploadMessage(photo)
+          .then(uploadMessageResponse => resolve(uploadMessageResponse.url))
+          .catch(error => reject(error));
+      }
+    });
   },
 );
 
