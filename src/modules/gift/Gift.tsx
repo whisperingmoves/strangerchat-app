@@ -1,4 +1,9 @@
-import React, {forwardRef, useImperativeHandle, useState} from 'react';
+import React, {
+  forwardRef,
+  useCallback,
+  useImperativeHandle,
+  useState,
+} from 'react';
 import {
   LayoutAnimation,
   Modal,
@@ -43,12 +48,16 @@ export default forwardRef((props: Props, ref) => {
     setGiftTranslateY(0);
   };
 
+  const hideTopUp = useCallback(() => {
+    setTopUpTranslateY(windowHeight * 0.86);
+  }, [windowHeight]);
+
   const hide = () => {
     setGiftTranslateY(352);
 
     setVisible(false);
 
-    setTopUpTranslateY(windowHeight * 0.86);
+    hideTopUp();
   };
 
   useImperativeHandle(ref, () => {
@@ -94,7 +103,7 @@ export default forwardRef((props: Props, ref) => {
     if (y > (windowHeight * 0.86) / 2) {
       LayoutAnimation.spring();
 
-      setTopUpTranslateY(windowHeight * 0.86);
+      hideTopUp();
       // setGiftTranslateY(0);
     }
   };
@@ -132,6 +141,7 @@ export default forwardRef((props: Props, ref) => {
             style={[styles.topUp, topUpStyle]}
             handleTopUpDrag={handleTopUpDrag}
             handleTopUpRelease={handleTopUpRelease}
+            hideTopUp={hideTopUp}
           />
         )}
       </View>

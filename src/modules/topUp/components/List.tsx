@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
 import {FlatList, Platform, StyleSheet} from 'react-native';
 
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
@@ -11,15 +11,19 @@ import {
   getCoinProductsAsync,
   list,
   resetPage,
+  resetStatus,
   scene,
   setScene,
   status,
 } from '../store/slice';
 import Separator from './Separator';
 import Footer from './Footer';
+import {store} from '../../../stores/store';
+import {showError} from '../../../utils/notification';
 
 type Props = {
   style: StyleProp<ViewStyle>;
+  hideTopUp: () => void;
 };
 
 const renderItem = ({item}: {item: ItemProps}) => <Item {...item} />;
@@ -42,6 +46,7 @@ export default (props: Props) => {
     dispatch(resetPage());
 
     dispatch(getCoinProductsAsync());
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -55,11 +60,42 @@ export default (props: Props) => {
     dispatch(getCoinProductsAsync());
   };
 
+  useEffect(() => {
+    if (statusValue === 'success' && sceneValue === 'getCoinProducts') {
+      dispatch(resetStatus());
+
+      return;
+    }
+
+    if (statusValue === 'failed' && sceneValue === 'getCoinProducts') {
+      dispatch(resetStatus());
+
+      const {error} = store.getState().topUp;
+
+      showError(error);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [statusValue]);
+
+  const data = useMemo(
+    () =>
+      listValue.map(item => {
+        return {
+          ...item,
+          hideTopUp: props.hideTopUp,
+        };
+      }),
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [listValue],
+  );
+
   return (
     <FlatList
       style={[styles.root, props.style]}
       showsVerticalScrollIndicator={false}
-      data={listValue}
+      data={data}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
       ItemSeparatorComponent={Separator}

@@ -7,6 +7,10 @@ import {status as navigationBarStatus} from '../modules/navigationBar/store/slic
 import {status as homeStatus} from '../modules/home/store/slice';
 import {status as newPostStatus} from '../modules/newPost/store/slice';
 import {
+  scene as topUpScene,
+  status as topUpStatus,
+} from '../modules/topUp/store/slice';
+import {
   scene as chatDetailScene,
   status as chatDetailStatus,
 } from '../modules/chatDetail/store/slice';
@@ -22,6 +26,8 @@ const useLoading = () => {
   const newPostStatusValue = useAppSelector(newPostStatus);
   const chatDetailStatusValue = useAppSelector(chatDetailStatus);
   const chatDetailSceneValue = useAppSelector(chatDetailScene);
+  const topUpStatusValue = useAppSelector(topUpStatus);
+  const topUpSceneValue = useAppSelector(topUpScene);
 
   const loading =
     loginStatusValue === 'loading' ||
@@ -32,7 +38,8 @@ const useLoading = () => {
     homeStatusValue === 'loading' ||
     newPostStatusValue === 'loading' ||
     (chatDetailStatusValue === 'loading' &&
-      chatDetailSceneValue === 'uploadMessage');
+      chatDetailSceneValue === 'uploadMessage') ||
+    (topUpStatusValue === 'loading' && topUpSceneValue === 'buyCoinProduct');
 
   useEffect(() => {
     return () => {};

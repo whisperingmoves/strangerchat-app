@@ -1,12 +1,19 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
 import {FlatList, Platform, StyleSheet} from 'react-native';
 
 import Item, {Item as ItemProps} from './Item';
 import Separator from './Separator';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
-import {getGiftListAsync, list, status} from '../store/slice';
+import {
+  getGiftListAsync,
+  list,
+  resetPage,
+  resetStatus,
+  status,
+} from '../store/slice';
 import {transformItemArray} from '../helper';
-import {resetPage} from '../../latest/store/slice';
+import {store} from '../../../stores/store';
+import {showError} from '../../../utils/notification';
 
 const renderItem = ({item}: {item: ItemProps[]}) => <Item itemList={item} />;
 
@@ -33,6 +40,24 @@ export default () => {
   }, [dispatch]);
 
   const data = transformItemArray(listValue);
+
+  useEffect(() => {
+    if (statusValue === 'success') {
+      dispatch(resetStatus());
+
+      return;
+    }
+
+    if (statusValue === 'failed') {
+      dispatch(resetStatus());
+
+      const {error} = store.getState().gift;
+
+      showError(error);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [statusValue]);
 
   return (
     <FlatList

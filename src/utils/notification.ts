@@ -12,3 +12,16 @@ export const showError = (errorMsg: string) => {
     });
   }, 50);
 };
+
+export const showSuccess = (successMsg: string) => {
+  Snackbar.dismiss();
+
+  setTimeout(() => {
+    Snackbar.show({
+      text: successMsg,
+      duration: Snackbar.LENGTH_SHORT,
+      textColor: '#FFF',
+      backgroundColor: '#8B5CFF',
+    });
+  }, 50);
+};

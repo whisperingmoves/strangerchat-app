@@ -14,6 +14,7 @@ type Props = {
   style: StyleProp<ViewStyle>;
   handleTopUpDrag: (y: number) => void;
   handleTopUpRelease: (y: number) => void;
+  hideTopUp: () => void;
 };
 
 export default (props: Props) => {
@@ -55,7 +56,7 @@ export default (props: Props) => {
 
       <Title style={styles.title} />
 
-      <GoodsList style={styles.goodsList} />
+      <GoodsList style={styles.goodsList} hideTopUp={props.hideTopUp} />
     </View>
   );
 };
