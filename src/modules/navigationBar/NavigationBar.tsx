@@ -15,13 +15,12 @@ import DailyAttendance, {
 import {CHAT, HOME} from '../../constants/Config';
 import {isTimestampToday} from '../../utils/date';
 import {store} from '../../stores/store';
-import {useAppDispatch, useAppSelector} from '../../hooks';
+import {useAppDispatch} from '../../hooks';
 import {socket} from '../../apis/socket';
 import {setNearestUsers, setOnlineUsers} from '../home/store/slice';
 import {NearestUsers} from '../../apis/notification/nearestUsers';
 import {OnlineUsers} from '../../apis/notification/onlineUsers';
 import {
-  conversationList,
   getRecentChatConversationsAsync,
   inCreConversationUnreadCount,
   setConversation,
@@ -63,20 +62,39 @@ export default () => {
     store.getState().user.lastCheckDate as number,
   );
 
-  useEffect(() => {
-    if (todayIsCheckedIn) {
-      return;
-    }
-
-    setTimeout(() => {
-      dailyAttendanceRef.current?.show();
-    }, 1000);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    if (!todayIsCheckedIn) {
+      setTimeout(() => {
+        dailyAttendanceRef.current?.show();
+      }, 1000);
+    }
+
+    socket.on('connect', () => {
+      const conversationListValue = store.getState().chat.conversationList;
+
+      dispatch(
+        getRecentChatConversationsAsync({
+          timestamp: conversationListValue.length
+            ? conversationListValue.filter(
+                conversation =>
+                  conversation.lastMessageTime &&
+                  conversation.lastMessageContent,
+              )[0].lastMessageTime
+            : undefined,
+        }),
+      );
+    });
+
+    socket.on('connect_error', () => {
+      socket.connect();
+    });
+
+    socket.on('disconnect', () => {
+      socket.connect();
+    });
+
     socket.on('notifications', data => {
       const {type, data: messageData} = data;
 
@@ -161,24 +179,9 @@ export default () => {
 
     return () => {
       socket.off('notifications');
+
       socket.disconnect();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [socket]);
-
-  const conversationListValue = useAppSelector(conversationList);
-
-  useEffect(() => {
-    dispatch(
-      getRecentChatConversationsAsync({
-        timestamp: conversationListValue.length
-          ? conversationListValue.filter(
-              conversation =>
-                conversation.lastMessageTime && conversation.lastMessageContent,
-            )[0].lastMessageTime
-          : undefined,
-      }),
-    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
