@@ -16,6 +16,7 @@ import {store} from '../../../stores/store';
 import {getCurrentUnixTimestampInSeconds} from '../../../utils/date';
 import {
   Content,
+  ContentLength,
   HandleSend,
   sendMessageAsync,
   setScene,
@@ -38,7 +39,12 @@ export default forwardRef((props: Props, ref) => {
 
   const userId = store.getState().user.userId;
 
-  const handleSend: HandleSend = (value: Content, type?: Type, giftId?: Id) => {
+  const handleSend: HandleSend = (
+    value: Content,
+    type?: Type,
+    giftId?: Id,
+    contentLength?: ContentLength,
+  ) => {
     const clientMessageId = generateUniqueId();
 
     const currentTimestamp = getCurrentUnixTimestampInSeconds();
@@ -53,6 +59,7 @@ export default forwardRef((props: Props, ref) => {
       content: value,
       sentTime: currentTimestamp,
       type,
+      contentLength,
     };
 
     dispatch(
@@ -85,6 +92,7 @@ export default forwardRef((props: Props, ref) => {
         content: value,
         type,
         giftId,
+        contentLength,
       }),
     );
   };

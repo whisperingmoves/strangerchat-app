@@ -8,14 +8,14 @@ export interface UploadMessageResponse {
 }
 
 export const uploadMessage = async (
-  photo: string,
+  uri: string,
 ): Promise<UploadMessageResponse> => {
   const formData = new FormData();
 
   formData.append('message', {
-    uri: photo,
-    name: getFileName(photo),
-    type: getFileMimeType(photo),
+    uri: uri,
+    name: getFileName(uri),
+    type: getFileMimeType(uri),
   });
 
   const response = await axiosInstance.post('/uploadMessage', formData, {

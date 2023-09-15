@@ -1,73 +1,20 @@
-import {Alert, Linking, Platform} from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import {RESULTS} from 'react-native-permissions';
 import {ActionSheetOptions} from '@expo/react-native-action-sheet/lib/typescript/types';
 
 import {
   ALLOW_ACCESS_CAMERA,
   ALLOW_ACCESS_STORAGE,
   CANCEL,
-  PERMISSION_REQUIRED,
   SELECT_PHOTO,
-  SETTINGS,
   TAKE_PHOTO,
 } from '../constants/Config';
-
-const checkCameraPermission = async () => {
-  const permission =
-    Platform.OS === 'ios' ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
-  const result = await check(permission);
-  if (result === RESULTS.DENIED) {
-    return request(permission);
-  }
-  return result;
-};
-
-const checkPhotoPermission = async () => {
-  if (Platform.OS === 'android') {
-    return RESULTS.GRANTED;
-  }
-
-  const permission = PERMISSIONS.IOS.PHOTO_LIBRARY;
-
-  const result = await check(permission);
-
-  if (result === RESULTS.DENIED) {
-    return request(permission);
-  }
-
-  return result;
-};
-
-const checkSavePhotoPermission = async () => {
-  const permission =
-    Platform.OS === 'ios'
-      ? PERMISSIONS.IOS.PHOTO_LIBRARY
-      : Number(Platform.Version) > 28
-      ? ''
-      : PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE;
-  if (!permission) {
-    return Promise.resolve(RESULTS.GRANTED);
-  }
-  const result = await check(permission);
-  if (result === RESULTS.DENIED) {
-    return request(permission);
-  }
-  return result;
-};
-
-const openSettings = (message: string) => {
-  Alert.alert(PERMISSION_REQUIRED, message, [
-    {
-      text: CANCEL,
-      style: 'cancel',
-    },
-    {
-      text: SETTINGS,
-      onPress: () => Linking.openSettings(),
-    },
-  ]);
-};
+import {
+  checkCameraPermission,
+  checkPhotoPermission,
+  checkSavePhotoPermission,
+  openSettings,
+} from './permission';
 
 export const takePhoto = async () => {
   let result = await checkCameraPermission();

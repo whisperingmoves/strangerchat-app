@@ -112,3 +112,15 @@ export const isTimestampExpired = (
 
   return currentTimestampMillis >= expirationTimestampMillis;
 };
+
+export const formatDuration = (seconds: number): string => {
+  if (seconds <= 60) {
+    return `${seconds}"`;
+  }
+
+  const minutes = Math.floor(seconds / 60);
+
+  const remainingSeconds = seconds % 60;
+
+  return `${minutes}'${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}"`;
+};

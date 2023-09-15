@@ -16,6 +16,7 @@ import icon_have_read from '../../../assets/images/icons/icon_have_read.png';
 import ResizeImage from '../../../components/ResizeImage';
 import {
   Content,
+  ContentLength,
   ConversationId,
   deleteMessage,
   markMessageAsReadAsync,
@@ -34,6 +35,7 @@ import {useAppDispatch} from '../../../hooks';
 import MessageStatusIndicator from '../../../components/MessageStatusIndicator';
 import {InputRef} from '../../../components/Input';
 import {store} from '../../../stores/store';
+import VoiceMessage from './VoiceMessage';
 
 export type Props = {
   conversationId: ConversationId;
@@ -42,6 +44,7 @@ export type Props = {
   senderId: SenderId;
   sentTime?: SentTime;
   content: Content;
+  contentLength?: ContentLength;
   type?: Type;
   avatar?: OpponentAvatar;
   readStatus?: ReadStatus;
@@ -162,6 +165,16 @@ export default (props: Props) => {
           <View style={[styles.textContainer, textContainerStyle]}>
             <Text style={[styles.text, textStyle]}>{props.content}</Text>
           </View>
+        )}
+
+        {props.type === 1 && (
+          <VoiceMessage
+            duration={props.contentLength as ContentLength}
+            voiceContent={props.content}
+            containerStyle={[styles.textContainer, textContainerStyle]}
+            isSelf={isSelf}
+            durationTextStyle={[styles.text, textStyle]}
+          />
         )}
 
         {(props.type === 2 || props.type === 5) && (

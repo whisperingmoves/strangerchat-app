@@ -5,6 +5,7 @@ export interface RecentMessage {
   recipientId: string;
   sentTime: number;
   content: string;
+  contentLength?: number;
   type?: number;
   readStatus?: number;
 }

@@ -17,7 +17,7 @@ import {socket} from '../../../apis/socket';
 
 export interface Message extends RecentMessage, SentMessage {}
 
-export type Photo = string;
+export type Uri = string;
 
 export type Error = string;
 
@@ -40,17 +40,24 @@ export type SentTime = number;
 
 export type Content = string;
 
+export type ContentLength = number;
+
 export type Type = number;
 
 export type ReadStatus = number;
 
 export type SendStatus = number;
 
-export type HandleSend = (value: Content, type?: Type, giftId?: Id) => void;
+export type HandleSend = (
+  value: Content,
+  type?: Type,
+  giftId?: Id,
+  contentLength?: ContentLength,
+) => void;
 
 export interface State {
   messageMap: Record<ConversationId, Message[]>;
-  messageImage?: Photo;
+  messageUri?: Uri;
   error: Error;
   scene?: Scene;
   currentConversationId?: ConversationId;
@@ -84,15 +91,15 @@ export const markMessageAsReadAsync = createAsyncThunk<void, MarkMessageAsRead>(
   },
 );
 
-export const uploadMessageAsync = createAsyncThunk<Photo, Photo>(
+export const uploadMessageAsync = createAsyncThunk<Uri, Uri>(
   'chatDetail/uploadMessage',
-  photo => {
+  uri => {
     return new Promise((resolve, reject) => {
       if (!socket.connected) {
         socket.connect();
 
         socket.on('connect', () => {
-          uploadMessage(photo)
+          uploadMessage(uri)
             .then(uploadMessageResponse => resolve(uploadMessageResponse.url))
             .catch(error => reject(error));
         });
@@ -101,7 +108,7 @@ export const uploadMessageAsync = createAsyncThunk<Photo, Photo>(
           reject(err);
         });
       } else {
-        uploadMessage(photo)
+        uploadMessage(uri)
           .then(uploadMessageResponse => resolve(uploadMessageResponse.url))
           .catch(error => reject(error));
       }
@@ -299,8 +306,8 @@ export const slice = createSlice({
       state.status = initialState.status;
     },
 
-    resetMessageImage: state => {
-      state.messageImage = initialState.messageImage;
+    resetmessageUri: state => {
+      state.messageUri = initialState.messageUri;
     },
   },
 
@@ -354,8 +361,8 @@ export const slice = createSlice({
 
       .addCase(
         uploadMessageAsync.fulfilled,
-        (state, action: PayloadAction<Photo>) => {
-          state.messageImage = action.payload;
+        (state, action: PayloadAction<Uri>) => {
+          state.messageUri = action.payload;
 
           state.status = 'success';
         },
@@ -379,7 +386,7 @@ export const {
   updateMessageConversationId,
   setScene,
   resetStatus,
-  resetMessageImage,
+  resetmessageUri,
 } = slice.actions;
 
 export const status = (state: RootState) => state.chatDetail.status;
@@ -388,6 +395,6 @@ export const scene = (state: RootState) => state.chatDetail.scene;
 
 export const messageMap = (state: RootState) => state.chatDetail.messageMap;
 
-export const messageImage = (state: RootState) => state.chatDetail.messageImage;
+export const messageUri = (state: RootState) => state.chatDetail.messageUri;
 
 export default slice.reducer;

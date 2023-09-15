@@ -32,7 +32,7 @@ export const markMessageAsRead = async (
 };
 
 export const uploadMessage = async (
-  photo: string,
+  uri: string,
 ): Promise<UploadMessageResponse> => {
-  return await uploadMessageApi(photo);
+  return await uploadMessageApi(uri);
 };

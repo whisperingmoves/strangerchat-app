@@ -142,6 +142,7 @@ export default (props: Props) => {
       senderId: message.senderId,
       sentTime,
       content: message.content,
+      contentLength: message.contentLength,
       type: message.type,
       avatar: isSelf ? undefined : props.opponentAvatar,
       readStatus: message.readStatus,

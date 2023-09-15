@@ -5,6 +5,7 @@ export interface SentMessage {
   senderId: string;
   recipientId: string;
   content: string;
+  contentLength?: number;
   type?: number;
   sentTime: number;
   readStatus?: number;

@@ -5,6 +5,7 @@ export interface SendMessage {
   clientMessageId: string;
   opponentUserId: string;
   content: string;
+  contentLength?: number;
   type?: number;
   giftId?: string;
 }

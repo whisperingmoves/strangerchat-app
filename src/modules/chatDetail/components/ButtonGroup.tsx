@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {ImageSourcePropType} from 'react-native/Libraries/Image/Image';
 
@@ -12,22 +12,27 @@ import icon_gift from '../../../assets/images/icons/icon_gift.png';
 import Gift, {GiftRef} from '../../gift/Gift';
 import {
   Content,
+  ContentLength,
   HandleSend,
-  messageImage,
-  Photo,
-  resetMessageImage,
+  messageUri,
+  resetmessageUri,
   resetStatus,
   scene,
   setScene,
   status,
   uploadMessageAsync,
+  Uri,
 } from '../store/slice';
 import {checkFileExistence} from '../../../utils/file';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {showError} from '../../../utils/notification';
-import {COULD_NOT_FIND_IMAGE} from '../../../constants/Config';
+import {
+  COULD_NOT_FIND_AUDIO,
+  COULD_NOT_FIND_IMAGE,
+} from '../../../constants/Config';
 import {selectPhoto, takePhoto} from '../../../utils/image';
 import {store} from '../../../stores/store';
+import AudioRecorder, {AudioRecorderRef} from './AudioRecorder';
 
 type Props = {
   style: ViewStyle;
@@ -38,25 +43,40 @@ type Props = {
 export default (props: Props) => {
   const giftRef = useRef<GiftRef>(null);
 
+  const audioRecorderRef = useRef<AudioRecorderRef>(null);
+
   const dispatch = useAppDispatch();
 
   const sceneValue = useAppSelector(scene);
 
   const statusValue = useAppSelector(status);
 
-  const messageImageValue = useAppSelector(messageImage);
+  const messageUriValue = useAppSelector(messageUri);
+
+  const [messageType, setMessageType] = useState(0);
+
+  const [recordSecsValue, setRecordSecsValue] = useState<ContentLength>(0);
 
   useEffect(() => {
     if (
       statusValue === 'success' &&
       sceneValue === 'uploadMessage' &&
-      messageImageValue
+      messageUriValue
     ) {
       dispatch(resetStatus());
 
-      dispatch(resetMessageImage());
+      dispatch(resetmessageUri());
 
-      props.handleSend(messageImageValue as Content, 2);
+      if (messageType === 1) {
+        audioRecorderRef.current?.hide();
+      }
+
+      props.handleSend(
+        messageUriValue as Content,
+        messageType,
+        undefined,
+        messageType === 1 ? recordSecsValue : undefined,
+      );
 
       return;
     }
@@ -68,25 +88,34 @@ export default (props: Props) => {
 
       return;
     }
-  }, [dispatch, props, sceneValue, statusValue, messageImageValue]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, props, sceneValue, statusValue, messageUriValue, messageType]);
 
   const uploadMessage = useCallback(
-    (photo: Photo) => {
-      checkFileExistence(photo)
+    (uri: Uri) => {
+      const errorMsg =
+        messageType === 2
+          ? COULD_NOT_FIND_IMAGE
+          : messageType === 1
+          ? COULD_NOT_FIND_AUDIO
+          : '';
+
+      checkFileExistence(uri)
         .then(result => {
           if (result) {
             dispatch(setScene('uploadMessage'));
 
-            dispatch(uploadMessageAsync(photo));
+            dispatch(uploadMessageAsync(uri));
           } else {
-            showError(COULD_NOT_FIND_IMAGE);
+            showError(errorMsg);
           }
         })
         .catch(() => {
-          showError(COULD_NOT_FIND_IMAGE);
+          showError(errorMsg);
         });
     },
-    [dispatch],
+    [dispatch, messageType],
   );
 
   const handleSelectPhoto = useCallback(() => {
@@ -105,16 +134,39 @@ export default (props: Props) => {
     }, 200);
   }, [props, uploadMessage]);
 
+  const handleAudioRecorderConfirm = useCallback(
+    (audioUri: string, recordSecs: number) => {
+      setRecordSecsValue(recordSecs);
+
+      uploadMessage(audioUri);
+    },
+    [uploadMessage],
+  );
+
+  const handleAudioRecorderCancel = useCallback(() => {
+    audioRecorderRef.current?.hide();
+  }, []);
+
   return (
     <View style={[styles.root, props.style]}>
       {btnList.map((value, index) => {
         const handlePress = () => {
-          if (index === 4) {
-            giftRef.current?.show();
-          } else if (index === 1) {
+          if (index === 1) {
+            setMessageType(2);
+
             handleSelectPhoto();
           } else if (index === 2) {
+            setMessageType(2);
+
             handleTakePhoto();
+          } else if (index === 3) {
+            setMessageType(1);
+
+            audioRecorderRef.current?.show();
+          } else if (index === 4) {
+            setMessageType(5);
+
+            giftRef.current?.show();
           }
         };
 
@@ -129,6 +181,12 @@ export default (props: Props) => {
       })}
 
       <Gift ref={giftRef} handleSend={props.handleSend} />
+
+      <AudioRecorder
+        ref={audioRecorderRef}
+        onCancel={handleAudioRecorderCancel}
+        onConfirm={handleAudioRecorderConfirm}
+      />
     </View>
   );
 };

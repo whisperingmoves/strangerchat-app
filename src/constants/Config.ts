@@ -8,7 +8,7 @@ export const ALLOW_ACCESS_STORAGE =
 export const ALLOW_ACCESS_CAMERA =
   'Please allow the app to access your camera in your app settings';
 
-export const CANCEL = 'cancel';
+export const CANCEL = 'Cancel';
 
 export const PERMISSION_REQUIRED = 'Permission required';
 
@@ -26,6 +26,8 @@ export const FOLLOW = 'Follow';
 
 export const COULD_NOT_FIND_IMAGE = 'Could not find image';
 
+export const COULD_NOT_FIND_AUDIO = 'Could not find audio';
+
 export const HOME = 'Home';
 
 export const FOR_YOU = 'For you';
@@ -39,3 +41,6 @@ export const TOP_UP = 'Top up';
 export const GIFT = 'Gift';
 
 export const YESTERDAY = 'Yesterday';
+
+export const ALLOW_ACCESS_MICROPHONE =
+  'Please allow the app to access your microphone in your app settings';

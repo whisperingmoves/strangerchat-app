@@ -6,6 +6,8 @@ export const SAY_SOMETHING = 'Say something...';
 
 export const IMAGE = 'Image';
 
+export const VOICE = 'Voice';
+
 export const BLOCK = 'Block';
 
 export const UNBLOCK = 'Unblock';
