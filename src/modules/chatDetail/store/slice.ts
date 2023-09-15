@@ -306,7 +306,7 @@ export const slice = createSlice({
       state.status = initialState.status;
     },
 
-    resetmessageUri: state => {
+    resetMessageUri: state => {
       state.messageUri = initialState.messageUri;
     },
   },
@@ -386,7 +386,7 @@ export const {
   updateMessageConversationId,
   setScene,
   resetStatus,
-  resetmessageUri,
+  resetMessageUri,
 } = slice.actions;
 
 export const status = (state: RootState) => state.chatDetail.status;

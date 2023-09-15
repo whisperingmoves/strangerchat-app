@@ -181,14 +181,14 @@ export const slice = createSlice({
 
       let updatedConversationList = [...state.conversationList];
 
-      const existingConversationIndex = state.conversationList.findIndex(
+      const existingConversationIndex = updatedConversationList.findIndex(
         conversation =>
           conversation.conversationId === conversationDetails.conversationId,
       );
 
       if (existingConversationIndex !== -1) {
-        state.conversationList[existingConversationIndex] = {
-          ...state.conversationList[existingConversationIndex],
+        updatedConversationList[existingConversationIndex] = {
+          ...updatedConversationList[existingConversationIndex],
           ...conversationDetails,
         };
       } else {

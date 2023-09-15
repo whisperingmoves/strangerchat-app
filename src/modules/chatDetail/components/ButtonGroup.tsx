@@ -15,7 +15,7 @@ import {
   ContentLength,
   HandleSend,
   messageUri,
-  resetmessageUri,
+  resetMessageUri,
   resetStatus,
   scene,
   setScene,
@@ -65,7 +65,7 @@ export default (props: Props) => {
     ) {
       dispatch(resetStatus());
 
-      dispatch(resetmessageUri());
+      dispatch(resetMessageUri());
 
       if (messageType === 1) {
         audioRecorderRef.current?.hide();
