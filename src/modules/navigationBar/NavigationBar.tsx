@@ -34,6 +34,7 @@ import {CreatedConversation} from '../../apis/notification/createdConversation';
 import {RecentConversation} from '../../apis/notification/recentConversations';
 import {ConversationDetails} from '../../apis/notification/conversationDetails';
 import {
+  getRecentChatMessagesAsync,
   markedAsReadMessage,
   setRecentMessages,
   setSentMessage,
@@ -150,6 +151,19 @@ export default () => {
               lastMessageType: messageData.type,
             }),
           );
+
+          const messageList =
+            store.getState().chatDetail.messageMap[
+              messageData.conversationId
+            ] || [];
+
+          if (messageList.length === 1) {
+            dispatch(
+              getRecentChatMessagesAsync({
+                conversationId: messageData.conversationId,
+              }),
+            );
+          }
 
           if (
             messageData.conversationId ===
