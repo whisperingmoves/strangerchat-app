@@ -238,6 +238,15 @@ export default forwardRef((props: Props, ref) => {
       setPlayTime(audioRecorderPlayer.mmssss(Math.floor(e.currentPosition)));
 
       setDuration(audioRecorderPlayer.mmssss(Math.floor(e.duration)));
+
+      if (e.currentPosition >= e.duration) {
+        LayoutAnimation.easeInEaseOut();
+
+        setIsPlayStopped(true);
+        setIsPlaying(false);
+        setIsPlayPaused(true);
+        setIsPlayResumed(true);
+      }
     });
 
     LayoutAnimation.easeInEaseOut();
