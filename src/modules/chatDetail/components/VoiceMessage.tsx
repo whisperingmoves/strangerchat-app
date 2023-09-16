@@ -70,11 +70,11 @@ export default (props: VoiceMessageProps) => {
     await audioRecorderPlayer.setVolume(1.0);
 
     audioRecorderPlayer.addPlayBackListener(async (e: PlayBackType) => {
-      if (e.currentPosition > props.duration * 1000) {
+      if (e.currentPosition >= e.duration) {
         await stopPlay();
       }
     });
-  }, [audioRecorderPlayer, props.duration, props.voiceContent, stopPlay]);
+  }, [audioRecorderPlayer, props.voiceContent, stopPlay]);
 
   const handlePausePlay = useCallback(async (): Promise<void> => {
     await audioRecorderPlayer.pausePlayer();
