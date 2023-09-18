@@ -53,6 +53,7 @@ import {
 import RNFS, {DownloadProgressCallbackResult} from 'react-native-fs';
 import {getFileName} from '../../../utils/file';
 import CircularProgress from 'react-native-circular-progress-indicator';
+import {LayoutChangeEvent} from 'react-native/Libraries/Types/CoreEventTypes';
 
 export type Props = {
   conversationId: ConversationId;
@@ -78,16 +79,20 @@ export default (props: Props) => {
 
   const [cacheProgressValue, setCacheProgressValue] = useState(0);
 
+  const [cacheProgressWidth, setCacheProgressWidth] = useState(0);
+
   const dispatch = useAppDispatch();
 
   const isSelf = props.isSelf;
 
-  const textContainerStyle: StyleProp<ViewStyle> = {
-    backgroundColor: isSelf ? '#8B5CFF' : '#F1F0F3',
-    borderTopLeftRadius: isSelf ? 20 : 0,
-    borderTopRightRadius: isSelf ? 0 : 20,
-    maxWidth: windowWidth - 20 * 2 - 46 - 6,
-  };
+  const textContainerStyle: StyleProp<ViewStyle> = useMemo(() => {
+    return {
+      backgroundColor: isSelf ? '#8B5CFF' : '#F1F0F3',
+      borderTopLeftRadius: isSelf ? 20 : 0,
+      borderTopRightRadius: isSelf ? 0 : 20,
+      maxWidth: windowWidth - 20 * 2 - 46 - 6 - cacheProgressWidth,
+    };
+  }, [cacheProgressWidth, isSelf, windowWidth]);
 
   const textStyle: StyleProp<TextStyle> = {
     color: isSelf ? '#FFF' : '#554C5F',
@@ -103,7 +108,6 @@ export default (props: Props) => {
         : props.type === 0 && props.content
         ? 'center'
         : 'flex-start',
-    gap: 3,
   };
 
   const handleResend = () => {
@@ -215,7 +219,7 @@ export default (props: Props) => {
         Math.floor((res.bytesWritten / res.contentLength) * 100),
       );
     },
-    [],
+    [setCacheProgressValue],
   );
 
   useEffect(() => {
@@ -242,7 +246,14 @@ export default (props: Props) => {
         });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.type]);
+  }, [props.type, props.isCached]);
+
+  const handleCacheProgressLayoutChange = useCallback(
+    (event: LayoutChangeEvent) => {
+      setCacheProgressWidth(event.nativeEvent.layout.width);
+    },
+    [],
+  );
 
   return (
     <View style={styles.root}>
@@ -280,17 +291,19 @@ export default (props: Props) => {
         )}
 
         {props.type === 1 && props.isCached !== 1 && (
-          <CircularProgress
-            value={cacheProgressValue}
-            radius={10}
-            activeStrokeWidth={3}
-            inActiveStrokeWidth={6}
-            activeStrokeColor={textStyle.color as string | undefined}
-            inActiveStrokeColor={
-              textContainerStyle.backgroundColor as string | undefined
-            }
-            progressValueColor={'#FFFFFF00'}
-          />
+          <View onLayout={handleCacheProgressLayoutChange}>
+            <CircularProgress
+              value={cacheProgressValue}
+              radius={10}
+              activeStrokeWidth={3}
+              inActiveStrokeWidth={6}
+              activeStrokeColor={textStyle.color as string | undefined}
+              inActiveStrokeColor={
+                textContainerStyle.backgroundColor as string | undefined
+              }
+              progressValueColor={'#FFFFFF00'}
+            />
+          </View>
         )}
 
         {(props.type === 2 || props.type === 5) && (
