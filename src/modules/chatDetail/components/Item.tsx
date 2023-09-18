@@ -1,6 +1,13 @@
-import React, {RefObject, useCallback, useEffect} from 'react';
+import React, {
+  RefObject,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {
   Image,
+  Platform,
   StyleSheet,
   Text,
   TextStyle,
@@ -19,12 +26,14 @@ import {
   ContentLength,
   ConversationId,
   deleteMessage,
+  IsCached,
   markMessageAsReadAsync,
   MessageId,
   ReadStatus,
   SenderId,
   SendStatus,
   SentTime,
+  setMessage,
   setScene,
   Type,
 } from '../store/slice';
@@ -36,6 +45,14 @@ import MessageStatusIndicator from '../../../components/MessageStatusIndicator';
 import {InputRef} from '../../../components/Input';
 import {store} from '../../../stores/store';
 import VoiceMessage from './VoiceMessage';
+import {showError} from '../../../utils/notification';
+import {
+  IMAGE_CACHE_FAILURE,
+  VOICE_CACHE_FAILURE,
+} from '../../../constants/chatDetail/Config';
+import RNFS, {DownloadProgressCallbackResult} from 'react-native-fs';
+import {getFileName} from '../../../utils/file';
+import CircularProgress from 'react-native-circular-progress-indicator';
 
 export type Props = {
   conversationId: ConversationId;
@@ -53,10 +70,13 @@ export type Props = {
   inputRef: RefObject<InputRef>;
   imageIndex?: number;
   onImageClick?: (imageIndex: number) => void;
+  isCached?: IsCached;
 };
 
 export default (props: Props) => {
   const {width: windowWidth} = useWindowDimensions();
+
+  const [cacheProgressValue, setCacheProgressValue] = useState(0);
 
   const dispatch = useAppDispatch();
 
@@ -83,6 +103,7 @@ export default (props: Props) => {
         : props.type === 0 && props.content
         ? 'center'
         : 'flex-start',
+    gap: 3,
   };
 
   const handleResend = () => {
@@ -143,6 +164,86 @@ export default (props: Props) => {
     props.onImageClick(props.imageIndex as number);
   }, [props]);
 
+  const photoUri = useMemo(
+    () =>
+      (props.type === 2 || props.type === 5) && generateFullURL(props.content),
+    [props.content, props.type],
+  );
+
+  const voiceLocalUri = useMemo(
+    () =>
+      Platform.OS === 'android'
+        ? RNFS.TemporaryDirectoryPath + '/' + getFileName(props.content)
+        : getFileName(props.content),
+    [props.content],
+  );
+
+  const voiceUri = useMemo(() => {
+    if (props.type === 1 && props.isCached !== 1) {
+      return '';
+    }
+
+    if (props.type === 1 && props.isCached === 1) {
+      return voiceLocalUri;
+    }
+  }, [props.type, props.isCached, voiceLocalUri]);
+
+  useEffect(() => {
+    (props.type === 2 || props.type === 5) &&
+      props.isCached !== 1 &&
+      Image.prefetch(photoUri as string)
+        .then(() => {
+          dispatch(
+            setMessage({
+              conversationId: props.conversationId,
+              messageId: props.messageId,
+              clientMessageId: props.clientMessageId,
+              isCached: 1,
+            }),
+          );
+        })
+        .catch(() => {
+          showError(IMAGE_CACHE_FAILURE);
+        });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [photoUri, props.type]);
+
+  const handleCacheProgress = useCallback(
+    (res: DownloadProgressCallbackResult) => {
+      setCacheProgressValue(
+        Math.floor((res.bytesWritten / res.contentLength) * 100),
+      );
+    },
+    [],
+  );
+
+  useEffect(() => {
+    props.type === 1 &&
+      props.isCached !== 1 &&
+      RNFS.downloadFile({
+        fromUrl: generateFullURL(props.content),
+        toFile: voiceLocalUri,
+        progress: handleCacheProgress,
+      })
+        .promise.then(() => {
+          dispatch(
+            setMessage({
+              conversationId: props.conversationId,
+              messageId: props.messageId,
+              clientMessageId: props.clientMessageId,
+              isCached: 1,
+              content: voiceLocalUri,
+            }),
+          );
+        })
+        .catch(() => {
+          showError(VOICE_CACHE_FAILURE);
+        });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.type]);
+
   return (
     <View style={styles.root}>
       {props.sentTime && (
@@ -171,10 +272,24 @@ export default (props: Props) => {
           <VoiceMessage
             messageId={(props.messageId || props.clientMessageId) as MessageId}
             duration={props.contentLength as ContentLength}
-            voiceContent={props.content}
+            voiceUri={voiceUri as Content}
             containerStyle={[styles.textContainer, textContainerStyle]}
             isSelf={isSelf}
             durationTextStyle={[styles.text, textStyle]}
+          />
+        )}
+
+        {props.type === 1 && props.isCached !== 1 && (
+          <CircularProgress
+            value={cacheProgressValue}
+            radius={10}
+            activeStrokeWidth={3}
+            inActiveStrokeWidth={6}
+            activeStrokeColor={textStyle.color as string | undefined}
+            inActiveStrokeColor={
+              textContainerStyle.backgroundColor as string | undefined
+            }
+            progressValueColor={'#FFFFFF00'}
           />
         )}
 
@@ -183,7 +298,7 @@ export default (props: Props) => {
             activeOpacity={0.7}
             onPress={handleImageMessageClick}>
             <ResizeImage
-              photoUri={generateFullURL(props.content)}
+              photoUri={photoUri as string}
               defaultHeight={120}
               styles={styles.image}
             />

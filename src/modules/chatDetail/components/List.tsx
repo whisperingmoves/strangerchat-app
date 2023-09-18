@@ -151,6 +151,7 @@ export default (props: Props) => {
       inputRef: props.inputRef,
       imageIndex,
       onImageClick,
+      isCached: message.isCached,
     };
   });
 

@@ -21,3 +21,7 @@ export const UNFOLLOW_SUCCESSFULLY = 'Unfollow successfully';
 export const BLOCK_SUCCESSFULLY = 'Block successfully';
 
 export const UNBLOCK_SUCCESSFULLY = 'Unblock successfully';
+
+export const IMAGE_CACHE_FAILURE = 'Image Cache Failure';
+
+export const VOICE_CACHE_FAILURE = 'Voice Cache Failure';

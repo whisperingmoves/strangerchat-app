@@ -15,7 +15,9 @@ import {MarkMessageAsRead} from '../../../apis/message/markMessageAsRead';
 import {Id} from '../../gift/store/slice';
 import {socket} from '../../../apis/socket';
 
-export interface Message extends RecentMessage, SentMessage {}
+export interface Message extends RecentMessage, SentMessage {
+  isCached?: number;
+}
 
 export type Uri = string;
 
@@ -33,6 +35,8 @@ export type Status = 'idle' | 'loading' | 'failed' | 'success';
 export type ConversationId = string;
 
 export type MessageId = string;
+
+export type IsCached = number;
 
 export type SenderId = string;
 
@@ -314,6 +318,47 @@ export const slice = createSlice({
     setCurrentVoiceMessageId: (state, action: PayloadAction<MessageId>) => {
       state.currentVoiceMessageId = action.payload;
     },
+
+    setMessage: (
+      state: State,
+      action: PayloadAction<{
+        conversationId: ConversationId;
+        messageId: MessageId;
+        clientMessageId?: MessageId;
+        isCached?: IsCached;
+        content?: Content;
+      }>,
+    ) => {
+      const updatedMessageMap = {...state.messageMap};
+
+      const message = action.payload;
+      const {conversationId, messageId, clientMessageId} = message;
+
+      const existingMessages = updatedMessageMap[conversationId];
+
+      if (existingMessages) {
+        const updatedMessages = existingMessages.map(existingMessage => {
+          if (
+            clientMessageId
+              ? existingMessage.clientMessageId === clientMessageId
+              : existingMessage.messageId === messageId
+          ) {
+            return {
+              ...existingMessage,
+              ...message,
+            };
+          }
+
+          return existingMessage;
+        });
+
+        updatedMessages.sort((a, b) => b.sentTime - a.sentTime);
+
+        updatedMessageMap[conversationId] = updatedMessages;
+
+        state.messageMap = updatedMessageMap;
+      }
+    },
   },
 
   extraReducers: builder => {
@@ -393,6 +438,7 @@ export const {
   resetStatus,
   resetMessageUri,
   setCurrentVoiceMessageId,
+  setMessage,
 } = slice.actions;
 
 export const status = (state: RootState) => state.chatDetail.status;

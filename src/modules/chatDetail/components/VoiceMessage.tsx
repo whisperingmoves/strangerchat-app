@@ -22,7 +22,6 @@ import {
 import AudioRecorderPlayer, {
   PlayBackType,
 } from 'react-native-audio-recorder-player';
-import {generateFullURL} from '../../helper';
 import {formatDuration} from '../../../utils/date';
 import {LayoutChangeEvent} from 'react-native/Libraries/Types/CoreEventTypes';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
@@ -31,7 +30,7 @@ import {showError} from '../../../utils/notification';
 type VoiceMessageProps = {
   duration: ContentLength;
   messageId: MessageId;
-  voiceContent: Content;
+  voiceUri: Content;
   containerStyle: StyleProp<ViewStyle>;
   isSelf?: boolean;
   durationTextStyle: StyleProp<TextStyle>;
@@ -91,9 +90,7 @@ export default (props: VoiceMessageProps) => {
     dispatch(setCurrentVoiceMessageId(props.messageId));
 
     setTimeout(async () => {
-      await audioRecorderPlayer.startPlayer(
-        generateFullURL(props.voiceContent),
-      );
+      await audioRecorderPlayer.startPlayer(props.voiceUri);
 
       await audioRecorderPlayer.setVolume(1.0);
 
@@ -107,7 +104,7 @@ export default (props: VoiceMessageProps) => {
     audioRecorderPlayer,
     dispatch,
     props.messageId,
-    props.voiceContent,
+    props.voiceUri,
     stopPlay,
   ]);
 
@@ -120,12 +117,16 @@ export default (props: VoiceMessageProps) => {
   }, [audioRecorderPlayer]);
 
   const startPlay = useCallback(async (): Promise<void> => {
+    if (!props.voiceUri) {
+      return;
+    }
+
     setIsStarted(true);
     setIsPaused(false);
     setIsResumed(false);
 
     await handleStartPlay();
-  }, [handleStartPlay]);
+  }, [handleStartPlay, props.voiceUri]);
 
   const pausePlay = useCallback(async (): Promise<void> => {
     await handlePausePlay();
