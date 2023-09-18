@@ -12,17 +12,25 @@ import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 import icon_volume_up from '../../../assets/images/icons/icon_volume_up.png';
 import icon_volume_down from '../../../assets/images/icons/icon_volume_down.png';
 import {ImageSourcePropType} from 'react-native/Libraries/Image/Image';
-import {Content, ContentLength} from '../store/slice';
+import {
+  Content,
+  ContentLength,
+  currentVoiceMessageId,
+  MessageId,
+  setCurrentVoiceMessageId,
+} from '../store/slice';
 import AudioRecorderPlayer, {
   PlayBackType,
 } from 'react-native-audio-recorder-player';
 import {generateFullURL} from '../../helper';
-import {showError} from '../../../utils/notification';
 import {formatDuration} from '../../../utils/date';
 import {LayoutChangeEvent} from 'react-native/Libraries/Types/CoreEventTypes';
+import {useAppDispatch, useAppSelector} from '../../../hooks';
+import {showError} from '../../../utils/notification';
 
 type VoiceMessageProps = {
   duration: ContentLength;
+  messageId: MessageId;
   voiceContent: Content;
   containerStyle: StyleProp<ViewStyle>;
   isSelf?: boolean;
@@ -37,6 +45,21 @@ export default (props: VoiceMessageProps) => {
   const [isResumed, setIsResumed] = useState(false);
 
   const [durationWidth, setDurationWidth] = useState(0);
+
+  const currentVoiceMessageIdValue = useAppSelector(currentVoiceMessageId);
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (
+      currentVoiceMessageIdValue &&
+      currentVoiceMessageIdValue !== props.messageId
+    ) {
+      stopPlay().then();
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentVoiceMessageIdValue]);
 
   const isPlaying = useMemo(
     () => isStarted && !isPaused,
@@ -65,16 +88,28 @@ export default (props: VoiceMessageProps) => {
   }, [handleStopPlay]);
 
   const handleStartPlay = useCallback(async (): Promise<void> => {
-    await audioRecorderPlayer.startPlayer(generateFullURL(props.voiceContent));
+    dispatch(setCurrentVoiceMessageId(props.messageId));
 
-    await audioRecorderPlayer.setVolume(1.0);
+    setTimeout(async () => {
+      await audioRecorderPlayer.startPlayer(
+        generateFullURL(props.voiceContent),
+      );
 
-    audioRecorderPlayer.addPlayBackListener(async (e: PlayBackType) => {
-      if (e.currentPosition >= e.duration) {
-        await stopPlay();
-      }
-    });
-  }, [audioRecorderPlayer, props.voiceContent, stopPlay]);
+      await audioRecorderPlayer.setVolume(1.0);
+
+      audioRecorderPlayer.addPlayBackListener(async (e: PlayBackType) => {
+        if (e.currentPosition >= e.duration) {
+          await stopPlay();
+        }
+      });
+    }, 200);
+  }, [
+    audioRecorderPlayer,
+    dispatch,
+    props.messageId,
+    props.voiceContent,
+    stopPlay,
+  ]);
 
   const handlePausePlay = useCallback(async (): Promise<void> => {
     await audioRecorderPlayer.pausePlayer();
@@ -85,11 +120,11 @@ export default (props: VoiceMessageProps) => {
   }, [audioRecorderPlayer]);
 
   const startPlay = useCallback(async (): Promise<void> => {
-    await handleStartPlay();
-
     setIsStarted(true);
     setIsPaused(false);
     setIsResumed(false);
+
+    await handleStartPlay();
   }, [handleStartPlay]);
 
   const pausePlay = useCallback(async (): Promise<void> => {
@@ -188,9 +223,9 @@ export default (props: VoiceMessageProps) => {
     };
   }, [props.isSelf]);
 
-  const handleDurationLayout = (event: LayoutChangeEvent) => {
+  const handleDurationLayout = useCallback((event: LayoutChangeEvent) => {
     setDurationWidth(event.nativeEvent.layout.width);
-  };
+  }, []);
 
   return (
     <TouchableOpacity

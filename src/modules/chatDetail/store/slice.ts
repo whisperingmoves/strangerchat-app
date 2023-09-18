@@ -61,6 +61,7 @@ export interface State {
   error: Error;
   scene?: Scene;
   currentConversationId?: ConversationId;
+  currentVoiceMessageId?: MessageId;
   status: Status;
 }
 
@@ -309,6 +310,10 @@ export const slice = createSlice({
     resetMessageUri: state => {
       state.messageUri = initialState.messageUri;
     },
+
+    setCurrentVoiceMessageId: (state, action: PayloadAction<MessageId>) => {
+      state.currentVoiceMessageId = action.payload;
+    },
   },
 
   extraReducers: builder => {
@@ -387,6 +392,7 @@ export const {
   setScene,
   resetStatus,
   resetMessageUri,
+  setCurrentVoiceMessageId,
 } = slice.actions;
 
 export const status = (state: RootState) => state.chatDetail.status;
@@ -396,5 +402,8 @@ export const scene = (state: RootState) => state.chatDetail.scene;
 export const messageMap = (state: RootState) => state.chatDetail.messageMap;
 
 export const messageUri = (state: RootState) => state.chatDetail.messageUri;
+
+export const currentVoiceMessageId = (state: RootState) =>
+  state.chatDetail.currentVoiceMessageId;
 
 export default slice.reducer;

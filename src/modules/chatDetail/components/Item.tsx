@@ -169,6 +169,7 @@ export default (props: Props) => {
 
         {props.type === 1 && (
           <VoiceMessage
+            messageId={(props.messageId || props.clientMessageId) as MessageId}
             duration={props.contentLength as ContentLength}
             voiceContent={props.content}
             containerStyle={[styles.textContainer, textContainerStyle]}
