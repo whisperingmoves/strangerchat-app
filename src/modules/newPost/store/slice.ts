@@ -60,6 +60,7 @@ const initialState: State = {
   error: '',
   scene: undefined,
   status: 'idle',
+  atUsers: [],
   checkedAtUsers: [],
   confirmedAtUsers: [],
 };
@@ -167,6 +168,22 @@ export const slice = createSlice({
         user => user.userId !== userIdToRemove,
       );
     },
+
+    removeAtUser: (state, action: PayloadAction<UserId>) => {
+      const userIdToRemove = action.payload;
+
+      state.atUsers = state.atUsers?.filter(
+        userId => userId !== userIdToRemove,
+      );
+    },
+
+    removeConfirmedAtUser: (state, action: PayloadAction<UserId>) => {
+      const userIdToRemove = action.payload;
+
+      state.confirmedAtUsers = state.confirmedAtUsers?.filter(
+        user => user.userId !== userIdToRemove,
+      );
+    },
   },
 
   extraReducers: builder => {
@@ -246,6 +263,8 @@ export const {
   updateCheckedAtUsers,
   removeCheckedAtUser,
   setAtUsers,
+  removeAtUser,
+  removeConfirmedAtUser,
 } = slice.actions;
 
 export const status = (state: RootState) => state.newPost.status;

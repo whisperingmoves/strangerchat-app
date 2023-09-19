@@ -6,10 +6,17 @@ import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 import {PLACE_HOLDER} from '../../../constants/newPost/Config';
-import {content, images, removeImageByIndex, setState} from '../store/slice';
+import {
+  confirmedAtUsers,
+  content,
+  images,
+  removeImageByIndex,
+  setState,
+} from '../store/slice';
 import {useAppSelector} from '../../../hooks';
 import PhotoList from '../../../components/photoList/PhotoList';
 import {generateFullURL} from '../../helper';
+import ConfirmedAtUsers from './ConfirmedAtUsers';
 
 export interface InputRef {
   blur: () => void;
@@ -42,6 +49,8 @@ export default forwardRef((props: Props, ref) => {
     dispatch(removeImageByIndex(index));
   };
 
+  const confirmedAtUsersValue = useAppSelector(confirmedAtUsers);
+
   return (
     <ScrollView
       style={[styles.root, props.style]}
@@ -68,6 +77,10 @@ export default forwardRef((props: Props, ref) => {
           isMarginLeft={false}
           onDelete={handleDelete}
         />
+      )}
+
+      {confirmedAtUsersValue.length > 0 && (
+        <ConfirmedAtUsers confirmedAtUsers={confirmedAtUsersValue} />
       )}
     </ScrollView>
   );
