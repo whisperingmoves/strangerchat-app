@@ -15,7 +15,11 @@ import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import Item, {Props as ItemProps} from './Item';
 
 import Separator from './Separator';
-import {ConversationId, OpponentAvatar} from '../../chat/store/slice';
+import {
+  ConversationId,
+  OpponentAvatar,
+  setConversation,
+} from '../../chat/store/slice';
 import {
   getRecentChatMessagesAsync,
   messageMap,
@@ -97,6 +101,22 @@ export default (props: Props) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const lastMessage =
+      messageList && messageList.length ? messageList[0] : undefined;
+
+    dispatch(
+      setConversation({
+        conversationId: props.conversationId,
+        lastMessageTime: lastMessage ? lastMessage.sentTime : 0,
+        lastMessageContent: lastMessage ? lastMessage.content : '',
+        lastMessageType: lastMessage ? lastMessage.type : 0,
+      }),
+    );
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messageList]);
 
   const handleImageClick = useCallback((imageIdx: number) => {
     setImageIndexValue(imageIdx);

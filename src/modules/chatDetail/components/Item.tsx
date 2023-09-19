@@ -37,13 +37,12 @@ import {
   setScene,
   Type,
 } from '../store/slice';
-import {OpponentAvatar, setConversation} from '../../chat/store/slice';
+import {OpponentAvatar} from '../../chat/store/slice';
 import {generateFullURL} from '../../helper';
 import {formatTimestamp} from '../../../utils/date';
 import {useAppDispatch} from '../../../hooks';
 import MessageStatusIndicator from '../../../components/MessageStatusIndicator';
 import {InputRef} from '../../../components/Input';
-import {store} from '../../../stores/store';
 import VoiceMessage from './VoiceMessage';
 import {showError} from '../../../utils/notification';
 import {
@@ -116,18 +115,6 @@ export default (props: Props) => {
         clientMessageId: props.clientMessageId,
         messageId: props.messageId,
         conversationId: props.conversationId,
-      }),
-    );
-
-    const lastMessage =
-      store.getState().chatDetail.messageMap[props.conversationId][0];
-
-    dispatch(
-      setConversation({
-        conversationId: props.conversationId,
-        lastMessageTime: lastMessage.sentTime,
-        lastMessageContent: lastMessage.content,
-        lastMessageType: lastMessage.type,
       }),
     );
 

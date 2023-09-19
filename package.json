@@ -7,6 +7,7 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
+    "start-with-no-cache": "react-native start --reset-cache",
     "test": "jest",
     "postinstall": "react-native setup-ios-permissions && pod-install",
     "cleaniOSCache": "cd ios && xcodebuild clean -workspace strangerchat.xcworkspace -scheme strangerchat -configuration Debug",
