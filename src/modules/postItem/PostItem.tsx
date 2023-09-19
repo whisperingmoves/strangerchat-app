@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
@@ -11,6 +11,7 @@ import {generateFullURL} from '../helper';
 import Location from './components/Location';
 import Footer from './components/Footer';
 import {LatestPostData} from '../../apis/post/getLatestPosts';
+import AtUserList from '../../components/AtUserList';
 
 type CustomProps = {
   isFollowing?: boolean;
@@ -34,6 +35,8 @@ export default (props: Props) => {
   ) {
     photoIsMarginLeft = false;
   }
+
+  const handleAtUserPress = useCallback(() => {}, []);
 
   return (
     <View style={styles.root}>
@@ -63,6 +66,16 @@ export default (props: Props) => {
 
         {props?.content && <Text style={styles.content}>{props.content}</Text>}
 
+        {props.atUsers && props.atUsers.length > 0 && (
+          <AtUserList
+            style={styles.atUserList}
+            atUsers={props.atUsers.map(atUser => {
+              return {userId: atUser.id, username: atUser.username};
+            })}
+            onItemPress={handleAtUserPress}
+          />
+        )}
+
         {props?.city && (
           <Location
             location={props.city}
@@ -90,6 +103,9 @@ const styles = StyleSheet.create({
   },
   photoList: {
     marginBottom: 14,
+  },
+  atUserList: {
+    marginTop: 14,
   },
   content: {
     color: '#554C5F',

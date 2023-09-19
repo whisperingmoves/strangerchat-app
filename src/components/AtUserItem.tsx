@@ -1,24 +1,23 @@
 import React, {useCallback} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {AtUser, removeAtUser, removeConfirmedAtUser} from '../store/slice';
-import {getUsername} from '../../helper';
-import {useAppDispatch} from '../../../hooks';
+import {UserId, Username} from '../modules/newPost/store/slice';
+import {getUsername} from '../modules/helper';
 
-type Props = AtUser;
+type Props = {
+  userId: UserId;
+  username?: Username;
+  onPress: (userId: UserId) => void;
+};
 
 export default (props: Props) => {
-  const dispatch = useAppDispatch();
-
   const handlePress = useCallback(() => {
-    dispatch(removeConfirmedAtUser(props.userId));
-
-    dispatch(removeAtUser(props.userId));
-  }, [dispatch, props.userId]);
+    props.onPress(props.userId);
+  }, [props]);
 
   return (
     <TouchableOpacity activeOpacity={0.7} onPress={handlePress}>
       <Text style={styles.txt}>
-        {props.username ? props.username : getUsername(props.userId)}
+        {`@${props.username ? props.username : getUsername(props.userId)}`}
       </Text>
     </TouchableOpacity>
   );

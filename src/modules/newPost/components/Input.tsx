@@ -1,4 +1,9 @@
-import React, {forwardRef, useImperativeHandle, useRef} from 'react';
+import React, {
+  forwardRef,
+  useCallback,
+  useImperativeHandle,
+  useRef,
+} from 'react';
 import {useDispatch} from 'react-redux';
 import {ScrollView, StyleSheet, TextInput} from 'react-native';
 
@@ -10,13 +15,16 @@ import {
   confirmedAtUsers,
   content,
   images,
+  removeAtUser,
+  removeConfirmedAtUser,
   removeImageByIndex,
   setState,
+  UserId,
 } from '../store/slice';
 import {useAppSelector} from '../../../hooks';
 import PhotoList from '../../../components/photoList/PhotoList';
 import {generateFullURL} from '../../helper';
-import ConfirmedAtUsers from './ConfirmedAtUsers';
+import ConfirmedAtUserList from '../../../components/AtUserList';
 
 export interface InputRef {
   blur: () => void;
@@ -51,6 +59,15 @@ export default forwardRef((props: Props, ref) => {
 
   const confirmedAtUsersValue = useAppSelector(confirmedAtUsers);
 
+  const handleConfirmedAtUserPress = useCallback(
+    (userId: UserId) => {
+      dispatch(removeConfirmedAtUser(userId));
+
+      dispatch(removeAtUser(userId));
+    },
+    [dispatch],
+  );
+
   return (
     <ScrollView
       style={[styles.root, props.style]}
@@ -80,7 +97,10 @@ export default forwardRef((props: Props, ref) => {
       )}
 
       {confirmedAtUsersValue.length > 0 && (
-        <ConfirmedAtUsers confirmedAtUsers={confirmedAtUsersValue} />
+        <ConfirmedAtUserList
+          atUsers={confirmedAtUsersValue}
+          onItemPress={handleConfirmedAtUserPress}
+        />
       )}
     </ScrollView>
   );
