@@ -25,12 +25,28 @@ export type Scene = 'newPost' | 'uploadPost' | 'getLocation' | undefined;
 
 export type Status = 'idle' | 'loading' | 'failed' | 'success';
 
+export type UserId = string;
+
+export type Username = string;
+
+export type Avatar = string;
+
+export type Keyword = string;
+
 export const VISIBILITY_MAP = [PUBLIC, HOME, PRIVATE];
+
+export interface AtUser {
+  userId: UserId;
+  username?: Username;
+}
 
 export interface State extends CreatePostRequest, CreatePostResponse {
   error: Error;
   scene: Scene;
   status: Status;
+  checkedAtUsers: AtUser[];
+  confirmedAtUsers: AtUser[];
+  keyword?: Keyword;
 }
 
 const initialState: State = {
@@ -44,6 +60,8 @@ const initialState: State = {
   error: '',
   scene: undefined,
   status: 'idle',
+  checkedAtUsers: [],
+  confirmedAtUsers: [],
 };
 
 const initialCreatePostRequest: CreatePostRequest = {
@@ -101,8 +119,16 @@ export const slice = createSlice({
       copy(state, action.payload);
     },
 
+    setAtUsers: (state, action: PayloadAction<UserId[]>) => {
+      state.atUsers = action.payload;
+    },
+
     setScene: (state, action: PayloadAction<Scene>) => {
       state.scene = action.payload;
+    },
+
+    setKeyword: (state, action: PayloadAction<Keyword>) => {
+      state.keyword = action.payload;
     },
 
     setVisibility: (state, action: PayloadAction<Visibility>) => {
@@ -115,6 +141,31 @@ export const slice = createSlice({
       if (state.images && index >= 0 && index < state.images.length) {
         state.images = state.images.filter((_, i) => i !== index);
       }
+    },
+
+    updateCheckedAtUsers: (state, action: PayloadAction<AtUser>) => {
+      const {userId, username} = action.payload;
+      const existingUserIndex = state.checkedAtUsers.findIndex(
+        user => user.userId === userId,
+      );
+
+      const updateCheckedAtUsers = state.checkedAtUsers;
+
+      if (existingUserIndex !== -1) {
+        updateCheckedAtUsers[existingUserIndex].username = username;
+      } else {
+        updateCheckedAtUsers.push({userId, username});
+      }
+
+      state.checkedAtUsers = updateCheckedAtUsers;
+    },
+
+    removeCheckedAtUser: (state, action: PayloadAction<UserId>) => {
+      const userIdToRemove = action.payload;
+
+      state.checkedAtUsers = state.checkedAtUsers.filter(
+        user => user.userId !== userIdToRemove,
+      );
     },
   },
 
@@ -191,6 +242,10 @@ export const {
   setScene,
   setVisibility,
   removeImageByIndex,
+  setKeyword,
+  updateCheckedAtUsers,
+  removeCheckedAtUser,
+  setAtUsers,
 } = slice.actions;
 
 export const status = (state: RootState) => state.newPost.status;
@@ -202,5 +257,13 @@ export const content = (state: RootState) => state.newPost.content;
 export const images = (state: RootState) => state.newPost.images;
 
 export const visibility = (state: RootState) => state.newPost.visibility;
+
+export const checkedAtUsers = (state: RootState) =>
+  state.newPost.checkedAtUsers;
+
+export const confirmedAtUsers = (state: RootState) =>
+  state.newPost.confirmedAtUsers;
+
+export const keyword = (state: RootState) => state.newPost.keyword;
 
 export default slice.reducer;

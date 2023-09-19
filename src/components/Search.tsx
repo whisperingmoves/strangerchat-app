@@ -5,22 +5,16 @@ import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
-import icon_search from '../../../assets/images/icons/icon_search.png';
-import {SEARCH} from '../../../constants/search/Config';
-import {useAppDispatch} from '../../../hooks';
-import {setKeyword} from '../store/slice';
+import icon_search from '../assets/images/icons/icon_search.png';
+import {SEARCH} from '../constants/search/Config';
 
 type Props = {
   style: StyleProp<ViewStyle>;
+  onChangeText: (text: string) => void;
+  text?: string;
 };
 
 export default (props: Props) => {
-  const dispatch = useAppDispatch();
-
-  const handleChangeText = (text: string) => {
-    dispatch(setKeyword(text));
-  };
-
   return (
     <View style={[styles.root, props.style]}>
       <Image source={icon_search} />
@@ -30,7 +24,8 @@ export default (props: Props) => {
         placeholder={SEARCH}
         placeholderTextColor={'#8E8895'}
         returnKeyType={'search'}
-        onChangeText={handleChangeText}
+        onChangeText={props.onChangeText}
+        value={props.text}
       />
     </View>
   );
@@ -38,7 +33,7 @@ export default (props: Props) => {
 
 const styles = StyleSheet.create({
   root: {
-    width: '100%',
+    // width: '100%',
     height: 36,
     borderRadius: 18,
     paddingHorizontal: 20,

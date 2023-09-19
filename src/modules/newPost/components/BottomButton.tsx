@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useRef} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
@@ -14,6 +14,7 @@ import {Photo, setScene, uploadPostAsync} from '../store/slice';
 import {checkFileExistence} from '../../../utils/file';
 import {showError} from '../../../utils/notification';
 import {COULD_NOT_FIND_IMAGE} from '../../../constants/Config';
+import AtUsersModal, {AtUsersRef} from './AtUsersModal';
 
 type Props = {
   style: StyleProp<ViewStyle>;
@@ -24,6 +25,8 @@ export default (props: Props) => {
   const {showActionSheetWithOptions} = useActionSheet();
 
   const dispatch = useAppDispatch();
+
+  const atUsersRef = useRef<AtUsersRef>(null);
 
   const uploadPost = (postImage: Photo) => {
     checkFileExistence(postImage)
@@ -47,13 +50,17 @@ export default (props: Props) => {
     }, 200);
   };
 
+  const handleAtUsersPress = useCallback(() => {
+    atUsersRef.current?.show();
+  }, []);
+
   return (
     <View style={[styles.root, props.style]}>
       <TouchableOpacity activeOpacity={0.7} onPress={handleImagePicker}>
         <Image source={icon_picture} />
       </TouchableOpacity>
 
-      <TouchableOpacity activeOpacity={0.7}>
+      <TouchableOpacity activeOpacity={0.7} onPress={handleAtUsersPress}>
         <Text style={styles.mentionTxt}>@</Text>
       </TouchableOpacity>
 
@@ -66,6 +73,8 @@ export default (props: Props) => {
       {/*<TouchableOpacity activeOpacity={0.7}>*/}
       {/*  <Image source={icon_add_outlined} />*/}
       {/*</TouchableOpacity>*/}
+
+      <AtUsersModal ref={atUsersRef} />
     </View>
   );
 };

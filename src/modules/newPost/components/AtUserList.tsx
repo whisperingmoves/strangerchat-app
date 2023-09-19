@@ -5,22 +5,19 @@ import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
-import Item, {Props as ItemProps} from './Item';
-
-import Footer from '../../../components/ListFooter';
+import Item, {Props as ItemProps} from './AtUserItem';
 import {useAppSelector} from '../../../hooks';
-import {conversationList, keyword} from '../store/slice';
-import {IMAGE, VOICE} from '../../../constants/chatDetail/Config';
-import {GIFT} from '../../../constants/Config';
+import {conversationList} from '../../chat/store/slice';
+import {checkedAtUsers, keyword} from '../store/slice';
+import ListFooter from '../../../components/ListFooter';
 import ListSeparator from '../../../components/ListSeparator';
 
 const renderItem = ({item}: {item: ItemProps}) => <Item {...item} />;
 
 const keyExtractor = (item: ItemProps, index: number) =>
-  `${item.content}-${index}`;
+  `${item.userId}-${index}`;
 
 type Props = {
-  tabBarHeight: number;
   style: StyleProp<ViewStyle>;
 };
 
@@ -29,12 +26,12 @@ export default (props: Props) => {
 
   const keywordValue = useAppSelector(keyword);
 
+  const checkedAtUsersValue = useAppSelector(checkedAtUsers);
+
   const data: ItemProps[] = conversationListValue
     .filter(conversation =>
       keywordValue
-        ? conversation.opponentUsername?.includes(keywordValue) ||
-          (conversation.lastMessageContent.includes(keywordValue) &&
-            !conversation.lastMessageType)
+        ? conversation.opponentUsername?.includes(keywordValue)
         : true,
     )
     .filter(
@@ -42,26 +39,21 @@ export default (props: Props) => {
         conversation.lastMessageTime && conversation.lastMessageContent,
     )
     .map(conversation => {
-      let content = conversation.lastMessageContent;
+      let isChecked = false;
 
-      if (conversation.lastMessageType === 2) {
-        content = `[${IMAGE}]`;
-      } else if (conversation.lastMessageType === 5) {
-        content = `[${GIFT}]`;
-      } else if (conversation.lastMessageType === 1) {
-        content = `[${VOICE}]`;
+      const existingUserIndex = checkedAtUsersValue.findIndex(
+        user => user.userId === conversation.opponentUserId,
+      );
+
+      if (existingUserIndex !== -1) {
+        isChecked = true;
       }
 
       return {
-        conversationId: conversation.conversationId,
-        clientConversationId: conversation.clientConversationId,
         userId: conversation.opponentUserId,
         avatar: conversation.opponentAvatar,
-        online: conversation.opponentOnlineStatus,
         username: conversation.opponentUsername,
-        updateTime: conversation.lastMessageTime,
-        content,
-        unreadCount: conversation.unreadCount,
+        isChecked,
       };
     });
 
@@ -74,7 +66,7 @@ export default (props: Props) => {
       showsVerticalScrollIndicator={false}
       keyExtractor={keyExtractor}
       contentContainerStyle={props.style}
-      ListFooterComponent={<Footer tabBarHeight={props.tabBarHeight} />}
+      ListFooterComponent={<ListFooter tabBarHeight={30} />}
     />
   );
 };
