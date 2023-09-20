@@ -198,7 +198,7 @@ export default (props: Props) => {
         });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [photoUri, props.type]);
+  }, []);
 
   const handleCacheProgress = useCallback(
     (res: DownloadProgressCallbackResult) => {
@@ -212,6 +212,7 @@ export default (props: Props) => {
   useEffect(() => {
     props.type === 1 &&
       props.isCached !== 1 &&
+      props.messageId !== '' &&
       RNFS.downloadFile({
         fromUrl: generateFullURL(props.content),
         toFile: voiceLocalUri,
@@ -233,7 +234,7 @@ export default (props: Props) => {
         });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.type, props.isCached]);
+  }, [voiceLocalUri, props.messageId]);
 
   const handleCacheProgressLayoutChange = useCallback(
     (event: LayoutChangeEvent) => {
