@@ -13,8 +13,8 @@ export const getLocation = (): Promise<GeoPosition | undefined> => {
           position => {
             resolve(position);
           },
-          error => {
-            reject(error);
+          () => {
+            resolve(undefined);
           },
           {
             accuracy: {
