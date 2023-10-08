@@ -14,12 +14,16 @@ type Props = {
   onBackPress: () => void;
   onMorePress: () => void;
   style: StyleProp<ViewStyle>;
+  hideMore?: boolean;
 };
 
 export default (props: Props) => {
   return (
     <View style={[styles.root, props.style]}>
-      <TouchableOpacity activeOpacity={0.7} onPress={props.onBackPress}>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={props.onBackPress}
+        style={styles.backIcon}>
         <Image source={icon_backtrack} />
       </TouchableOpacity>
 
@@ -27,9 +31,14 @@ export default (props: Props) => {
         {props.username ? props.username : getUsername(props.userId)}
       </Text>
 
-      <TouchableOpacity activeOpacity={0.7} onPress={props.onMorePress}>
-        <Image source={icon_more} />
-      </TouchableOpacity>
+      {!props.hideMore && (
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={props.onMorePress}
+          style={styles.moreIcon}>
+          <Image source={icon_more} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -37,10 +46,17 @@ export default (props: Props) => {
 const styles = StyleSheet.create({
   root: {
     width: '100%',
-    paddingHorizontal: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+  },
+  backIcon: {
+    position: 'absolute',
+    left: 20,
+  },
+  moreIcon: {
+    position: 'absolute',
+    right: 20,
   },
   txt: {
     color: '#554C5F',

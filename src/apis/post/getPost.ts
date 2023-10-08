@@ -3,6 +3,7 @@ import axiosInstance from '../axios';
 export interface GetPostResponse {
   authorId: string;
   authorAvatar: string;
+  authorGender: string;
   authorName?: string;
   createTime: number;
   isFollowed?: number;

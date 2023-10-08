@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   Image,
   LayoutAnimation,
@@ -21,24 +21,35 @@ import {
   likeOrUnlikePostAsync,
   operationPostId,
   PostId,
+  resetStatus,
+  scene,
   setOperationPostId,
+  setScene,
   status,
 } from '../../../stores/post/slice';
+import {UpdateListItemCallback} from '../../recommend/store/slice';
 
 type Props = {
   style: StyleProp<ViewStyle>;
   postId: PostId;
   count?: LikeCount;
   isLiked?: IsLiked;
+  isCommentDetail?: boolean;
+  updateListItemCallback?: UpdateListItemCallback;
 };
 
 export default (props: Props) => {
   const dispatch = useAppDispatch();
 
   const [count, setCount] = useState<LikeCount>(0);
+
   const [isLiked, setIsLiked] = useState<IsLiked>(0);
+
   const statusValue = useAppSelector(status);
+
   const operationPostIdValue = useAppSelector(operationPostId);
+
+  const sceneValue = useAppSelector(scene);
 
   useEffect(() => {
     setCount(props.count ? props.count : 0);
@@ -49,7 +60,13 @@ export default (props: Props) => {
   }, [props.isLiked]);
 
   useEffect(() => {
-    if (statusValue === 'failed' && operationPostIdValue === props.postId) {
+    if (
+      statusValue === 'failed' &&
+      sceneValue === 'like' &&
+      operationPostIdValue === props.postId
+    ) {
+      dispatch(resetStatus());
+
       const error = store.getState().post.error;
 
       showError(error);
@@ -64,13 +81,28 @@ export default (props: Props) => {
         setCount(count + 1);
       }
     }
+
+    if (
+      statusValue === 'success' &&
+      sceneValue === 'like' &&
+      operationPostIdValue === props.postId
+    ) {
+      dispatch(resetStatus());
+
+      if (props.isCommentDetail && props.updateListItemCallback) {
+        props.updateListItemCallback({isLiked, likeCount: count});
+      }
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statusValue]);
 
-  const handlePress = () => {
+  const handlePress = useCallback(() => {
     LayoutAnimation.easeInEaseOut();
 
     dispatch(setOperationPostId(props.postId));
+
+    dispatch(setScene('like'));
 
     if (isLiked) {
       setIsLiked(0);
@@ -85,9 +117,7 @@ export default (props: Props) => {
     setCount(count + 1);
 
     dispatch(likeOrUnlikePostAsync(1));
-  };
-
-  const showCountTxt = Boolean(count > 0);
+  }, [count, dispatch, isLiked, props.postId]);
 
   return (
     <TouchableOpacity
@@ -96,7 +126,7 @@ export default (props: Props) => {
       onPress={handlePress}>
       <Image source={isLiked ? icon_like_filled : icon_like_outlined} />
 
-      {showCountTxt && (
+      {count > 0 && (
         <Text style={styles.txt}>{formatNumberWithSuffix(count)}</Text>
       )}
     </TouchableOpacity>

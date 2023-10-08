@@ -22,7 +22,7 @@ import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import Footer from './components/Footer';
 import NavigationBar from './components/NavigationBar';
 import TopUp from '../topUp/TopUp';
-import {HandleSend} from '../chatDetail/store/slice';
+import {HandleSend} from './store/slice';
 
 export interface GiftRef {
   show: () => void;

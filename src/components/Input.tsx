@@ -1,4 +1,10 @@
-import React, {forwardRef, useImperativeHandle, useRef, useState} from 'react';
+import React, {
+  forwardRef,
+  useCallback,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import {
   Image,
   ImageStyle,
@@ -14,6 +20,7 @@ import icon_send from '../assets/images/icons/icon_send.png';
 
 export interface InputRef {
   blur: () => void;
+  focus: () => void;
   setText: (text: string) => void;
 }
 
@@ -27,11 +34,11 @@ export default forwardRef((props: Props, ref) => {
 
   const inputRef = useRef<TextInput>(null);
 
-  const handleChangeText = (text: string) => {
+  const handleChangeText = useCallback((text: string) => {
     setValue(text);
-  };
+  }, []);
 
-  const handlePress = () => {
+  const handlePress = useCallback(() => {
     if (!value) {
       return;
     }
@@ -39,21 +46,29 @@ export default forwardRef((props: Props, ref) => {
     setValue('');
 
     props.onSend(value);
-  };
+  }, [props, value]);
 
-  const blur = () => {
+  const blur = useCallback(() => {
     inputRef.current?.blur();
-  };
+  }, []);
 
-  const setText = (text: string) => {
-    setValue(text);
-
+  const focus = useCallback(() => {
     inputRef.current?.focus();
-  };
+  }, []);
+
+  const setText = useCallback(
+    (text: string) => {
+      setValue(text);
+
+      focus();
+    },
+    [focus],
+  );
 
   useImperativeHandle(ref, () => {
     return {
       blur,
+      focus,
       setText,
     };
   });

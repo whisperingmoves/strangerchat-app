@@ -21,6 +21,12 @@ import useLoading from './src/hooks/useLoading';
 import Search from './src/modules/search/Search';
 import ChatDetail from './src/modules/chatDetail/ChatDetail';
 import {ConversationId} from './src/modules/chat/store/slice';
+import CommentDetail from './src/modules/commentDetail/CommentDetail';
+import {
+  AuthorId,
+  AuthorName,
+  PostId,
+} from './src/modules/commentDetail/store/slice';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -36,6 +42,7 @@ export type RootStackParamList = {
     conversationId: ConversationId;
     clientConversationId?: ConversationId;
   };
+  CommentDetail: {postId: PostId; authorId: AuthorId; authorName?: AuthorName};
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -142,6 +149,15 @@ function App(): Element {
           <Stack.Screen
             name="ChatDetail"
             component={ChatDetail}
+            options={{
+              headerShown: false,
+              ...TransitionPresets.SlideFromRightIOS,
+            }}
+          />
+
+          <Stack.Screen
+            name="CommentDetail"
+            component={CommentDetail}
             options={{
               headerShown: false,
               ...TransitionPresets.SlideFromRightIOS,

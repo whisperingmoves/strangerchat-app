@@ -1,5 +1,5 @@
 import React from 'react';
-import {Alert, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
@@ -9,7 +9,9 @@ import CollectButton from './CollectButton';
 import {CommentCount, IsLiked, LikeCount} from '../../following/store/slice';
 import CommentButton from './CommentButton';
 import LikeButton from './LikeButton';
-import {PostId} from '../../../stores/post/slice';
+import {Content, PostId} from '../../../stores/post/slice';
+import {UpdateListItemCallback} from '../../recommend/store/slice';
+import {IsCollected} from '../../commentDetail/store/slice';
 
 type Props = {
   style: StyleProp<ViewStyle>;
@@ -19,31 +21,53 @@ type Props = {
   likeCount?: LikeCount;
   commentCount?: CommentCount;
   isLiked?: IsLiked;
+  isCommentDetail?: boolean;
+  updateListItemCallback?: UpdateListItemCallback;
+  content: Content;
+  isCollected?: IsCollected;
+  focusInput?: () => void;
 };
 
 export default (props: Props) => {
-  // const navigation = useNavigation<StackNavigationProp<any>>();
-
   const handlePress = () => {
-    Alert.alert("navigation.push('CommentDetail', {...props});");
+    props.focusInput && props.focusInput();
   };
 
   return (
     <View style={[styles.footer, props.style]}>
-      {!props.showCollect && <ShareButton />}
+      {!props.showCollect && (
+        <ShareButton
+          count={props.shareCount}
+          updateListItemCallback={props.updateListItemCallback}
+          isCommentDetail={props.isCommentDetail}
+          postId={props.postId}
+          content={props.content}
+        />
+      )}
 
-      {props.showCollect && <CollectButton />}
+      {props.showCollect && (
+        <CollectButton postId={props.postId} isCollected={props.isCollected} />
+      )}
 
       <PlaceHolder />
 
       {props.showCollect && (
-        <ShareButton count={props.shareCount} style={styles.likeBtn} />
+        <ShareButton
+          count={props.shareCount}
+          updateListItemCallback={props.updateListItemCallback}
+          isCommentDetail={props.isCommentDetail}
+          postId={props.postId}
+          content={props.content}
+          style={styles.likeBtn}
+        />
       )}
 
       <LikeButton
         postId={props.postId}
         isLiked={props.isLiked}
         count={props.likeCount}
+        isCommentDetail={props.isCommentDetail}
+        updateListItemCallback={props.updateListItemCallback}
         style={styles.likeBtn}
       />
 

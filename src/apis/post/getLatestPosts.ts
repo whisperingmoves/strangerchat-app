@@ -17,6 +17,7 @@ export interface LatestPostData {
   city?: string;
   likeCount?: number;
   commentCount?: number;
+  shareCount?: number;
   postId: string;
   isLiked?: number;
   isFollowed?: number;

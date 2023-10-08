@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import {RootState} from '../../../stores/store';
 import {getFollowedPosts} from './api';
@@ -21,11 +21,19 @@ export type AuthorAvatar = string;
 
 export type AuthorId = string;
 
+export type PostId = string;
+
 export type City = string;
 
 export type LikeCount = number;
 
+export type ShareCount = number;
+
 export type CommentCount = number;
+
+export type IsFollowed = number;
+
+export type IsBlocked = number;
 
 export type Error = string;
 
@@ -69,6 +77,60 @@ export const slice = createSlice({
     resetPage: state => {
       state.page = initialState.page;
     },
+
+    updateListItemByAuthorId: (
+      state,
+      action: PayloadAction<{
+        authorId: AuthorId;
+        isFollowed?: IsFollowed;
+        isBlocked?: IsBlocked;
+      }>,
+    ) => {
+      const listItem = action.payload;
+
+      const updateList = state.list;
+
+      updateList.forEach((item, index) => {
+        if (item.authorId !== listItem.authorId) {
+          return;
+        }
+
+        updateList[index] = {
+          ...updateList[index],
+          ...listItem,
+        };
+      });
+
+      state.list = updateList;
+    },
+
+    updateListItemByPostId: (
+      state,
+      action: PayloadAction<{
+        postId: PostId;
+        isLiked?: IsLiked;
+        likeCount?: LikeCount;
+        commentCount?: CommentCount;
+        shareCount?: ShareCount;
+      }>,
+    ) => {
+      const listItem = action.payload;
+
+      const updateList = state.list;
+
+      updateList.forEach((item, index) => {
+        if (item.postId !== listItem.postId) {
+          return;
+        }
+
+        updateList[index] = {
+          ...updateList[index],
+          ...listItem,
+        };
+      });
+
+      state.list = updateList;
+    },
   },
 
   extraReducers: builder => {
@@ -87,7 +149,12 @@ export const slice = createSlice({
   },
 });
 
-export const {resetStatus, resetPage} = slice.actions;
+export const {
+  resetStatus,
+  resetPage,
+  updateListItemByAuthorId,
+  updateListItemByPostId,
+} = slice.actions;
 
 export const status = (state: RootState) => state.following.status;
 

@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import Home from '../home/Home';
@@ -45,6 +45,8 @@ import {SentMessage} from '../../apis/notification/sentMessage';
 import {MarkedAsReadMessage} from '../../apis/notification/markedAsReadMessage';
 import {CoinBalance} from '../../apis/notification/coinBalance';
 import {setUser} from '../../stores/user/slice';
+import ViewShot from 'react-native-view-shot';
+import {ViewShotContext} from '../../contexts/ViewShotContext';
 
 export type RootBottomTabParamList = {
   Home: undefined;
@@ -199,58 +201,62 @@ export default () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const viewShotRef = useRef<ViewShot>(null);
+
   return (
-    <View style={styles.root}>
-      {/* eslint-disable-next-line react/no-unstable-nested-components */}
-      <BottomTab.Navigator tabBar={props => <TabBar {...props} />}>
-        <BottomTab.Screen
-          name="Home"
-          component={Home}
-          options={{
-            title: HOME,
-            headerShown: false,
-          }}
-        />
+    <ViewShot style={styles.root} ref={viewShotRef}>
+      <ViewShotContext.Provider value={viewShotRef}>
+        {/* eslint-disable-next-line react/no-unstable-nested-components */}
+        <BottomTab.Navigator tabBar={props => <TabBar {...props} />}>
+          <BottomTab.Screen
+            name="Home"
+            component={Home}
+            options={{
+              title: HOME,
+              headerShown: false,
+            }}
+          />
 
-        <BottomTab.Screen
-          name="Explore"
-          component={Explore}
-          options={{
-            title: EXPLORE,
-            headerShown: false,
-          }}
-        />
+          <BottomTab.Screen
+            name="Explore"
+            component={Explore}
+            options={{
+              title: EXPLORE,
+              headerShown: false,
+            }}
+          />
 
-        <BottomTab.Screen
-          name="Post"
-          component={Empty}
-          options={{
-            title: POST,
-            headerShown: false,
-          }}
-        />
+          <BottomTab.Screen
+            name="Post"
+            component={Empty}
+            options={{
+              title: POST,
+              headerShown: false,
+            }}
+          />
 
-        <BottomTab.Screen
-          name="Chat"
-          component={Chat}
-          options={{
-            title: CHAT,
-            headerShown: false,
-          }}
-        />
+          <BottomTab.Screen
+            name="Chat"
+            component={Chat}
+            options={{
+              title: CHAT,
+              headerShown: false,
+            }}
+          />
 
-        <BottomTab.Screen
-          name="Profile"
-          component={Profile}
-          options={{
-            title: PROFILE,
-            headerShown: false,
-          }}
-        />
-      </BottomTab.Navigator>
+          <BottomTab.Screen
+            name="Profile"
+            component={Profile}
+            options={{
+              title: PROFILE,
+              headerShown: false,
+            }}
+          />
+        </BottomTab.Navigator>
 
-      <DailyAttendance ref={dailyAttendanceRef} />
-    </View>
+        <DailyAttendance ref={dailyAttendanceRef} />
+      </ViewShotContext.Provider>
+    </ViewShot>
   );
 };
 

@@ -33,6 +33,7 @@ import {
 import {selectPhoto, takePhoto} from '../../../utils/image';
 import {store} from '../../../stores/store';
 import AudioRecorder, {AudioRecorderRef} from './AudioRecorder';
+import {HandleSend as HandleGiftSend} from '../../gift/store/slice';
 
 type Props = {
   style: ViewStyle;
@@ -147,6 +148,13 @@ export default (props: Props) => {
     audioRecorderRef.current?.hide();
   }, []);
 
+  const handleGiftSend: HandleGiftSend = useCallback(
+    gift => {
+      props.handleSend(gift.image, 5, gift.id);
+    },
+    [props],
+  );
+
   return (
     <View style={[styles.root, props.style]}>
       {btnList.map((value, index) => {
@@ -180,7 +188,7 @@ export default (props: Props) => {
         );
       })}
 
-      <Gift ref={giftRef} handleSend={props.handleSend} />
+      <Gift ref={giftRef} handleSend={handleGiftSend} />
 
       <AudioRecorder
         ref={audioRecorderRef}

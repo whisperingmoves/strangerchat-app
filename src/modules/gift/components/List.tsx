@@ -9,6 +9,8 @@ import {
   list,
   resetPage,
   resetStatus,
+  scene,
+  setScene,
   status,
 } from '../store/slice';
 import {transformItemArray} from '../helper';
@@ -25,6 +27,8 @@ export default () => {
 
   const statusValue = useAppSelector(status);
 
+  const sceneValue = useAppSelector(scene);
+
   const refreshing = useMemo(() => statusValue === 'loading', [statusValue]);
 
   const dispatch = useAppDispatch();
@@ -32,23 +36,27 @@ export default () => {
   const refresh = useCallback(() => {
     dispatch(resetPage());
 
+    dispatch(setScene('getGiftList'));
+
     dispatch(getGiftListAsync());
   }, [dispatch]);
 
   const load = useCallback(() => {
+    dispatch(setScene('getGiftList'));
+
     dispatch(getGiftListAsync());
   }, [dispatch]);
 
   const data = transformItemArray(listValue);
 
   useEffect(() => {
-    if (statusValue === 'success') {
+    if (statusValue === 'success' && sceneValue === 'getGiftList') {
       dispatch(resetStatus());
 
       return;
     }
 
-    if (statusValue === 'failed') {
+    if (statusValue === 'failed' && sceneValue === 'getGiftList') {
       dispatch(resetStatus());
 
       const {error} = store.getState().gift;

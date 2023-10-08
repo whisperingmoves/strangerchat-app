@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   Image,
   LayoutAnimation,
@@ -23,7 +23,11 @@ import {
   ConversationId,
   CreateTime,
 } from '../../following/store/slice';
-import {IsBlocked, IsFollowed} from '../../recommend/store/slice';
+import {
+  IsBlocked,
+  IsFollowed,
+  UpdateListItemCallback,
+} from '../../recommend/store/slice';
 import ChatButton from './ChatButton';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {
@@ -53,10 +57,12 @@ type Props = {
   isFollowing?: boolean;
   isRecommend?: boolean;
   isLatest?: boolean;
+  isCommentDetail?: boolean;
   isFollowed?: IsFollowed;
   isBlocked?: IsBlocked;
   conversationId?: ConversationId;
   style: StyleProp<ViewStyle>;
+  updateListItemCallback?: UpdateListItemCallback;
 };
 
 export default (props: Props) => {
@@ -96,15 +102,17 @@ export default (props: Props) => {
     );
   }, [props.isFollowed, props.isFollowing]);
 
+  const handleStatusChange = useCallback(() => {
+    LayoutAnimation.easeInEaseOut();
+
+    const followValue = isFollowed ? 0 : 1;
+
+    setIsFollowed(followValue);
+  }, [isFollowed]);
+
   useEffect(() => {
     const isSameAuthor = operationUserIdValue === props.authorId;
     const isSamePost = operationPostIdValue === props.postId;
-
-    const handleStatusChange = () => {
-      dispatch(resetStatus());
-      LayoutAnimation.easeInEaseOut();
-      setIsFollowed(isFollowed ? 0 : 1);
-    };
 
     if (
       statusValue === 'failed' &&
@@ -112,8 +120,12 @@ export default (props: Props) => {
       isSameAuthor &&
       isSamePost
     ) {
+      dispatch(resetStatus());
+
       const error = useAppSelector(state => state.user.error);
+
       showError(error);
+
       handleStatusChange();
     }
 
@@ -125,10 +137,23 @@ export default (props: Props) => {
     ) {
       handleStatusChange();
     }
+
+    if (
+      statusValue === 'success' &&
+      sceneValue === 'postItem' &&
+      isSameAuthor &&
+      isSamePost
+    ) {
+      dispatch(resetStatus());
+
+      if (props.isCommentDetail && props.updateListItemCallback) {
+        props.updateListItemCallback({isFollowed});
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statusValue]);
 
-  const handleFollow = () => {
+  const handleFollow = useCallback(() => {
     LayoutAnimation.easeInEaseOut();
 
     dispatch(setScene('postItem'));
@@ -138,9 +163,9 @@ export default (props: Props) => {
     const followValue = isFollowed ? 0 : 1;
     setIsFollowed(followValue);
     dispatch(followOrUnfollowUserAsync(followValue));
-  };
+  }, [dispatch, isFollowed, props.authorId, props.postId]);
 
-  const renderActionButton = () => {
+  const renderActionButton = useCallback(() => {
     if (props.authorId !== userId) {
       if (isFollowed || conversationId || clientConversationId) {
         return (
@@ -159,7 +184,17 @@ export default (props: Props) => {
     }
 
     return null;
-  };
+  }, [
+    clientConversationId,
+    conversationId,
+    handleFollow,
+    isFollowed,
+    props.authorAvatar,
+    props.authorId,
+    props.isBlocked,
+    props.isFollowed,
+    userId,
+  ]);
 
   return (
     <View style={[styles.root, props.style]}>
@@ -175,7 +210,7 @@ export default (props: Props) => {
           {props.authorName ? props.authorName : getUsername(props.authorId)}
         </Text>
         <Text style={styles.createTimeTxt}>
-          {props.isFollowing || props.isLatest
+          {props.isFollowing || props.isLatest || props.isCommentDetail
             ? formatTimeAgo(props.createTime as CreateTime)
             : FOR_YOU}
         </Text>

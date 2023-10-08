@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {FlatList, Platform, StyleSheet} from 'react-native';
 
 import Item, {Props as ItemProps} from '../postItem/PostItem';
 
 import Separator from './components/Separator';
 import Footer from '../../components/ListFooter';
+import {resetPostDetail} from '../commentDetail/store/slice';
+import {useAppDispatch} from '../../hooks';
 
 const keyExtractor = (item: ItemProps, index: number) =>
   `${item.postId}-${index}`;
@@ -24,6 +26,12 @@ type Props = {
 };
 
 export default (props: Props) => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(resetPostDetail());
+  }, [dispatch]);
+
   return (
     <FlatList
       style={styles.root}

@@ -15,6 +15,7 @@ export interface FollowedPostData {
   city?: string;
   likeCount?: number;
   commentCount?: number;
+  shareCount?: number;
   postId: string;
   isLiked?: number;
   conversationId?: string;

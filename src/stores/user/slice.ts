@@ -9,6 +9,8 @@ import {blockOrUnblockUser, followOrUnfollowUser, registerUser} from './api';
 import {VerifyCodeResponse} from '../../apis/verification/verifyCode';
 import {Mobile} from '../../modules/login/store/slice';
 
+export type FreeHeatsLeft = number;
+
 export type UserId = string;
 
 export type Error = string;
@@ -20,6 +22,10 @@ export type Scene =
   | 'unfollowUserOnChatDetail'
   | 'blockUserOnChatDetail'
   | 'unblockUserOnChatDetail'
+  | 'followUserOnCommentDetail'
+  | 'unfollowUserOnCommentDetail'
+  | 'blockUserOnCommentDetail'
+  | 'unblockUserOnCommentDetail'
   | undefined;
 
 export type Status = 'idle' | 'loading' | 'failed' | 'success';
@@ -178,5 +184,7 @@ export const operationUserId = (state: RootState) => state.user.operationUserId;
 export const coinBalance = (state: RootState) => state.user.coinBalance;
 
 export const avatar = (state: RootState) => state.user.avatar;
+
+export const freeHeatsLeft = (state: RootState) => state.user.freeHeatsLeft;
 
 export default slice.reducer;

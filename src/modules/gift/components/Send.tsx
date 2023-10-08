@@ -2,9 +2,8 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {SEND} from '../../../constants/Config';
-import {resetSelectedGift, selectedGift} from '../store/slice';
+import {HandleSend, resetSelectedGift, selectedGift} from '../store/slice';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
-import {HandleSend} from '../../chatDetail/store/slice';
 import {coinBalance} from '../../../stores/user/slice';
 import {showError} from '../../../utils/notification';
 import {INSUFFICIENT_GOLD_BALANCE} from '../../../constants/gift/Config';
@@ -32,7 +31,7 @@ export default (props: Props) => {
       return;
     }
 
-    props.handleSend(gift.image, 5, gift.id);
+    props.handleSend(gift);
 
     setTimeout(() => {
       props.hide();

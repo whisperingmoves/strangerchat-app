@@ -22,7 +22,14 @@ export default (props: Props) => {
 
   const sceneValue = useAppSelector(scene);
 
-  const data = useAppSelector(list);
+  const listValue = useAppSelector(list);
+
+  const data = listValue.map(item => {
+    return {
+      ...item,
+      authorGender: '',
+    };
+  });
 
   const dispatch = useAppDispatch();
 

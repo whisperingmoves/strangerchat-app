@@ -14,7 +14,7 @@ export type Page = number;
 
 export type PageSize = number;
 
-export type Scene = 'chatDetail' | 'postDetail';
+export type Scene = 'getGiftList' | 'sendGift';
 
 export type Id = string;
 
@@ -23,6 +23,8 @@ export type Image = string;
 export type Name = string;
 
 export type Value = number;
+
+export type HandleSend = (data: GiftData) => void;
 
 export interface State {
   list: GiftData[];

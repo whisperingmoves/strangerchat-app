@@ -28,6 +28,7 @@ import chatReducer from '../modules/chat/store/slice';
 import chatDetailReducer from '../modules/chatDetail/store/slice';
 import giftReducer from '../modules/gift/store/slice';
 import topUpReducer from '../modules/topUp/store/slice';
+import commentDetailReducer from '../modules/commentDetail/store/slice';
 
 export const LOG_OUT = 'LOG_OUT';
 
@@ -58,6 +59,7 @@ const appReducer = combineReducers({
   chatDetail: chatDetailReducer,
   gift: giftReducer,
   topUp: topUpReducer,
+  commentDetail: commentDetailReducer,
 });
 
 const rootReducer = (state: any, action: any) => {

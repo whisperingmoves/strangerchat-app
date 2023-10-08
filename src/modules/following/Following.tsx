@@ -24,6 +24,7 @@ export default (props: Props) => {
     return {
       ...item,
       isFollowing: true,
+      authorGender: '',
     };
   });
 

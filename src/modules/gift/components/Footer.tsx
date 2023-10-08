@@ -3,7 +3,7 @@ import {StyleSheet, View} from 'react-native';
 
 import TopUp from './TopUp';
 import Send from './Send';
-import {HandleSend} from '../../chatDetail/store/slice';
+import {HandleSend} from '../store/slice';
 
 type Props = {
   handleTopUpPress: () => void;

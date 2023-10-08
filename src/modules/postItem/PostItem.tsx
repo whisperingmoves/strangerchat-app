@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
@@ -12,22 +12,54 @@ import Location from './components/Location';
 import Footer from './components/Footer';
 import {LatestPostData} from '../../apis/post/getLatestPosts';
 import AtUserList from '../../components/AtUserList';
+import {GetPostResponse} from '../../apis/post/getPost';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {UpdateListItemCallback} from '../recommend/store/slice';
 
 type CustomProps = {
   isFollowing?: boolean;
   isRecommend?: boolean;
   isLatest?: boolean;
   showCollect?: boolean;
+  isCommentDetail?: boolean;
   contentContainerStyle?: ViewStyle;
   locationStyle?: ViewStyle;
   footerStyle?: ViewStyle;
+  updateListItemCallback?: UpdateListItemCallback;
+  focusInput?: () => void;
 };
 
-type PostDetailProps = FollowedPostData & RecommendedPostData & LatestPostData;
+type PostDetailProps = FollowedPostData &
+  RecommendedPostData &
+  LatestPostData &
+  GetPostResponse;
 
 export type Props = PostDetailProps & CustomProps;
 
 export default (props: Props) => {
+  const handleAtUserPress = useCallback(() => {}, []);
+
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const handlePress = useCallback(() => {
+    if (props.isCommentDetail) {
+      return;
+    }
+
+    navigation.push('CommentDetail', {
+      postId: props.postId,
+      authorId: props.authorId,
+      authorName: props.authorName,
+    });
+  }, [
+    navigation,
+    props.authorId,
+    props.authorName,
+    props.isCommentDetail,
+    props.postId,
+  ]);
+
   let photoIsMarginLeft: boolean = true;
   if (
     props.contentContainerStyle &&
@@ -36,10 +68,11 @@ export default (props: Props) => {
     photoIsMarginLeft = false;
   }
 
-  const handleAtUserPress = useCallback(() => {}, []);
-
   return (
-    <View style={styles.root}>
+    <TouchableOpacity
+      activeOpacity={0.7}
+      style={styles.root}
+      onPress={handlePress}>
       <Header
         authorId={props.authorId}
         authorAvatar={props.authorAvatar}
@@ -49,10 +82,12 @@ export default (props: Props) => {
         isFollowing={props.isFollowing}
         isRecommend={props.isRecommend}
         isLatest={props.isLatest}
+        isCommentDetail={props.isCommentDetail}
         isFollowed={props.isFollowed}
         isBlocked={props.isBlocked}
         conversationId={props.conversationId}
         style={styles.header}
+        updateListItemCallback={props.updateListItemCallback}
       />
 
       <View style={[styles.contentContainer, props.contentContainerStyle]}>
@@ -85,7 +120,7 @@ export default (props: Props) => {
 
         <Footer {...props} style={[styles.footer, props.footerStyle]} />
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
