@@ -28,6 +28,8 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {
   BLOCK,
   BLOCK_SUCCESSFULLY,
+  CANCEL,
+  FOLLOW,
   FOLLOW_SUCCESSFULLY,
   REPORT,
   REPORT_SUCCESSFULLY,
@@ -35,8 +37,7 @@ import {
   UNBLOCK_SUCCESSFULLY,
   UNFOLLOW,
   UNFOLLOW_SUCCESSFULLY,
-} from '../../constants/chatDetail/Config';
-import {CANCEL, FOLLOW} from '../../constants/Config';
+} from '../../constants/Config';
 import {
   blockOrUnblockUserAsync,
   followOrUnfollowUserAsync,

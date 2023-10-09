@@ -1,5 +1,13 @@
-import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useCallback, useMemo, useState} from 'react';
+import {
+  Image,
+  LayoutAnimation,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import Like from './Like';
 import {
@@ -13,6 +21,13 @@ import {
 } from '../store/slice';
 import {generateFullURL, getUsername} from '../../helper';
 import {formatTimeAgo} from '../../../utils/date';
+import {REPORT} from '../../../constants/Config';
+import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
+import {
+  reportUserAsync,
+  setScene as setUserScene,
+} from '../../../stores/user/slice';
+import {useAppDispatch} from '../../../hooks';
 
 export type Props = {
   commentId: CommentId;
@@ -25,8 +40,41 @@ export type Props = {
 };
 
 export default (props: Props) => {
+  const [showFab, setShowFab] = useState(false);
+
+  const handleLongPress = useCallback(() => {
+    LayoutAnimation.spring();
+
+    setShowFab(true);
+  }, []);
+
+  const handlePress = useCallback(() => {
+    LayoutAnimation.spring();
+
+    setShowFab(false);
+  }, []);
+
+  const tabStyle: ViewStyle = useMemo(() => {
+    return {
+      opacity: showFab ? 1 : 0,
+    };
+  }, [showFab]);
+
+  const dispatch = useAppDispatch();
+
+  const handleReport = useCallback(() => {
+    dispatch(setUserScene('reportUserOnCommentDetail'));
+
+    dispatch(reportUserAsync(props.userId));
+
+    handlePress();
+  }, [dispatch, handlePress, props.userId]);
+
   return (
-    <View style={styles.root}>
+    <Pressable
+      style={styles.root}
+      onLongPress={handleLongPress}
+      onPress={handlePress}>
       <View style={styles.header}>
         <TouchableOpacity activeOpacity={0.7}>
           <Image
@@ -49,7 +97,14 @@ export default (props: Props) => {
       </View>
 
       <Text style={styles.contentTxt}>{props.content}</Text>
-    </View>
+
+      <TouchableOpacity
+        activeOpacity={0.7}
+        style={[styles.fab, tabStyle]}
+        onPress={handleReport}>
+        <Text style={styles.fabTxt}>{REPORT}</Text>
+      </TouchableOpacity>
+    </Pressable>
   );
 };
 
@@ -92,5 +147,22 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     includeFontPadding: false,
     marginLeft: 46 + 10,
+  },
+  fab: {
+    backgroundColor: '#F1F0F3',
+    width: 56,
+    height: 30,
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    left: '50%',
+    marginLeft: -28,
+  },
+  fabTxt: {
+    color: '#696173',
+    textAlignVertical: 'center',
+    includeFontPadding: false,
+    fontSize: 12,
   },
 });

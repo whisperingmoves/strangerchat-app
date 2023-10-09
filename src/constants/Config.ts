@@ -44,3 +44,21 @@ export const YESTERDAY = 'Yesterday';
 
 export const ALLOW_ACCESS_MICROPHONE =
   'Please allow the app to access your microphone in your app settings';
+
+export const BLOCK = 'Block';
+
+export const UNBLOCK = 'Unblock';
+
+export const UNFOLLOW = 'Unfollow';
+
+export const REPORT = 'Report';
+
+export const FOLLOW_SUCCESSFULLY = 'Follow successfully';
+
+export const UNFOLLOW_SUCCESSFULLY = 'Unfollow successfully';
+
+export const BLOCK_SUCCESSFULLY = 'Block successfully';
+
+export const UNBLOCK_SUCCESSFULLY = 'Unblock successfully';
+
+export const REPORT_SUCCESSFULLY = 'Report successfully';

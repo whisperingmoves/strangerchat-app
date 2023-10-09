@@ -37,10 +37,11 @@ import {
 import {StackNavigationProp} from '@react-navigation/stack';
 import {InputRef} from '../../components/Input';
 import {useActionSheet} from '@expo/react-native-action-sheet';
-import {CANCEL, FOLLOW} from '../../constants/Config';
 import {
   BLOCK,
   BLOCK_SUCCESSFULLY,
+  CANCEL,
+  FOLLOW,
   FOLLOW_SUCCESSFULLY,
   REPORT,
   REPORT_SUCCESSFULLY,
@@ -48,7 +49,7 @@ import {
   UNBLOCK_SUCCESSFULLY,
   UNFOLLOW,
   UNFOLLOW_SUCCESSFULLY,
-} from '../../constants/chatDetail/Config';
+} from '../../constants/Config';
 import {showError, showSuccess} from '../../utils/notification';
 import {store} from '../../stores/store';
 import {IsBlocked, IsFollowed} from '../recommend/store/slice';
