@@ -29,6 +29,8 @@ import {
   BLOCK,
   BLOCK_SUCCESSFULLY,
   FOLLOW_SUCCESSFULLY,
+  REPORT,
+  REPORT_SUCCESSFULLY,
   UNBLOCK,
   UNBLOCK_SUCCESSFULLY,
   UNFOLLOW,
@@ -38,6 +40,7 @@ import {CANCEL, FOLLOW} from '../../constants/Config';
 import {
   blockOrUnblockUserAsync,
   followOrUnfollowUserAsync,
+  reportUserAsync,
   resetStatus as resetUserStatus,
   scene as userScene,
   setOperationUserId,
@@ -176,7 +179,8 @@ export default (props: Props) => {
       (userSceneValue === 'followUserOnCommentDetail' ||
         userSceneValue === 'unfollowUserOnCommentDetail' ||
         userSceneValue === 'blockUserOnCommentDetail' ||
-        userSceneValue === 'unblockUserOnCommentDetail')
+        userSceneValue === 'unblockUserOnCommentDetail' ||
+        userSceneValue === 'reportUserOnCommentDetail')
     ) {
       dispatch(resetUserStatus());
 
@@ -204,6 +208,8 @@ export default (props: Props) => {
         isBlocked = 0;
 
         successMsg = UNBLOCK_SUCCESSFULLY;
+      } else if (userSceneValue === 'reportUserOnCommentDetail') {
+        successMsg = REPORT_SUCCESSFULLY;
       }
 
       dispatch(
@@ -223,7 +229,8 @@ export default (props: Props) => {
       (userSceneValue === 'followUserOnCommentDetail' ||
         userSceneValue === 'unfollowUserOnCommentDetail' ||
         userSceneValue === 'blockUserOnCommentDetail' ||
-        userSceneValue === 'unblockUserOnCommentDetail')
+        userSceneValue === 'unblockUserOnCommentDetail' ||
+        userSceneValue === 'reportUserOnCommentDetail')
     ) {
       dispatch(resetUserStatus());
 
@@ -277,10 +284,11 @@ export default (props: Props) => {
     const options = [
       postDetailValue.isFollowed ? UNFOLLOW : FOLLOW,
       postDetailValue.isBlocked ? UNBLOCK : BLOCK,
+      REPORT,
       CANCEL,
     ];
 
-    const cancelButtonIndex = 2;
+    const cancelButtonIndex = 3;
 
     showActionSheetWithOptions(
       {
@@ -324,6 +332,12 @@ export default (props: Props) => {
             dispatch(
               blockOrUnblockUserAsync(postDetailValue.isBlocked ? 0 : 1),
             );
+
+            break;
+          case 2:
+            dispatch(setUserScene('reportUserOnCommentDetail'));
+
+            dispatch(reportUserAsync(authorId));
 
             break;
         }
