@@ -23,6 +23,7 @@ import {
   avatar,
   blockOrUnblockUserAsync,
   followOrUnfollowUserAsync,
+  reportUserAsync,
   resetStatus as resetUserStatus,
   scene as userScene,
   setOperationUserId,
@@ -41,6 +42,8 @@ import {
   BLOCK,
   BLOCK_SUCCESSFULLY,
   FOLLOW_SUCCESSFULLY,
+  REPORT,
+  REPORT_SUCCESSFULLY,
   UNBLOCK,
   UNBLOCK_SUCCESSFULLY,
   UNFOLLOW,
@@ -111,7 +114,8 @@ export default (props: Props) => {
       (userSceneValue === 'followUserOnChatDetail' ||
         userSceneValue === 'unfollowUserOnChatDetail' ||
         userSceneValue === 'blockUserOnChatDetail' ||
-        userSceneValue === 'unblockUserOnChatDetail')
+        userSceneValue === 'unblockUserOnChatDetail' ||
+        userSceneValue === 'reportUserOnChatDetail')
     ) {
       dispatch(resetUserStatus());
 
@@ -139,6 +143,8 @@ export default (props: Props) => {
         isBlocked = 0;
 
         successMsg = UNBLOCK_SUCCESSFULLY;
+      } else if (userSceneValue === 'reportUserOnChatDetail') {
+        successMsg = REPORT_SUCCESSFULLY;
       }
 
       dispatch(
@@ -160,7 +166,8 @@ export default (props: Props) => {
       (userSceneValue === 'followUserOnChatDetail' ||
         userSceneValue === 'unfollowUserOnChatDetail' ||
         userSceneValue === 'blockUserOnChatDetail' ||
-        userSceneValue === 'unblockUserOnChatDetail')
+        userSceneValue === 'unblockUserOnChatDetail' ||
+        userSceneValue === 'reportUserOnChatDetail')
     ) {
       dispatch(resetUserStatus());
 
@@ -192,10 +199,11 @@ export default (props: Props) => {
     const options = [
       conversation.isFollowed ? UNFOLLOW : FOLLOW,
       conversation.isBlocked ? UNBLOCK : BLOCK,
+      REPORT,
       CANCEL,
     ];
 
-    const cancelButtonIndex = 2;
+    const cancelButtonIndex = 3;
 
     showActionSheetWithOptions(
       {
@@ -237,6 +245,12 @@ export default (props: Props) => {
             dispatch(setOperationUserId(conversation.opponentUserId));
 
             dispatch(blockOrUnblockUserAsync(conversation.isBlocked ? 0 : 1));
+
+            break;
+          case 2:
+            dispatch(setScene('reportUserOnChatDetail'));
+
+            dispatch(reportUserAsync(conversation.opponentUserId));
 
             break;
         }

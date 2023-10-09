@@ -11,6 +11,10 @@ import {
   blockOrUnblockUser as blockOrUnblockUserApi,
   BlockUserRequest,
 } from '../../apis/user/blockOrUnblockUser';
+import {
+  reportUser as reportUserApi,
+  ReportUserRequest,
+} from '../../apis/user/reportUser';
 
 export const registerUser = async (
   request: RegisterUserRequest,
@@ -30,4 +34,11 @@ export const blockOrUnblockUser = async (
   token: string,
 ): Promise<void> => {
   return await blockOrUnblockUserApi(request, token);
+};
+
+export const reportUser = async (
+  request: ReportUserRequest,
+  token: string,
+): Promise<void> => {
+  return await reportUserApi(request, token);
 };

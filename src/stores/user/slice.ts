@@ -5,7 +5,12 @@ import {
 } from '../../apis/user/registerUser';
 import {copy} from '../../utils/object';
 import {RootState} from '../store';
-import {blockOrUnblockUser, followOrUnfollowUser, registerUser} from './api';
+import {
+  blockOrUnblockUser,
+  followOrUnfollowUser,
+  registerUser,
+  reportUser,
+} from './api';
 import {VerifyCodeResponse} from '../../apis/verification/verifyCode';
 import {Mobile} from '../../modules/login/store/slice';
 
@@ -22,10 +27,12 @@ export type Scene =
   | 'unfollowUserOnChatDetail'
   | 'blockUserOnChatDetail'
   | 'unblockUserOnChatDetail'
+  | 'reportUserOnChatDetail'
   | 'followUserOnCommentDetail'
   | 'unfollowUserOnCommentDetail'
   | 'blockUserOnCommentDetail'
   | 'unblockUserOnCommentDetail'
+  | 'reportUserOnCommentDetail'
   | undefined;
 
 export type Status = 'idle' | 'loading' | 'failed' | 'success';
@@ -87,6 +94,16 @@ export const blockOrUnblockUserAsync = createAsyncThunk<
   const {token, operationUserId: userId} = getState().user;
 
   return await blockOrUnblockUser({userId: userId as UserId, action}, token);
+});
+
+export const reportUserAsync = createAsyncThunk<
+  void,
+  string,
+  {state: {user: State}}
+>('user/reportUser', async (userId, {getState}) => {
+  const {token} = getState().user;
+
+  return await reportUser({userId}, token);
 });
 
 export const slice = createSlice({
@@ -157,6 +174,22 @@ export const slice = createSlice({
       })
 
       .addCase(blockOrUnblockUserAsync.rejected, (state, action) => {
+        state.status = 'failed';
+
+        state.error = action.error.message || '';
+      })
+
+      .addCase(reportUserAsync.pending, state => {
+        state.status = 'loading';
+      })
+
+      .addCase(reportUserAsync.fulfilled, (state, action) => {
+        state.status = 'success';
+
+        copy(state, action.payload);
+      })
+
+      .addCase(reportUserAsync.rejected, (state, action) => {
         state.status = 'failed';
 
         state.error = action.error.message || '';
