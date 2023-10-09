@@ -12,6 +12,8 @@ import {
   getPostAsync,
   postDetail,
   PostId,
+  resetCommentParentId,
+  resetCommentPlaceHolder,
   resetPostDetail,
   resetStatus as resetCommentDetailStatus,
   scene as commentDetailScene,
@@ -366,7 +368,11 @@ export default (props: Props) => {
 
   const focusInput = useCallback(() => {
     inputRef.current?.focus();
-  }, []);
+
+    dispatch(resetCommentPlaceHolder());
+
+    dispatch(resetCommentParentId());
+  }, [dispatch]);
 
   return (
     <ViewShot style={[styles.root, statusBarStyle]} ref={viewShotRef}>

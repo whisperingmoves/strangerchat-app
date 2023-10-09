@@ -18,6 +18,8 @@ import {
   Content,
   CreateTime,
   IsLiked,
+  setCommentParentId,
+  setCommentPlaceHolder,
 } from '../store/slice';
 import {generateFullURL, getUsername} from '../../helper';
 import {formatTimeAgo} from '../../../utils/date';
@@ -28,6 +30,7 @@ import {
   setScene as setUserScene,
 } from '../../../stores/user/slice';
 import {useAppDispatch} from '../../../hooks';
+import {REPLY_COMMENT} from '../../../constants/commentDetail/Config';
 
 export type Props = {
   commentId: CommentId;
@@ -48,11 +51,23 @@ export default (props: Props) => {
     setShowFab(true);
   }, []);
 
+  const dispatch = useAppDispatch();
+
   const handlePress = useCallback(() => {
     LayoutAnimation.spring();
 
     setShowFab(false);
-  }, []);
+
+    dispatch(
+      setCommentPlaceHolder(
+        REPLY_COMMENT(
+          props.username ? props.username : getUsername(props.userId),
+        ),
+      ),
+    );
+
+    dispatch(setCommentParentId(props.commentId));
+  }, [dispatch, props.commentId, props.userId, props.username]);
 
   const tabStyle: ViewStyle = useMemo(() => {
     return {
@@ -60,15 +75,15 @@ export default (props: Props) => {
     };
   }, [showFab]);
 
-  const dispatch = useAppDispatch();
-
   const handleReport = useCallback(() => {
     dispatch(setUserScene('reportUserOnCommentDetail'));
 
     dispatch(reportUserAsync(props.userId));
 
-    handlePress();
-  }, [dispatch, handlePress, props.userId]);
+    LayoutAnimation.spring();
+
+    setShowFab(false);
+  }, [dispatch, props.userId]);
 
   return (
     <Pressable

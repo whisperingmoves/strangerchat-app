@@ -8,6 +8,8 @@ import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {
   CommentCount,
   CommentId,
+  commentParentId,
+  commentPlaceHolder,
   commentPostAsync,
   Content,
   postCommentContent,
@@ -41,6 +43,10 @@ export default forwardRef((props: Props, ref) => {
   const postCommentIdValue = useAppSelector(postCommentId);
 
   const postCommentContentValue = useAppSelector(postCommentContent);
+
+  const commentPlaceHolderValue = useAppSelector(commentPlaceHolder);
+
+  const commentParentIdValue = useAppSelector(commentParentId);
 
   useEffect(() => {
     if (statusValue === 'success' && sceneValue === 'commentPost') {
@@ -79,14 +85,26 @@ export default forwardRef((props: Props, ref) => {
     (value: string) => {
       dispatch(setScene('commentPost'));
 
-      dispatch(commentPostAsync({postId: props.postId, content: value}));
+      dispatch(
+        commentPostAsync({
+          postId: props.postId,
+          content: value,
+          parentId: commentParentIdValue ? commentParentIdValue : undefined,
+        }),
+      );
     },
-    [dispatch, props.postId],
+    [commentParentIdValue, dispatch, props.postId],
   );
 
   return (
     <View style={[styles.root, props.style]}>
-      <Input placeholder={ENTER_COMMENT} onSend={handleSend} ref={ref} />
+      <Input
+        placeholder={
+          commentPlaceHolderValue ? commentPlaceHolderValue : ENTER_COMMENT
+        }
+        onSend={handleSend}
+        ref={ref}
+      />
     </View>
   );
 });

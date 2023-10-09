@@ -8,6 +8,8 @@ import ListFooter from '../../../components/ListFooter';
 import {
   getPostCommentsAsync,
   list,
+  resetCommentParentId,
+  resetCommentPlaceHolder,
   resetPage,
   resetStatus,
   scene,
@@ -56,6 +58,10 @@ export default (props: Props) => {
 
   const refresh = useCallback(() => {
     dispatch(resetPage());
+
+    dispatch(resetCommentParentId());
+
+    dispatch(resetCommentPlaceHolder());
 
     dispatch(setScene('getPostComments'));
 

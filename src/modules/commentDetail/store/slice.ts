@@ -55,6 +55,8 @@ export type IsCollected = number;
 
 export type IsLiked = number;
 
+export type CommentPlaceHolder = string;
+
 export interface State extends GetPostCommentsRequest {
   list: PostCommentData[];
   postDetail: GetPostResponse;
@@ -63,6 +65,8 @@ export interface State extends GetPostCommentsRequest {
   postCommentId?: CommentId;
   postCommentContent?: Content;
   status: Status;
+  commentPlaceHolder?: CommentPlaceHolder;
+  commentParentId?: CommentId;
 }
 
 const initialState: State = {
@@ -176,6 +180,25 @@ export const slice = createSlice({
     prependListItem: (state, action: PayloadAction<PostCommentData>) => {
       state.list = [action.payload, ...state.list];
     },
+
+    setCommentPlaceHolder: (
+      state,
+      action: PayloadAction<CommentPlaceHolder>,
+    ) => {
+      state.commentPlaceHolder = action.payload;
+    },
+
+    resetCommentPlaceHolder: state => {
+      state.commentPlaceHolder = initialState.commentPlaceHolder;
+    },
+
+    setCommentParentId: (state, action: PayloadAction<CommentId>) => {
+      state.commentParentId = action.payload;
+    },
+
+    resetCommentParentId: state => {
+      state.commentParentId = initialState.commentParentId;
+    },
   },
 
   extraReducers: builder => {
@@ -286,6 +309,10 @@ export const {
   setPostDetail,
   setScene,
   prependListItem,
+  setCommentPlaceHolder,
+  resetCommentPlaceHolder,
+  setCommentParentId,
+  resetCommentParentId,
 } = slice.actions;
 
 export const status = (state: RootState) => state.commentDetail.status;
@@ -301,5 +328,11 @@ export const postCommentId = (state: RootState) =>
 
 export const postCommentContent = (state: RootState) =>
   state.commentDetail.postCommentContent;
+
+export const commentPlaceHolder = (state: RootState) =>
+  state.commentDetail.commentPlaceHolder;
+
+export const commentParentId = (state: RootState) =>
+  state.commentDetail.commentParentId;
 
 export default slice.reducer;
