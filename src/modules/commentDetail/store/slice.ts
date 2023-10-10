@@ -67,6 +67,8 @@ export interface State extends GetPostCommentsRequest {
   status: Status;
   commentPlaceHolder?: CommentPlaceHolder;
   commentParentId?: CommentId;
+  commentParentUserId?: AuthorId;
+  commentParentUsername?: AuthorName;
 }
 
 const initialState: State = {
@@ -199,6 +201,25 @@ export const slice = createSlice({
     resetCommentParentId: state => {
       state.commentParentId = initialState.commentParentId;
     },
+
+    setCommentParentUserId: (state, action: PayloadAction<AuthorId>) => {
+      state.commentParentUserId = action.payload;
+    },
+
+    resetCommentParentUserId: state => {
+      state.commentParentUserId = initialState.commentParentUserId;
+    },
+
+    setCommentParentUsername: (
+      state,
+      action: PayloadAction<AuthorName | undefined>,
+    ) => {
+      state.commentParentUsername = action.payload;
+    },
+
+    resetCommentParentUsername: state => {
+      state.commentParentUsername = initialState.commentParentUsername;
+    },
   },
 
   extraReducers: builder => {
@@ -313,6 +334,10 @@ export const {
   resetCommentPlaceHolder,
   setCommentParentId,
   resetCommentParentId,
+  setCommentParentUserId,
+  resetCommentParentUserId,
+  setCommentParentUsername,
+  resetCommentParentUsername,
 } = slice.actions;
 
 export const status = (state: RootState) => state.commentDetail.status;
@@ -334,5 +359,11 @@ export const commentPlaceHolder = (state: RootState) =>
 
 export const commentParentId = (state: RootState) =>
   state.commentDetail.commentParentId;
+
+export const commentParentUserId = (state: RootState) =>
+  state.commentDetail.commentParentUserId;
+
+export const commentParentUsername = (state: RootState) =>
+  state.commentDetail.commentParentUsername;
 
 export default slice.reducer;

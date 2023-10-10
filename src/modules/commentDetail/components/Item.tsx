@@ -5,6 +5,7 @@ import {
   Pressable,
   StyleSheet,
   Text,
+  TextStyle,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -19,6 +20,8 @@ import {
   CreateTime,
   IsLiked,
   setCommentParentId,
+  setCommentParentUserId,
+  setCommentParentUsername,
   setCommentPlaceHolder,
 } from '../store/slice';
 import {generateFullURL, getUsername} from '../../helper';
@@ -40,6 +43,8 @@ export type Props = {
   createTime: CreateTime;
   content: Content;
   isLiked?: IsLiked;
+  replyUserId?: AuthorId;
+  replyUsername?: AuthorName;
 };
 
 export default (props: Props) => {
@@ -67,6 +72,10 @@ export default (props: Props) => {
     );
 
     dispatch(setCommentParentId(props.commentId));
+
+    dispatch(setCommentParentUserId(props.userId));
+
+    dispatch(setCommentParentUsername(props.username));
   }, [dispatch, props.commentId, props.userId, props.username]);
 
   const tabStyle: ViewStyle = useMemo(() => {
@@ -84,6 +93,28 @@ export default (props: Props) => {
 
     setShowFab(false);
   }, [dispatch, props.userId]);
+
+  const [replyTxtColor, setReplyTxtColor] = useState('#D988FF');
+
+  const handleOnReplyTxtPress = useCallback(() => {}, []);
+
+  const handleOnReplyTxtPressIn = useCallback(() => {
+    LayoutAnimation.easeInEaseOut();
+
+    setReplyTxtColor('#D988FF90');
+  }, []);
+
+  const handleOnReplyTxtPressOut = useCallback(() => {
+    LayoutAnimation.easeInEaseOut();
+
+    setReplyTxtColor('#D988FF');
+  }, []);
+
+  const replyTxtStyle: TextStyle = useMemo(() => {
+    return {
+      color: replyTxtColor,
+    };
+  }, [replyTxtColor]);
 
   return (
     <Pressable
@@ -111,7 +142,21 @@ export default (props: Props) => {
         <Like commentId={props.commentId} isLiked={props.isLiked} />
       </View>
 
-      <Text style={styles.contentTxt}>{props.content}</Text>
+      <Text style={styles.contentTxt}>
+        {props.replyUserId && (
+          <Text
+            style={replyTxtStyle}
+            onPress={handleOnReplyTxtPress}
+            onPressIn={handleOnReplyTxtPressIn}
+            onPressOut={handleOnReplyTxtPressOut}>
+            @{''}
+            {props.replyUsername
+              ? props.replyUsername
+              : getUsername(props.replyUserId)}
+          </Text>
+        )}
+        {props.content}
+      </Text>
 
       <TouchableOpacity
         activeOpacity={0.7}

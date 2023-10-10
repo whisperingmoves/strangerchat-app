@@ -9,6 +9,8 @@ import {
   CommentCount,
   CommentId,
   commentParentId,
+  commentParentUserId,
+  commentParentUsername,
   commentPlaceHolder,
   commentPostAsync,
   Content,
@@ -48,6 +50,10 @@ export default forwardRef((props: Props, ref) => {
 
   const commentParentIdValue = useAppSelector(commentParentId);
 
+  const commentParentUserIdValue = useAppSelector(commentParentUserId);
+
+  const commentParentUsernameValue = useAppSelector(commentParentUsername);
+
   useEffect(() => {
     if (statusValue === 'success' && sceneValue === 'commentPost') {
       dispatch(resetStatus());
@@ -60,6 +66,8 @@ export default forwardRef((props: Props, ref) => {
           content: postCommentContentValue as Content,
           userId: store.getState().user.userId,
           commentId: postCommentIdValue as CommentId,
+          replyUserId: commentParentUserIdValue,
+          replyUsername: commentParentUsernameValue,
         }),
       );
 

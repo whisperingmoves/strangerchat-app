@@ -14,6 +14,8 @@ export interface PostCommentData {
   content: string;
   commentId: string;
   isLiked?: number;
+  replyUserId?: string;
+  replyUsername?: string;
 }
 
 export const getPostComments = async (

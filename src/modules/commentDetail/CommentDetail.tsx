@@ -13,6 +13,8 @@ import {
   postDetail,
   PostId,
   resetCommentParentId,
+  resetCommentParentUserId,
+  resetCommentParentUsername,
   resetCommentPlaceHolder,
   resetPostDetail,
   resetStatus as resetCommentDetailStatus,
@@ -372,6 +374,10 @@ export default (props: Props) => {
     dispatch(resetCommentPlaceHolder());
 
     dispatch(resetCommentParentId());
+
+    dispatch(resetCommentParentUserId());
+
+    dispatch(resetCommentParentUsername());
   }, [dispatch]);
 
   return (

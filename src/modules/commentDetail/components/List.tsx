@@ -9,6 +9,8 @@ import {
   getPostCommentsAsync,
   list,
   resetCommentParentId,
+  resetCommentParentUserId,
+  resetCommentParentUsername,
   resetCommentPlaceHolder,
   resetPage,
   resetStatus,
@@ -42,24 +44,16 @@ export default (props: Props) => {
 
   const sceneValue = useAppSelector(scene);
 
-  const data: ItemProps[] = listValue.map(item => {
-    return {
-      commentId: item.commentId,
-      userId: item.userId,
-      avatar: item.avatar,
-      username: item.username,
-      createTime: item.createTime,
-      content: item.content,
-      isLiked: item.isLiked,
-    };
-  });
-
   const dispatch = useAppDispatch();
 
   const refresh = useCallback(() => {
     dispatch(resetPage());
 
     dispatch(resetCommentParentId());
+
+    dispatch(resetCommentParentUserId());
+
+    dispatch(resetCommentParentUsername());
 
     dispatch(resetCommentPlaceHolder());
 
@@ -104,7 +98,7 @@ export default (props: Props) => {
   return (
     <FlatList
       style={styles.root}
-      data={data}
+      data={listValue}
       renderItem={renderItem}
       ItemSeparatorComponent={renderSeparator}
       showsVerticalScrollIndicator={false}
