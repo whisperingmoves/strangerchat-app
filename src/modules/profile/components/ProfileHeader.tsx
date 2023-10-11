@@ -13,7 +13,6 @@ import Stats from './Stats';
 import Location from './Location';
 
 type Props = {
-  username: string;
   location: string;
   style: StyleProp<ViewStyle>;
 };
@@ -31,7 +30,7 @@ export default (props: Props) => {
 
       <Avatar style={styles.avatar} />
 
-      <Username username={props.username} style={styles.username} />
+      <Username style={styles.username} />
 
       <Location location={props.location} style={styles.location} />
 

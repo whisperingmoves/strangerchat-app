@@ -20,11 +20,7 @@ export default () => {
       keyExtractor={keyExtractor}
       ItemSeparatorComponent={Separator}
       ListHeaderComponent={
-        <Header
-          location={'Los Angeles'}
-          username={'MacDonald'}
-          style={styles.header}
-        />
+        <Header location={'Los Angeles'} style={styles.header} />
       }
     />
   );
