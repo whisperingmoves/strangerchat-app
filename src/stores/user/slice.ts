@@ -10,11 +10,13 @@ import {
   followOrUnfollowUser,
   registerUser,
   reportUser,
+  updateUserProfile,
+  uploadAvatar,
 } from './api';
 import {VerifyCodeResponse} from '../../apis/verification/verifyCode';
 import {Mobile} from '../../modules/login/store/slice';
-
-export type FreeHeatsLeft = number;
+import {UploadAvatarResponse} from '../../apis/resource/uploadAvatar';
+import {UpdateUserProfileRequest} from '../../apis/user/updateUserProfile';
 
 export type UserId = string;
 
@@ -33,13 +35,17 @@ export type Scene =
   | 'blockUserOnCommentDetail'
   | 'unblockUserOnCommentDetail'
   | 'reportUserOnCommentDetail'
+  | 'updateAvatar'
   | undefined;
 
 export type Status = 'idle' | 'loading' | 'failed' | 'success';
 
 export type Avatar = string;
 
-export interface State extends RegisterUserResponse, VerifyCodeResponse {
+export interface State
+  extends RegisterUserResponse,
+    VerifyCodeResponse,
+    UploadAvatarResponse {
   mobile: Mobile;
   operationUserId?: UserId;
   error: Error;
@@ -67,6 +73,7 @@ const initialState: State = {
   scene: undefined,
   error: '',
   status: 'idle',
+  url: '',
 };
 
 export const registerUserAsync = createAsyncThunk<
@@ -104,6 +111,23 @@ export const reportUserAsync = createAsyncThunk<
   const {token} = getState().user;
 
   return await reportUser({userId}, token);
+});
+
+export const uploadAvatarAsync = createAsyncThunk<UploadAvatarResponse, string>(
+  'user/uploadAvatar',
+  async avatar => {
+    return await uploadAvatar(avatar);
+  },
+);
+
+export const updateUserProfileAsync = createAsyncThunk<
+  void,
+  UpdateUserProfileRequest,
+  {state: {user: State}}
+>('user/updateUserProfile', async (request, {getState}) => {
+  const {token} = getState().user;
+
+  return await updateUserProfile(request, token);
 });
 
 export const slice = createSlice({
@@ -190,6 +214,36 @@ export const slice = createSlice({
       })
 
       .addCase(reportUserAsync.rejected, (state, action) => {
+        state.status = 'failed';
+
+        state.error = action.error.message || '';
+      })
+
+      .addCase(uploadAvatarAsync.pending, state => {
+        state.status = 'loading';
+      })
+
+      .addCase(uploadAvatarAsync.fulfilled, (state, action) => {
+        state.status = 'success';
+
+        state.url = action.payload.url;
+      })
+
+      .addCase(uploadAvatarAsync.rejected, (state, action) => {
+        state.status = 'failed';
+
+        state.error = action.error.message || '';
+      })
+
+      .addCase(updateUserProfileAsync.pending, state => {
+        state.status = 'loading';
+      })
+
+      .addCase(updateUserProfileAsync.fulfilled, state => {
+        state.status = 'success';
+      })
+
+      .addCase(updateUserProfileAsync.rejected, (state, action) => {
         state.status = 'failed';
 
         state.error = action.error.message || '';

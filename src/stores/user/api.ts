@@ -15,6 +15,14 @@ import {
   reportUser as reportUserApi,
   ReportUserRequest,
 } from '../../apis/user/reportUser';
+import {
+  uploadAvatar as uploadAvatarApi,
+  UploadAvatarResponse,
+} from '../../apis/resource/uploadAvatar';
+import {
+  updateUserProfile as updateUserProfileApi,
+  UpdateUserProfileRequest,
+} from '../../apis/user/updateUserProfile';
 
 export const registerUser = async (
   request: RegisterUserRequest,
@@ -41,4 +49,17 @@ export const reportUser = async (
   token: string,
 ): Promise<void> => {
   return await reportUserApi(request, token);
+};
+
+export const uploadAvatar = async (
+  avatar: string,
+): Promise<UploadAvatarResponse> => {
+  return await uploadAvatarApi(avatar);
+};
+
+export const updateUserProfile = async (
+  request: UpdateUserProfileRequest,
+  token: string,
+): Promise<void> => {
+  return await updateUserProfileApi(request, token);
 };

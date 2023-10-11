@@ -5,8 +5,6 @@ import Item, {Props as ItemProps} from './components/Item';
 import Separator from './components/Separator';
 import Header from './components/ProfileHeader';
 
-import avatar_boy_1 from '../../assets/images/avatars/male/avatar_boy_1.png';
-
 const renderItem = ({item}: {item: ItemProps}) => <Item {...item} />;
 
 const keyExtractor = (item: ItemProps, index: number) =>
@@ -24,7 +22,6 @@ export default () => {
       ListHeaderComponent={
         <Header
           location={'Los Angeles'}
-          avatar={avatar_boy_1}
           username={'MacDonald'}
           style={styles.header}
         />
