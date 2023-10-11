@@ -1,0 +1,51 @@
+import React from 'react';
+import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+
+type Props = {
+  count: number;
+  label: string;
+};
+
+export default (props: Props) => {
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const handlePress = () => {
+    navigation.push('MyFollowing');
+  };
+
+  return (
+    <TouchableOpacity
+      activeOpacity={0.7}
+      style={styles.root}
+      onPress={handlePress}>
+      <Text style={styles.countTxt}>{props.count}</Text>
+
+      <Text style={styles.labelTxt}>{props.label}</Text>
+    </TouchableOpacity>
+  );
+};
+
+const styles = StyleSheet.create({
+  root: {
+    gap: 4,
+    alignItems: 'center',
+  },
+  countTxt: {
+    color: '#FFF',
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    includeFontPadding: false,
+  },
+  labelTxt: {
+    color: '#FFF',
+    fontSize: 14,
+    opacity: 0.6,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    includeFontPadding: false,
+  },
+});

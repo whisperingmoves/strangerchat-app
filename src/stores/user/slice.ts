@@ -220,4 +220,6 @@ export const avatar = (state: RootState) => state.user.avatar;
 
 export const freeHeatsLeft = (state: RootState) => state.user.freeHeatsLeft;
 
+export const giftsReceived = (state: RootState) => state.user.giftsReceived;
+
 export default slice.reducer;
