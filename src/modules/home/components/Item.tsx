@@ -39,7 +39,7 @@ export default (props: Props) => {
         <LinearGradient
           colors={['#FFFFFF00', '#00000090']}
           style={styles.container}>
-          {props.relation && (
+          {(props.relation || props.relation === 0) && (
             <Relation relation={props.relation} style={styles.relation} />
           )}
 

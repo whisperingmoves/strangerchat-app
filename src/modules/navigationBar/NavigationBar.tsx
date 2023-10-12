@@ -44,7 +44,7 @@ import {RecentMessage} from '../../apis/notification/recentMessages';
 import {SentMessage} from '../../apis/notification/sentMessage';
 import {MarkedAsReadMessage} from '../../apis/notification/markedAsReadMessage';
 import {CoinBalance} from '../../apis/notification/coinBalance';
-import {FollowersCount, setUser} from '../../stores/user/slice';
+import {FollowersCount, setUser, VisitorsCount} from '../../stores/user/slice';
 import ViewShot from 'react-native-view-shot';
 import {ViewShotContext} from '../../contexts/ViewShotContext';
 import {GiftsReceived} from '../../apis/notification/giftsReceived';
@@ -194,6 +194,9 @@ export default () => {
           break;
         case 15:
           dispatch(setUser(messageData as FollowersCount));
+          break;
+        case 16:
+          dispatch(setUser(messageData as VisitorsCount));
           break;
         default:
           break;
