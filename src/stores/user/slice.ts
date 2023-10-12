@@ -43,6 +43,14 @@ export type Status = 'idle' | 'loading' | 'failed' | 'success';
 
 export type Avatar = string;
 
+export type FollowingCount = number;
+
+export type FollowersCount = number;
+
+export type VisitorsCount = number;
+
+export type Action = number;
+
 export interface State
   extends RegisterUserResponse,
     VerifyCodeResponse,
@@ -85,13 +93,15 @@ export const registerUserAsync = createAsyncThunk<
 });
 
 export const followOrUnfollowUserAsync = createAsyncThunk<
-  void,
+  Action,
   number,
   {state: {user: State}}
 >('user/followOrUnfollowUser', async (action, {getState}) => {
   const {token, operationUserId: userId} = getState().user;
 
-  return await followOrUnfollowUser({userId: userId as UserId, action}, token);
+  await followOrUnfollowUser({userId: userId as UserId, action}, token);
+
+  return action;
 });
 
 export const blockOrUnblockUserAsync = createAsyncThunk<
@@ -176,11 +186,26 @@ export const slice = createSlice({
         state.status = 'loading';
       })
 
-      .addCase(followOrUnfollowUserAsync.fulfilled, (state, action) => {
-        state.status = 'success';
+      .addCase(
+        followOrUnfollowUserAsync.fulfilled,
+        (state, action: PayloadAction<Action>) => {
+          state.status = 'success';
 
-        copy(state, action.payload);
-      })
+          let followingCount = state.followingCount as FollowingCount;
+
+          if (action.payload === 1) {
+            followingCount += 1;
+          } else {
+            followingCount -= 1;
+
+            if (followingCount < 0) {
+              followingCount = 0;
+            }
+          }
+
+          state.followingCount = followingCount;
+        },
+      )
 
       .addCase(followOrUnfollowUserAsync.rejected, (state, action) => {
         state.status = 'failed';
@@ -194,8 +219,6 @@ export const slice = createSlice({
 
       .addCase(blockOrUnblockUserAsync.fulfilled, (state, action) => {
         state.status = 'success';
-
-        copy(state, action.payload);
       })
 
       .addCase(blockOrUnblockUserAsync.rejected, (state, action) => {
@@ -210,8 +233,6 @@ export const slice = createSlice({
 
       .addCase(reportUserAsync.fulfilled, (state, action) => {
         state.status = 'success';
-
-        copy(state, action.payload);
       })
 
       .addCase(reportUserAsync.rejected, (state, action) => {
@@ -278,5 +299,11 @@ export const avatar = (state: RootState) => state.user.avatar;
 export const freeHeatsLeft = (state: RootState) => state.user.freeHeatsLeft;
 
 export const giftsReceived = (state: RootState) => state.user.giftsReceived;
+
+export const followingCount = (state: RootState) => state.user.followingCount;
+
+export const followersCount = (state: RootState) => state.user.followersCount;
+
+export const visitorsCount = (state: RootState) => state.user.visitorsCount;
 
 export default slice.reducer;

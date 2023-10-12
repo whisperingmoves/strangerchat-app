@@ -2,9 +2,14 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {
+  FollowersCount,
+  FollowingCount,
+  VisitorsCount,
+} from '../../../stores/user/slice';
 
 type Props = {
-  count: number;
+  count: FollowingCount | FollowersCount | VisitorsCount;
   label: string;
 };
 

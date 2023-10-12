@@ -34,12 +34,7 @@ export default (props: Props) => {
 
       <Location location={props.location} style={styles.location} />
 
-      <Stats
-        followingCount={43}
-        followCount={7389}
-        visitedCount={873}
-        style={styles.stats}
-      />
+      <Stats style={styles.stats} />
     </LinearGradient>
   );
 };

@@ -9,26 +9,38 @@ import Base from './Base';
 import Line from './Line';
 import {FOLLOW, FOLLOWING} from '../../../constants/Config';
 import {VISITED_ME} from '../../../constants/profile/Config';
+import {useAppSelector} from '../../../hooks';
+import {
+  FollowersCount,
+  followersCount,
+  FollowingCount,
+  followingCount,
+  VisitorsCount,
+  visitorsCount,
+} from '../../../stores/user/slice';
 
 type Props = {
-  followingCount: number;
-  followCount: number;
-  visitedCount: number;
   style: StyleProp<ViewStyle>;
 };
 
 export default (props: Props) => {
+  const followingCountValue = useAppSelector(followingCount);
+
+  const followersCountValue = useAppSelector(followersCount);
+
+  const visitorsCountValue = useAppSelector(visitorsCount);
+
   return (
     <View style={[styles.root, props.style]}>
-      <Base count={props.followingCount} label={FOLLOWING} />
+      <Base count={followingCountValue as FollowingCount} label={FOLLOWING} />
 
       <Line />
 
-      <Base count={props.followCount} label={FOLLOW} />
+      <Base count={followersCountValue as FollowersCount} label={FOLLOW} />
 
       <Line />
 
-      <Base count={props.visitedCount} label={VISITED_ME} />
+      <Base count={visitorsCountValue as VisitorsCount} label={VISITED_ME} />
     </View>
   );
 };
