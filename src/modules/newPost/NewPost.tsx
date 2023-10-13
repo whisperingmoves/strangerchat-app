@@ -29,6 +29,8 @@ import {
 } from './store/slice';
 import {showError} from '../../utils/notification';
 import {store} from '../../stores/store';
+import {prependListItem} from '../../stores/user/slice';
+import {getCurrentUnixTimestampInSeconds} from '../../utils/date';
 
 export default () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -77,6 +79,22 @@ export default () => {
 
     if (statusValue === 'success' && sceneValue === 'newPost') {
       dispatch(resetStatus());
+
+      dispatch(
+        prependListItem({
+          postId: store.getState().newPost.postId,
+          createTime: getCurrentUnixTimestampInSeconds(),
+          content: store.getState().newPost.content,
+          images: store.getState().newPost.images,
+          city: store.getState().newPost.city,
+          atUsers: store.getState().newPost.confirmedAtUsers.map(item => {
+            return {
+              id: item.userId,
+              username: item.username,
+            };
+          }),
+        }),
+      );
 
       dispatch(resetState());
 
