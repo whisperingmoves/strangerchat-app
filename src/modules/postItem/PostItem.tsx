@@ -10,7 +10,7 @@ import PhotoList from '../../components/photoList/PhotoList';
 import {generateFullURL} from '../helper';
 import Footer from './components/Footer';
 import {LatestPostData} from '../../apis/post/getLatestPosts';
-import AtUserList from '../../components/AtUserList';
+import AtUserList from '../../components/atUserList/AtUserList';
 import {GetPostResponse} from '../../apis/post/getPost';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';

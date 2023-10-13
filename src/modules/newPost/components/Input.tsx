@@ -24,7 +24,7 @@ import {
 import {useAppSelector} from '../../../hooks';
 import PhotoList from '../../../components/photoList/PhotoList';
 import {generateFullURL} from '../../helper';
-import ConfirmedAtUserList from '../../../components/AtUserList';
+import ConfirmedAtUserList from '../../../components/atUserList/AtUserList';
 
 export interface InputRef {
   blur: () => void;

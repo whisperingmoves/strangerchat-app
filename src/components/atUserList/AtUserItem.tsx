@@ -1,7 +1,10 @@
 import React, {useCallback} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {UserId, Username} from '../modules/newPost/store/slice';
-import {getUsername} from '../modules/helper';
+import {getUsername} from '../../modules/helper';
+
+export type UserId = string;
+
+export type Username = string;
 
 type Props = {
   userId: UserId;

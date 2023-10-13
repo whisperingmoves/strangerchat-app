@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 import Location from '../../../components/Location';
@@ -6,10 +6,13 @@ import {MyPostData} from '../../../apis/user/getMyPosts';
 import PhotoList from '../../../components/photoList/PhotoList';
 import {generateFullURL} from '../../helper';
 import {formatDatetime} from '../../../utils/date';
+import AtUserList from '../../../components/atUserList/AtUserList';
 
 export type Props = MyPostData;
 
 export default (props: Props) => {
+  const handleAtUserPress = useCallback(() => {}, []);
+
   return (
     <TouchableOpacity style={styles.root} activeOpacity={0.7}>
       <Text style={styles.createTimeTxt}>
@@ -23,6 +26,16 @@ export default (props: Props) => {
           photoList={props.images.map(item => generateFullURL(item))}
           isMarginLeft={false}
           style={styles.photoList}
+        />
+      )}
+
+      {props.atUsers && props.atUsers.length > 0 && (
+        <AtUserList
+          style={styles.atUserList}
+          atUsers={props.atUsers.map(atUser => {
+            return {userId: atUser.id, username: atUser.username};
+          })}
+          onItemPress={handleAtUserPress}
         />
       )}
 
@@ -57,6 +70,9 @@ const styles = StyleSheet.create({
   },
   photoList: {
     marginTop: 10,
+  },
+  atUserList: {
+    marginTop: 14,
   },
   location: {
     marginTop: 16,

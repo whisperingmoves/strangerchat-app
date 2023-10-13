@@ -1,9 +1,13 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import AtUserItem from './AtUserItem';
-import {AtUser, UserId} from '../modules/newPost/store/slice';
+import AtUserItem, {UserId, Username} from './AtUserItem';
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
+
+type AtUser = {
+  userId: UserId;
+  username?: Username;
+};
 
 type Props = {
   style?: StyleProp<ViewStyle>;
