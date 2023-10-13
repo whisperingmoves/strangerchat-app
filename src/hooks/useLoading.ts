@@ -2,7 +2,7 @@ import {useEffect} from 'react';
 import {status as loginStatus} from '../modules/login/store/slice';
 import {status as verificationCodeStatus} from '../modules/verificationCode/store/slice';
 import {status as avatarStatus} from '../modules/avatar/store/slice';
-import {status as userStatus} from '../stores/user/slice';
+import {scene as userScene, status as userStatus} from '../stores/user/slice';
 import {status as navigationBarStatus} from '../modules/navigationBar/store/slice';
 import {status as homeStatus} from '../modules/home/store/slice';
 import {status as newPostStatus} from '../modules/newPost/store/slice';
@@ -29,6 +29,7 @@ const useLoading = () => {
   const verificationCodeStatusValue = useAppSelector(verificationCodeStatus);
   const avatarStatusValue = useAppSelector(avatarStatus);
   const userStatusValue = useAppSelector(userStatus);
+  const userSceneValue = useAppSelector(userScene);
   const navigationBarStatusValue = useAppSelector(navigationBarStatus);
   const homeStatusValue = useAppSelector(homeStatus);
   const newPostStatusValue = useAppSelector(newPostStatus);
@@ -45,7 +46,7 @@ const useLoading = () => {
     loginStatusValue === 'loading' ||
     verificationCodeStatusValue === 'loading' ||
     avatarStatusValue === 'loading' ||
-    userStatusValue === 'loading' ||
+    (userStatusValue === 'loading' && userSceneValue !== 'getMyPosts') ||
     navigationBarStatusValue === 'loading' ||
     homeStatusValue === 'loading' ||
     newPostStatusValue === 'loading' ||

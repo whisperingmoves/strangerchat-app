@@ -1,36 +1,39 @@
 import React from 'react';
-import {ImageSourcePropType} from 'react-native/Libraries/Image/Image';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 
-import Photo from './Photo';
-import Location from './Location';
+import Location from '../../../components/Location';
+import {MyPostData} from '../../../apis/user/getMyPosts';
+import PhotoList from '../../../components/photoList/PhotoList';
+import {generateFullURL} from '../../helper';
+import {formatDatetime} from '../../../utils/date';
 
-export type Props = {
-  updateTime: string;
-  content?: string;
-  photoList?: ImageSourcePropType[];
-  location?: string;
-};
+export type Props = MyPostData;
 
 export default (props: Props) => {
   return (
-    <View style={styles.root}>
-      <Text style={styles.updateTimeTxt}>{props.updateTime}</Text>
+    <TouchableOpacity style={styles.root} activeOpacity={0.7}>
+      <Text style={styles.createTimeTxt}>
+        {formatDatetime(props.createTime)}
+      </Text>
 
       {props.content && <Text style={styles.contentTxt}>{props.content}</Text>}
 
-      {props.photoList && (
-        <Photo photoList={props.photoList} style={styles.photo} />
+      {props?.images && (
+        <PhotoList
+          photoList={props.images.map(item => generateFullURL(item))}
+          isMarginLeft={false}
+          style={styles.photoList}
+        />
       )}
 
-      {props.location && (
+      {props?.city && (
         <Location
-          location={props.location}
+          location={props.city}
           color={'#8B5CFF'}
           style={styles.location}
         />
       )}
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -39,7 +42,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 20,
   },
-  updateTimeTxt: {
+  createTimeTxt: {
     color: '#C7C4CC',
     fontSize: 12,
     textAlignVertical: 'center',
@@ -52,7 +55,7 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
     marginTop: 16,
   },
-  photo: {
+  photoList: {
     marginTop: 10,
   },
   location: {

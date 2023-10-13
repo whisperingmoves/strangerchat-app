@@ -54,7 +54,7 @@ export type RootBottomTabParamList = {
   Explore: {tabBarHeight: number};
   Post: undefined;
   Chat: {tabBarHeight: number};
-  Profile: undefined;
+  Profile: {tabBarHeight: number};
 };
 
 const BottomTab = createBottomTabNavigator<RootBottomTabParamList>();

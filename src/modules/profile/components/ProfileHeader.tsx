@@ -10,10 +10,11 @@ import Header from './Header';
 import Avatar from './Avatar';
 import Username from './Username';
 import Stats from './Stats';
-import Location from './Location';
+import Location from '../../../components/Location';
+import {useAppSelector} from '../../../hooks';
+import {city} from '../../../stores/user/slice';
 
 type Props = {
-  location: string;
   style: StyleProp<ViewStyle>;
 };
 
@@ -21,6 +22,8 @@ export default (props: Props) => {
   const insets = useSafeAreaInsets();
 
   const statusBarStyle: StyleProp<ViewStyle> = {paddingTop: insets.top};
+
+  const cityValue = useAppSelector(city);
 
   return (
     <LinearGradient
@@ -32,7 +35,7 @@ export default (props: Props) => {
 
       <Username style={styles.username} />
 
-      <Location location={props.location} style={styles.location} />
+      {cityValue && <Location location={cityValue} style={styles.location} />}
 
       <Stats style={styles.stats} />
     </LinearGradient>

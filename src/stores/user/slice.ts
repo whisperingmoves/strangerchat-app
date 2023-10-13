@@ -8,6 +8,7 @@ import {RootState} from '../store';
 import {
   blockOrUnblockUser,
   followOrUnfollowUser,
+  getMyPosts,
   registerUser,
   reportUser,
   updateUserProfile,
@@ -17,6 +18,8 @@ import {VerifyCodeResponse} from '../../apis/verification/verifyCode';
 import {Mobile} from '../../modules/login/store/slice';
 import {UploadAvatarResponse} from '../../apis/resource/uploadAvatar';
 import {UpdateUserProfileRequest} from '../../apis/user/updateUserProfile';
+import {GetMyPostsRequest, MyPostData} from '../../apis/user/getMyPosts';
+import {listPageReducer} from '../helper';
 
 export type UserId = string;
 
@@ -37,6 +40,7 @@ export type Scene =
   | 'reportUserOnCommentDetail'
   | 'updateAvatar'
   | 'updateUsername'
+  | 'getMyPosts'
   | undefined;
 
 export type Status = 'idle' | 'loading' | 'failed' | 'success';
@@ -54,12 +58,14 @@ export type Action = number;
 export interface State
   extends RegisterUserResponse,
     VerifyCodeResponse,
-    UploadAvatarResponse {
+    UploadAvatarResponse,
+    GetMyPostsRequest {
   mobile: Mobile;
   operationUserId?: UserId;
   error: Error;
   scene: Scene;
   status: Status;
+  list: MyPostData[];
 }
 
 const initialState: State = {
@@ -83,6 +89,9 @@ const initialState: State = {
   error: '',
   status: 'idle',
   url: '',
+  list: [],
+  page: 1,
+  pageSize: 10,
 };
 
 export const registerUserAsync = createAsyncThunk<
@@ -141,6 +150,16 @@ export const updateUserProfileAsync = createAsyncThunk<
   return await updateUserProfile(request, token);
 });
 
+export const getMyPostsAsync = createAsyncThunk<
+  MyPostData[],
+  void,
+  {state: {user: State}}
+>('user/getUserPosts', async (_, {getState}) => {
+  const {token, page, pageSize} = getState().user;
+
+  return await getMyPosts({page, pageSize}, token);
+});
+
 export const slice = createSlice({
   name: 'user',
 
@@ -149,6 +168,10 @@ export const slice = createSlice({
   reducers: {
     resetStatus: state => {
       state.status = initialState.status;
+    },
+
+    resetPage: state => {
+      state.page = initialState.page;
     },
 
     setScene: (state, action: PayloadAction<Scene>) => {
@@ -161,6 +184,10 @@ export const slice = createSlice({
 
     setOperationUserId: (state, action: PayloadAction<UserId>) => {
       state.operationUserId = action.payload;
+    },
+
+    prependListItem: (state, action: PayloadAction<MyPostData>) => {
+      state.list = [action.payload, ...state.list];
     },
   },
 
@@ -269,12 +296,30 @@ export const slice = createSlice({
         state.status = 'failed';
 
         state.error = action.error.message || '';
+      })
+
+      .addCase(getMyPostsAsync.pending, state => {
+        state.status = 'loading';
+      })
+
+      .addCase(getMyPostsAsync.fulfilled, listPageReducer)
+
+      .addCase(getMyPostsAsync.rejected, (state, action) => {
+        state.status = 'failed';
+
+        state.error = action.error.message || '';
       });
   },
 });
 
-export const {resetStatus, setScene, setUser, setOperationUserId} =
-  slice.actions;
+export const {
+  resetStatus,
+  setScene,
+  setUser,
+  setOperationUserId,
+  prependListItem,
+  resetPage,
+} = slice.actions;
 
 export const status = (state: RootState) => state.user.status;
 
@@ -305,5 +350,9 @@ export const followingCount = (state: RootState) => state.user.followingCount;
 export const followersCount = (state: RootState) => state.user.followersCount;
 
 export const visitorsCount = (state: RootState) => state.user.visitorsCount;
+
+export const list = (state: RootState) => state.user.list;
+
+export const city = (state: RootState) => state.user.city;
 
 export default slice.reducer;

@@ -8,7 +8,6 @@ import {RecommendedPostData} from '../../apis/post/getRecommendedPosts';
 import {FollowedPostData} from '../../apis/post/getFollowedPosts';
 import PhotoList from '../../components/photoList/PhotoList';
 import {generateFullURL} from '../helper';
-import Location from './components/Location';
 import Footer from './components/Footer';
 import {LatestPostData} from '../../apis/post/getLatestPosts';
 import AtUserList from '../../components/AtUserList';
@@ -16,6 +15,7 @@ import {GetPostResponse} from '../../apis/post/getPost';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {UpdateListItemCallback} from '../recommend/store/slice';
+import Location from '../../components/Location';
 
 type CustomProps = {
   isFollowing?: boolean;
@@ -111,9 +111,10 @@ export default (props: Props) => {
           />
         )}
 
-        {props?.city && (
+        {props.city && (
           <Location
             location={props.city}
+            color={'#8B5CFF'}
             style={[styles.location, props.locationStyle]}
           />
         )}

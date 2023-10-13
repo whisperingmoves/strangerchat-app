@@ -23,6 +23,11 @@ import {
   updateUserProfile as updateUserProfileApi,
   UpdateUserProfileRequest,
 } from '../../apis/user/updateUserProfile';
+import {
+  getMyPosts as getMyPostsApi,
+  GetMyPostsRequest,
+  MyPostData,
+} from '../../apis/user/getMyPosts';
 
 export const registerUser = async (
   request: RegisterUserRequest,
@@ -62,4 +67,11 @@ export const updateUserProfile = async (
   token: string,
 ): Promise<void> => {
   return await updateUserProfileApi(request, token);
+};
+
+export const getMyPosts = async (
+  request: GetMyPostsRequest,
+  token: string,
+): Promise<MyPostData[]> => {
+  return await getMyPostsApi(request, token);
 };
