@@ -7,14 +7,30 @@ import PhotoList from '../../../components/photoList/PhotoList';
 import {generateFullURL} from '../../helper';
 import {formatDatetime} from '../../../utils/date';
 import AtUserList from '../../../components/atUserList/AtUserList';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {store} from '../../../stores/store';
 
 export type Props = MyPostData;
 
 export default (props: Props) => {
   const handleAtUserPress = useCallback(() => {}, []);
 
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const handlePress = useCallback(() => {
+    navigation.push('CommentDetail', {
+      postId: props.postId,
+      authorId: store.getState().user.userId,
+      authorName: store.getState().user.username,
+    });
+  }, [navigation, props.postId]);
+
   return (
-    <TouchableOpacity style={styles.root} activeOpacity={0.7}>
+    <TouchableOpacity
+      style={styles.root}
+      activeOpacity={0.7}
+      onPress={handlePress}>
       <Text style={styles.createTimeTxt}>
         {formatDatetime(props.createTime)}
       </Text>
