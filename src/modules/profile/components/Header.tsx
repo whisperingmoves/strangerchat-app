@@ -6,7 +6,6 @@ import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 import Gift from './Gift';
-import Friends from './Friends';
 import Setting from './Setting';
 import PlaceHolder from '../../../components/PlaceHolder';
 
@@ -21,7 +20,7 @@ export default (props: Props) => {
 
       <PlaceHolder />
 
-      <Friends />
+      {/*<Friends />*/}
 
       <Setting />
     </View>
