@@ -53,6 +53,7 @@ import {
 import {showError, showSuccess} from '../../utils/notification';
 import {store} from '../../stores/store';
 import {IsBlocked, IsFollowed} from '../recommend/store/slice';
+import {getUsername} from '../helper';
 
 type Props = {
   route: Route<
@@ -270,9 +271,12 @@ export default (props: Props) => {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={[styles.root, statusBarStyle]}>
         <DetailHeader
-          username={conversation.opponentUsername}
+          title={
+            conversation.opponentUsername
+              ? conversation.opponentUsername
+              : getUsername(conversation.opponentUserId)
+          }
           style={styles.header}
-          userId={conversation.opponentUserId}
           onBackPress={handleBackPress}
           onMorePress={handleMorePress}
         />

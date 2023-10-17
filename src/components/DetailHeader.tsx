@@ -6,13 +6,11 @@ import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 import icon_more from '../assets/images/icons/icon_more.png';
 import icon_backtrack from '../assets/images/icons/icon_backtrack.png';
-import {getUsername} from '../modules/helper';
 
 type Props = {
-  userId: string;
-  username?: string;
+  title: string;
   onBackPress: () => void;
-  onMorePress: () => void;
+  onMorePress?: () => void;
   style: StyleProp<ViewStyle>;
   hideMore?: boolean;
 };
@@ -27,9 +25,7 @@ export default (props: Props) => {
         <Image source={icon_backtrack} />
       </TouchableOpacity>
 
-      <Text style={styles.txt}>
-        {props.username ? props.username : getUsername(props.userId)}
-      </Text>
+      <Text style={styles.txt}>{props.title}</Text>
 
       {!props.hideMore && (
         <TouchableOpacity

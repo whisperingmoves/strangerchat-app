@@ -62,3 +62,5 @@ export const BLOCK_SUCCESSFULLY = 'Block successfully';
 export const UNBLOCK_SUCCESSFULLY = 'Unblock successfully';
 
 export const REPORT_SUCCESSFULLY = 'Report successfully';
+
+export const GOLD_COIN_RECHARGE = 'Gold coin recharge';

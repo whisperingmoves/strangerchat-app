@@ -27,6 +27,7 @@ import {
   AuthorName,
   PostId,
 } from './src/modules/commentDetail/store/slice';
+import Setting from './src/modules/setting/Setting';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -43,6 +44,7 @@ export type RootStackParamList = {
     clientConversationId?: ConversationId;
   };
   CommentDetail: {postId: PostId; authorId: AuthorId; authorName?: AuthorName};
+  Setting: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -158,6 +160,15 @@ function App(): Element {
           <Stack.Screen
             name="CommentDetail"
             component={CommentDetail}
+            options={{
+              headerShown: false,
+              ...TransitionPresets.SlideFromRightIOS,
+            }}
+          />
+
+          <Stack.Screen
+            name="Setting"
+            component={Setting}
             options={{
               headerShown: false,
               ...TransitionPresets.SlideFromRightIOS,

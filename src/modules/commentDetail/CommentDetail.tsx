@@ -72,6 +72,7 @@ import {showError, showSuccess} from '../../utils/notification';
 import {store} from '../../stores/store';
 import ViewShot from 'react-native-view-shot';
 import {ViewShotContext} from '../../contexts/ViewShotContext';
+import {getUsername} from '../helper';
 
 type Props = {
   route: Route<
@@ -384,8 +385,7 @@ export default (props: Props) => {
     <ViewShot style={[styles.root, statusBarStyle]} ref={viewShotRef}>
       <ViewShotContext.Provider value={viewShotRef}>
         <DetailHeader
-          userId={authorId}
-          username={authorName}
+          title={authorName ? authorName : getUsername(authorId)}
           onBackPress={handleBackPress}
           onMorePress={handleMorePress}
           style={styles.header}
