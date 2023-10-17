@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {ImageSourcePropType} from 'react-native/Libraries/Image/Image';
 
@@ -8,22 +8,34 @@ import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 import icon_next from '../../../assets/images/icons/icon_next.png';
+import {AppDispatch} from '../../../stores/store';
+import {useAppDispatch} from '../../../hooks';
 
 export type Props = {
   icon: ImageSourcePropType;
   label: string;
   description?: string;
   target?: string;
+  callback?: (
+    dispatch?: AppDispatch,
+    navigation?: StackNavigationProp<any>,
+  ) => void;
 };
 
 export default (props: Props & {style: StyleProp<ViewStyle>}) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
-  const handlePress = () => {
+  const dispatch = useAppDispatch();
+
+  const handlePress = useCallback(() => {
     if (props.target) {
       navigation.push(props.target);
     }
-  };
+
+    if (props.callback) {
+      props.callback(dispatch, navigation);
+    }
+  }, [dispatch, navigation, props]);
 
   return (
     <View style={[styles.root, props.style]}>
