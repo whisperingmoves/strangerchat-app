@@ -22,6 +22,7 @@ import {
   scene as giftScene,
   status as giftStatus,
 } from '../modules/gift/store/slice';
+import {status as myGiftStatus} from '../modules/myGift/store/slice';
 import {useAppSelector} from './index';
 
 const useLoading = () => {
@@ -41,6 +42,7 @@ const useLoading = () => {
   const topUpSceneValue = useAppSelector(topUpScene);
   const giftStatusValue = useAppSelector(giftStatus);
   const giftSceneValue = useAppSelector(giftScene);
+  const myGiftStatusValue = useAppSelector(myGiftStatus);
 
   const loading =
     loginStatusValue === 'loading' ||
@@ -55,7 +57,8 @@ const useLoading = () => {
     (chatDetailStatusValue === 'loading' &&
       chatDetailSceneValue === 'uploadMessage') ||
     (topUpStatusValue === 'loading' && topUpSceneValue === 'buyCoinProduct') ||
-    (giftStatusValue === 'loading' && giftSceneValue === 'sendGift');
+    (giftStatusValue === 'loading' && giftSceneValue === 'sendGift') ||
+    myGiftStatusValue === 'loading';
 
   useEffect(() => {
     return () => {};

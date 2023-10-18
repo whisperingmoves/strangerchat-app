@@ -29,6 +29,7 @@ import {
 } from './src/modules/commentDetail/store/slice';
 import Setting from './src/modules/setting/Setting';
 import Wallet from './src/modules/wallet/Wallet';
+import MyGift from './src/modules/myGift/MyGift';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -47,6 +48,7 @@ export type RootStackParamList = {
   CommentDetail: {postId: PostId; authorId: AuthorId; authorName?: AuthorName};
   Setting: undefined;
   Wallet: undefined;
+  MyGift: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -180,6 +182,15 @@ function App(): Element {
           <Stack.Screen
             name="Wallet"
             component={Wallet}
+            options={{
+              headerShown: false,
+              ...TransitionPresets.SlideFromRightIOS,
+            }}
+          />
+
+          <Stack.Screen
+            name="MyGift"
+            component={MyGift}
             options={{
               headerShown: false,
               ...TransitionPresets.SlideFromRightIOS,
