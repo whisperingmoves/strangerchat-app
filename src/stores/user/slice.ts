@@ -55,6 +55,8 @@ export type VisitorsCount = number;
 
 export type Action = number;
 
+export type CoinBalance = number;
+
 export interface State
   extends RegisterUserResponse,
     VerifyCodeResponse,

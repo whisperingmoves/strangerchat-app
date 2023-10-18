@@ -29,6 +29,7 @@ import chatDetailReducer from '../modules/chatDetail/store/slice';
 import giftReducer from '../modules/gift/store/slice';
 import topUpReducer from '../modules/topUp/store/slice';
 import commentDetailReducer from '../modules/commentDetail/store/slice';
+import walletReducer from '../modules/wallet/store/slice';
 
 export const LOG_OUT = 'LOG_OUT';
 
@@ -60,6 +61,7 @@ const appReducer = combineReducers({
   gift: giftReducer,
   topUp: topUpReducer,
   commentDetail: commentDetailReducer,
+  wallet: walletReducer,
 });
 
 const rootReducer = (state: any, action: any) => {

@@ -6,8 +6,12 @@ import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 type Props = {
   date: Date;
-  setDate: (date: Date) => void;
-  style: StyleProp<ViewStyle>;
+  setDate?: (date: Date) => void;
+  style?: StyleProp<ViewStyle>;
+  modal?: boolean;
+  open?: boolean;
+  onConfirm?: (date: Date) => void;
+  onCancel?: () => void;
 };
 
 export default (props: Props) => {
@@ -20,6 +24,10 @@ export default (props: Props) => {
         style={styles.datePicker}
         onDateChange={props.setDate}
         textColor={'#554C5F'}
+        modal={props.modal}
+        open={props.open}
+        onConfirm={props.onConfirm}
+        onCancel={props.onCancel}
       />
     </View>
   );
