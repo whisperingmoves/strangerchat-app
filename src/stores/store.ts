@@ -31,6 +31,9 @@ import topUpReducer from '../modules/topUp/store/slice';
 import commentDetailReducer from '../modules/commentDetail/store/slice';
 import walletReducer from '../modules/wallet/store/slice';
 import myGiftReducer from '../modules/myGift/store/slice';
+import followingUserReducer from '../modules/followingUser/store/slice';
+import followerReducer from '../modules/follower/store/slice';
+import closeFriendReducer from '../modules/closeFriend/store/slice';
 
 export const LOG_OUT = 'LOG_OUT';
 
@@ -64,6 +67,9 @@ const appReducer = combineReducers({
   commentDetail: commentDetailReducer,
   wallet: walletReducer,
   myGift: myGiftReducer,
+  followingUser: followingUserReducer,
+  follower: followerReducer,
+  closeFriend: closeFriendReducer,
 });
 
 const rootReducer = (state: any, action: any) => {

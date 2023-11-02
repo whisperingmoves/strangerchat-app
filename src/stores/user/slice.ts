@@ -41,6 +41,8 @@ export type Scene =
   | 'updateAvatar'
   | 'updateUsername'
   | 'getMyPosts'
+  | 'followUserOnMyFollowing'
+  | 'unfollowUserOnMyFollowing'
   | undefined;
 
 export type Status = 'idle' | 'loading' | 'failed' | 'success';

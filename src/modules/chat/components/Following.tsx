@@ -1,12 +1,23 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 import icon_people from '../../../assets/images/icons/icon_people.png';
 import {FOLLOWING} from '../../../constants/Config';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 export default () => {
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const handlePress = useCallback(() => {
+    navigation.push('MyFollowing');
+  }, [navigation]);
+
   return (
-    <TouchableOpacity activeOpacity={0.7} style={styles.root}>
+    <TouchableOpacity
+      activeOpacity={0.7}
+      style={styles.root}
+      onPress={handlePress}>
       <Image source={icon_people} />
 
       <Text style={styles.txt}>{FOLLOWING}</Text>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -16,9 +16,9 @@ type Props = {
 export default (props: Props) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
-  const handlePress = () => {
+  const handlePress = useCallback(() => {
     navigation.push('MyFollowing');
-  };
+  }, [navigation]);
 
   return (
     <TouchableOpacity

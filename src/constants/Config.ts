@@ -64,3 +64,6 @@ export const UNBLOCK_SUCCESSFULLY = 'Unblock successfully';
 export const REPORT_SUCCESSFULLY = 'Report successfully';
 
 export const GOLD_COIN_RECHARGE = 'Gold coin recharge';
+
+export const LATEST_POST_CONTENT = (latestPostContent: string) =>
+  `[Post] ${latestPostContent}`;
