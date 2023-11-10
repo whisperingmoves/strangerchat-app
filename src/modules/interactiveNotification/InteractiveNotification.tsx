@@ -98,7 +98,7 @@ export default () => {
       showError(error);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
+  }, [statusValue]);
 
   return (
     <FlatList

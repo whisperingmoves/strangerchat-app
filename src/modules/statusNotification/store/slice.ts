@@ -6,7 +6,6 @@ import {
   StatusNotificationData,
 } from '../../../apis/notification/getStatusNotifications';
 import {State as UserState} from '../../../stores/user/slice';
-import {copy} from '../../../utils/object';
 import {listPageReducer} from '../../../stores/helper';
 import {getStatusNotifications, markStatusNotificationAsRead} from './api';
 
@@ -14,8 +13,13 @@ export type Error = string;
 
 export type Status = 'idle' | 'loading' | 'failed' | 'success';
 
+export type Scene = 'getStatusNotifications' | 'markStatusNotificationAsRead';
+
+export type ReadStatus = number;
+
 export interface State extends GetStatusNotificationsRequest {
   list: StatusNotificationData[];
+  scene?: Scene;
   error: Error;
   status: Status;
 }
@@ -66,8 +70,8 @@ export const slice = createSlice({
       state.page = initialState.page;
     },
 
-    setState: (state, action: PayloadAction<any>) => {
-      copy(state, action.payload);
+    setScene: (state, action: PayloadAction<Scene>) => {
+      state.scene = action.payload;
     },
   },
 
@@ -101,10 +105,12 @@ export const slice = createSlice({
   },
 });
 
-export const {resetStatus, resetPage, setState} = slice.actions;
+export const {resetStatus, resetPage, setScene} = slice.actions;
 
 export const status = (state: RootState) => state.statusNotification.status;
 
 export const list = (state: RootState) => state.statusNotification.list;
+
+export const scene = (state: RootState) => state.statusNotification.scene;
 
 export default slice.reducer;

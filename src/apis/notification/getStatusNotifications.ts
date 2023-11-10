@@ -9,7 +9,7 @@ export interface StatusNotificationData {
   notificationId: string;
   userAvatar: string;
   userId: string;
-  userName?: string;
+  username?: string;
   statusType: number;
   statusTime: number;
   readStatus?: number;
