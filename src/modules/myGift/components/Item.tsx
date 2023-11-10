@@ -9,6 +9,7 @@ import {Top3Item as ItemProps} from './Top3Item';
 
 import icon_fall from '../../../assets/images/icons/icon_fall.png';
 import icon_rise from '../../../assets/images/icons/icon_rise.png';
+import {generateFullURL, getUsername} from '../../helper';
 
 type Props = ItemProps & {style: StyleProp<ViewStyle>};
 
@@ -16,17 +17,22 @@ export default (props: Props) => {
   return (
     <View style={[styles.root, props.style]}>
       <View style={styles.ranking}>
-        <Text style={styles.numberTxt}>{props.number}</Text>
+        <Text style={styles.numberTxt}>{props.currentRanking}</Text>
 
-        <Image source={props.up ? icon_rise : icon_fall} />
+        <Image source={props.diff > 0 ? icon_rise : icon_fall} />
       </View>
 
       <TouchableOpacity activeOpacity={0.7} style={styles.avatarBtn}>
-        <Image source={props.avatar} style={styles.avatar} />
+        <Image
+          source={{uri: generateFullURL(props.avatar)}}
+          style={styles.avatar}
+        />
       </TouchableOpacity>
 
       <View style={styles.info}>
-        <Text style={styles.numberTxt}>{props.username}</Text>
+        <Text style={styles.numberTxt}>
+          {props.username ? props.username : getUsername(props.userId)}
+        </Text>
 
         <Text style={styles.numberTxt}>{props.count}</Text>
       </View>

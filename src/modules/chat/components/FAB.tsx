@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {Image, StyleSheet, TouchableOpacity} from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
@@ -22,9 +22,9 @@ export default (props: Props) => {
     unreadNotificationsCount,
   );
 
-  const handlePress = () => {
+  const handlePress = useCallback(() => {
     navigation.push('Notification');
-  };
+  }, [navigation]);
 
   return (
     <TouchableOpacity

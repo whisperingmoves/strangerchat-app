@@ -34,6 +34,10 @@ import myGiftReducer from '../modules/myGift/store/slice';
 import followingUserReducer from '../modules/followingUser/store/slice';
 import followerReducer from '../modules/follower/store/slice';
 import closeFriendReducer from '../modules/closeFriend/store/slice';
+import interactiveNotificationReducer from '../modules/interactiveNotification/store/slice';
+import statusNotificationReducer from '../modules/statusNotification/store/slice';
+import giftNotificationReducer from '../modules/giftNotification/store/slice';
+import systemNotificationReducer from '../modules/systemNotification/store/slice';
 
 export const LOG_OUT = 'LOG_OUT';
 
@@ -70,6 +74,10 @@ const appReducer = combineReducers({
   followingUser: followingUserReducer,
   follower: followerReducer,
   closeFriend: closeFriendReducer,
+  interactiveNotification: interactiveNotificationReducer,
+  statusNotification: statusNotificationReducer,
+  giftNotification: giftNotificationReducer,
+  systemNotification: systemNotificationReducer,
 });
 
 const rootReducer = (state: any, action: any) => {

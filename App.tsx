@@ -31,6 +31,7 @@ import Setting from './src/modules/setting/Setting';
 import Wallet from './src/modules/wallet/Wallet';
 import MyGift from './src/modules/myGift/MyGift';
 import MyFollowing from './src/modules/myFollowing/MyFollowing';
+import Notification from './src/modules/notification/Notification';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -51,6 +52,7 @@ export type RootStackParamList = {
   Wallet: undefined;
   MyGift: undefined;
   MyFollowing: undefined;
+  Notification: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -202,6 +204,15 @@ function App(): Element {
           <Stack.Screen
             name="MyFollowing"
             component={MyFollowing}
+            options={{
+              headerShown: false,
+              ...TransitionPresets.SlideFromRightIOS,
+            }}
+          />
+
+          <Stack.Screen
+            name="Notification"
+            component={Notification}
             options={{
               headerShown: false,
               ...TransitionPresets.SlideFromRightIOS,
