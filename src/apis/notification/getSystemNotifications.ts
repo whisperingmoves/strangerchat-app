@@ -7,6 +7,7 @@ export interface GetSystemNotificationsRequest {
 
 export interface SystemNotificationData {
   notificationId: string;
+  notificationType: number;
   notificationTitle: string;
   notificationContent: string;
   notificationTime: number;

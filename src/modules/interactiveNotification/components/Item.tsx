@@ -70,7 +70,10 @@ export default (props: Props) => {
   }, [status]);
 
   return (
-    <TouchableOpacity style={styles.root} onPress={handlePress}>
+    <TouchableOpacity
+      style={styles.root}
+      activeOpacity={0.7}
+      onPress={handlePress}>
       <TouchableOpacity activeOpacity={0.7}>
         <Image
           source={{uri: generateFullURL(props.userAvatar)}}

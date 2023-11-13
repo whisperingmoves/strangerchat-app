@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   Image,
   ImageBackground,
@@ -12,32 +12,102 @@ import icon_next from '../../../assets/images/icons/icon_next.png';
 import icon_dialog_outlined from '../../../assets/images/icons/icon_dialog_outlined.png';
 import Avatar from './Avatar';
 import {VIEW_DETAILS} from '../../../constants/notification/Config';
+import {SystemNotificationData} from '../../../apis/notification/getSystemNotifications';
+import {
+  markSystemNotificationAsReadAsync,
+  ReadStatus,
+  resetStatus,
+  scene,
+  setScene,
+  status,
+} from '../store/slice';
+import {useAppDispatch, useAppSelector} from '../../../hooks';
+import {store} from '../../../stores/store';
+import {showError} from '../../../utils/notification';
+import {formatTimestamp} from '../../../utils/date';
 
-export type Props = {
-  title: string;
-  updateTime: string;
-  content: string;
-  type: 'purchased' | 'reminder';
-};
+export type Props = SystemNotificationData;
 
 export default (props: Props) => {
+  const [readStatus, setReadStatus] = useState<ReadStatus>(0);
+
+  useEffect(() => {
+    setReadStatus(props.readStatus || 0);
+  }, [props.readStatus]);
+
+  const dispatch = useAppDispatch();
+
+  const statusValue = useAppSelector(status);
+
+  const sceneValue = useAppSelector(scene);
+
+  const handlePress = useCallback(() => {
+    if (readStatus === 1) {
+      return;
+    }
+
+    dispatch(setScene('markSystemNotificationAsRead'));
+
+    dispatch(markSystemNotificationAsReadAsync(props.notificationId));
+
+    setReadStatus(1);
+  }, [dispatch, props.notificationId, readStatus]);
+
+  useEffect(() => {
+    if (
+      statusValue === 'success' &&
+      sceneValue === 'markSystemNotificationAsRead'
+    ) {
+      dispatch(resetStatus());
+
+      return;
+    }
+
+    if (
+      statusValue === 'failed' &&
+      sceneValue === 'markSystemNotificationAsRead'
+    ) {
+      dispatch(resetStatus());
+
+      setReadStatus(0);
+
+      const {error} = store.getState().systemNotification;
+
+      showError(error);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
+
+  const notificationTimeTxt = useMemo(
+    () => formatTimestamp(props.notificationTime),
+    [props.notificationTime],
+  );
+
   return (
-    <View style={styles.root}>
-      <Avatar type={props.type} />
+    <TouchableOpacity
+      style={styles.root}
+      activeOpacity={0.7}
+      onPress={handlePress}>
+      <Avatar
+        notificationType={props.notificationType}
+        readStatus={readStatus}
+      />
 
       <ImageBackground
         source={icon_dialog_outlined}
         style={styles.container}
         imageStyle={styles.containerIcon}>
-        <Text style={styles.titleTxt}>{props.title}</Text>
+        <Text style={styles.titleTxt}>{props.notificationTitle}</Text>
 
-        <Text style={styles.updateTimeTxt}>{props.updateTime}</Text>
+        <Text style={styles.notificationTimeTxt}>{notificationTimeTxt}</Text>
 
-        <Text style={styles.contentTxt}>{props.content}</Text>
+        <Text style={styles.notificationContentTxt}>
+          {props.notificationContent}
+        </Text>
 
-        {props.type === 'reminder' && <View style={styles.line} />}
+        {props.notificationType === 0 && <View style={styles.line} />}
 
-        {props.type === 'reminder' && (
+        {props.notificationType === 0 && (
           <TouchableOpacity activeOpacity={0.7} style={styles.viewContainer}>
             <Text style={styles.viewTxt}>{VIEW_DETAILS}</Text>
 
@@ -45,7 +115,7 @@ export default (props: Props) => {
           </TouchableOpacity>
         )}
       </ImageBackground>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -71,7 +141,7 @@ const styles = StyleSheet.create({
     marginTop: 14,
     marginHorizontal: 22,
   },
-  updateTimeTxt: {
+  notificationTimeTxt: {
     color: '#C7C4CC',
     fontSize: 12,
     textAlignVertical: 'center',
@@ -79,7 +149,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginHorizontal: 22,
   },
-  contentTxt: {
+  notificationContentTxt: {
     color: '#554C5F',
     fontSize: 16,
     textAlignVertical: 'center',

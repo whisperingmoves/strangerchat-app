@@ -81,7 +81,7 @@ export default () => {
     if (statusValue === 'failed' && sceneValue === 'getGiftNotifications') {
       dispatch(resetStatus());
 
-      const {error} = store.getState().interactiveNotification;
+      const {error} = store.getState().giftNotification;
 
       showError(error);
     }

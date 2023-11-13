@@ -80,7 +80,7 @@ export default () => {
     if (statusValue === 'failed' && sceneValue === 'getStatusNotifications') {
       dispatch(resetStatus());
 
-      const {error} = store.getState().interactiveNotification;
+      const {error} = store.getState().statusNotification;
 
       showError(error);
     }

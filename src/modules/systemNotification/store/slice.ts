@@ -7,15 +7,21 @@ import {
 } from '../../../apis/notification/getSystemNotifications';
 import {getSystemNotifications, markSystemNotificationAsRead} from './api';
 import {State as UserState} from '../../../stores/user/slice';
-import {copy} from '../../../utils/object';
 import {listPageReducer} from '../../../stores/helper';
 
 export type Error = string;
 
 export type Status = 'idle' | 'loading' | 'failed' | 'success';
 
+export type Scene = 'getSystemNotifications' | 'markSystemNotificationAsRead';
+
+export type ReadStatus = number;
+
+export type NotificationType = number;
+
 export interface State extends GetSystemNotificationsRequest {
   list: SystemNotificationData[];
+  scene?: Scene;
   error: Error;
   status: Status;
 }
@@ -66,8 +72,8 @@ export const slice = createSlice({
       state.page = initialState.page;
     },
 
-    setState: (state, action: PayloadAction<any>) => {
-      copy(state, action.payload);
+    setScene: (state, action: PayloadAction<Scene>) => {
+      state.scene = action.payload;
     },
   },
 
@@ -101,10 +107,12 @@ export const slice = createSlice({
   },
 });
 
-export const {resetStatus, resetPage, setState} = slice.actions;
+export const {resetStatus, resetPage, setScene} = slice.actions;
 
 export const status = (state: RootState) => state.systemNotification.status;
 
 export const list = (state: RootState) => state.systemNotification.list;
+
+export const scene = (state: RootState) => state.systemNotification.scene;
 
 export default slice.reducer;
