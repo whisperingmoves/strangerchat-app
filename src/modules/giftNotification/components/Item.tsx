@@ -16,6 +16,7 @@ import {
 } from '../store/slice';
 import {GiftNotificationData} from '../../../apis/notification/getGiftNotifications';
 import {GIFT_TEMPLATE} from '../../../constants/giftNotification/Config';
+import {setUnreadNotificationsCount} from '../../chat/store/slice';
 
 export type Props = GiftNotificationData;
 
@@ -50,6 +51,15 @@ export default (props: Props) => {
       sceneValue === 'markGiftNotificationAsRead'
     ) {
       dispatch(resetStatus());
+
+      const unreadNotificationsCount =
+        store.getState().chat.unreadNotificationsCount - 1;
+
+      dispatch(
+        setUnreadNotificationsCount({
+          count: unreadNotificationsCount < 0 ? 0 : unreadNotificationsCount,
+        }),
+      );
 
       return;
     }

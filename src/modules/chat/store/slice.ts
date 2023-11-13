@@ -101,7 +101,7 @@ export const slice = createSlice({
       state,
       action: PayloadAction<UnreadNotificationsCount>,
     ) => {
-      if (action.payload.count) {
+      if (action.payload.count || action.payload.count === 0) {
         state.unreadNotificationsCount = action.payload.count;
       }
     },

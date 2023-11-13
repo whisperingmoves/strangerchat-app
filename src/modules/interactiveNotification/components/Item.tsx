@@ -16,6 +16,7 @@ import {
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {store} from '../../../stores/store';
 import {showError} from '../../../utils/notification';
+import {setUnreadNotificationsCount} from '../../chat/store/slice';
 
 export type Props = InteractionNotificationData;
 
@@ -50,6 +51,15 @@ export default (props: Props) => {
       sceneValue === 'markInteractionNotificationAsRead'
     ) {
       dispatch(resetStatus());
+
+      const unreadNotificationsCount =
+        store.getState().chat.unreadNotificationsCount - 1;
+
+      dispatch(
+        setUnreadNotificationsCount({
+          count: unreadNotificationsCount < 0 ? 0 : unreadNotificationsCount,
+        }),
+      );
 
       return;
     }

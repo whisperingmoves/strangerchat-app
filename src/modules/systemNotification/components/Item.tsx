@@ -25,6 +25,7 @@ import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {store} from '../../../stores/store';
 import {showError} from '../../../utils/notification';
 import {formatTimestamp} from '../../../utils/date';
+import {setUnreadNotificationsCount} from '../../chat/store/slice';
 
 export type Props = SystemNotificationData;
 
@@ -59,6 +60,15 @@ export default (props: Props) => {
       sceneValue === 'markSystemNotificationAsRead'
     ) {
       dispatch(resetStatus());
+
+      const unreadNotificationsCount =
+        store.getState().chat.unreadNotificationsCount - 1;
+
+      dispatch(
+        setUnreadNotificationsCount({
+          count: unreadNotificationsCount < 0 ? 0 : unreadNotificationsCount,
+        }),
+      );
 
       return;
     }
