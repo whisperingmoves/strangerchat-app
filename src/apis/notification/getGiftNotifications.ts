@@ -9,7 +9,7 @@ export interface GiftNotificationData {
   notificationId: string;
   userAvatar: string;
   userId: string;
-  userName?: string;
+  username?: string;
   giftQuantity: number;
   giftName: string;
   giftTime: number;

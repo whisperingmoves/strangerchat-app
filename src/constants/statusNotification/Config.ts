@@ -1,1 +1,1 @@
-export const STATUS_MAP = ['Follow you', 'View your profile'];
+export const STATUS_MAP = ['Followed you', 'Viewed your profile'];

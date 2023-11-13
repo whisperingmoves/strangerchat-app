@@ -1,9 +1,9 @@
 export const INTERACTION_MAP = [
-  'Like your post',
-  'Comment your post',
-  'Share your post',
-  'Collect your post',
-  'Like your comment',
-  'Reply your comment',
-  'At you',
+  'Liked your post',
+  'Commented your post',
+  'Shared your post',
+  'Collected your post',
+  'Liked your comment',
+  'Replied your comment',
+  '@ you',
 ];

@@ -7,15 +7,19 @@ import {
 } from '../../../apis/notification/getGiftNotifications';
 import {State as UserState} from '../../../stores/user/slice';
 import {getGiftNotifications, markGiftNotificationAsRead} from './api';
-import {copy} from '../../../utils/object';
 import {listPageReducer} from '../../../stores/helper';
 
 export type Error = string;
 
 export type Status = 'idle' | 'loading' | 'failed' | 'success';
 
+export type Scene = 'getGiftNotifications' | 'markGiftNotificationAsRead';
+
+export type ReadStatus = number;
+
 export interface State extends GetGiftNotificationsRequest {
   list: GiftNotificationData[];
+  scene?: Scene;
   error: Error;
   status: Status;
 }
@@ -66,8 +70,8 @@ export const slice = createSlice({
       state.page = initialState.page;
     },
 
-    setState: (state, action: PayloadAction<any>) => {
-      copy(state, action.payload);
+    setScene: (state, action: PayloadAction<Scene>) => {
+      state.scene = action.payload;
     },
   },
 
@@ -101,10 +105,12 @@ export const slice = createSlice({
   },
 });
 
-export const {resetStatus, resetPage, setState} = slice.actions;
+export const {resetStatus, resetPage, setScene} = slice.actions;
 
 export const status = (state: RootState) => state.giftNotification.status;
 
 export const list = (state: RootState) => state.giftNotification.list;
+
+export const scene = (state: RootState) => state.giftNotification.scene;
 
 export default slice.reducer;
