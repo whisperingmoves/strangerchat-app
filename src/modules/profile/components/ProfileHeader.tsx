@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -13,6 +13,7 @@ import Stats from './Stats';
 import Location from '../../../components/Location';
 import {useAppSelector} from '../../../hooks';
 import {city} from '../../../stores/user/slice';
+import {UserIdContext} from '../context/UserIdContext';
 
 type Props = {
   style: StyleProp<ViewStyle>;
@@ -25,11 +26,13 @@ export default (props: Props) => {
 
   const cityValue = useAppSelector(city);
 
+  const profileUserIdValue = useContext(UserIdContext);
+
   return (
     <LinearGradient
       style={[styles.root, statusBarStyle, props.style]}
       colors={['#D988FF', '#8B5CFF']}>
-      <Header style={styles.header} />
+      {!profileUserIdValue && <Header style={styles.header} />}
 
       <Avatar style={styles.avatar} />
 

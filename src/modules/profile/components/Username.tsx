@@ -1,4 +1,11 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   Image,
   ImageStyle,
@@ -24,15 +31,19 @@ import {
   userId,
   username,
 } from '../../../stores/user/slice';
+import {username as profileUsername} from '../store/slice';
 import {getUsername} from '../../helper';
 import {showError} from '../../../utils/notification';
 import {store} from '../../../stores/store';
+import {UserIdContext} from '../context/UserIdContext';
 
 type Props = {
   style: StyleProp<ViewStyle>;
 };
 
 export default (props: Props) => {
+  const profileUserIdValue = useContext(UserIdContext);
+
   const [textWidth, setTextWidth] = useState(102);
 
   const handleLayoutChange = useCallback((event: LayoutChangeEvent) => {
@@ -48,6 +59,8 @@ export default (props: Props) => {
   const userIdValue = useAppSelector(userId);
 
   const usernameValue = useAppSelector(username);
+
+  const profileUsernameValue = useAppSelector(profileUsername);
 
   const inputRef = useRef<TextInput>(null);
 
@@ -101,25 +114,44 @@ export default (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statusValue]);
 
+  const usernameTxt = useMemo(
+    () =>
+      !profileUserIdValue
+        ? usernameValue
+          ? usernameValue
+          : getUsername(userIdValue)
+        : profileUsernameValue
+        ? profileUsernameValue
+        : getUsername(profileUserIdValue),
+    [profileUserIdValue, profileUsernameValue, userIdValue, usernameValue],
+  );
+
+  const editableValue = useMemo<boolean>(
+    () => (!profileUserIdValue ? editable : false),
+    [editable, profileUserIdValue],
+  );
+
   return (
     <View style={[styles.root, props.style]}>
       <TextInput
         style={styles.txt}
         onLayout={handleLayoutChange}
-        editable={editable}
+        editable={editableValue}
         ref={inputRef}
         onSubmitEditing={handleSubmitEditing}
         blurOnSubmit={true}
         onChangeText={setUsernameInput}>
-        {usernameValue ? usernameValue : getUsername(userIdValue)}
+        {usernameTxt}
       </TextInput>
 
-      <TouchableOpacity
-        activeOpacity={0.7}
-        style={[styles.btn, btnStyle]}
-        onPress={handleEditPress}>
-        <Image source={icon_edit} style={styles.icon} />
-      </TouchableOpacity>
+      {!profileUserIdValue && (
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={[styles.btn, btnStyle]}
+          onPress={handleEditPress}>
+          <Image source={icon_edit} style={styles.icon} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

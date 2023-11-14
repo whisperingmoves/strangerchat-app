@@ -10,8 +10,9 @@ import AtUserList from '../../../components/atUserList/AtUserList';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {store} from '../../../stores/store';
+import {UserPostData} from '../../../apis/user/getUserPosts';
 
-export type Props = MyPostData;
+export type Props = MyPostData | UserPostData;
 
 export default (props: Props) => {
   const handleAtUserPress = useCallback(() => {}, []);

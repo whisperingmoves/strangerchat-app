@@ -38,6 +38,7 @@ import interactiveNotificationReducer from '../modules/interactiveNotification/s
 import statusNotificationReducer from '../modules/statusNotification/store/slice';
 import giftNotificationReducer from '../modules/giftNotification/store/slice';
 import systemNotificationReducer from '../modules/systemNotification/store/slice';
+import profileReducer from '../modules/profile/store/slice';
 
 export const LOG_OUT = 'LOG_OUT';
 
@@ -78,6 +79,7 @@ const appReducer = combineReducers({
   statusNotification: statusNotificationReducer,
   giftNotification: giftNotificationReducer,
   systemNotification: systemNotificationReducer,
+  profile: profileReducer,
 });
 
 const rootReducer = (state: any, action: any) => {

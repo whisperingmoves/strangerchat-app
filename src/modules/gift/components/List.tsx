@@ -42,10 +42,14 @@ export default () => {
   }, [dispatch]);
 
   const load = useCallback(() => {
+    if (statusValue === 'idle' || statusValue === 'loading') {
+      return;
+    }
+
     dispatch(setScene('getGiftList'));
 
     dispatch(getGiftListAsync());
-  }, [dispatch]);
+  }, [dispatch, statusValue]);
 
   const data = transformItemArray(listValue);
 

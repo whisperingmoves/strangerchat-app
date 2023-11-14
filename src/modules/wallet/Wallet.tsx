@@ -50,7 +50,7 @@ export default () => {
   }, [dispatch, statusValue]);
 
   const load = useCallback(() => {
-    if (statusValue === 'loading') {
+    if (statusValue === 'loading' || statusValue === 'idle') {
       return;
     }
 

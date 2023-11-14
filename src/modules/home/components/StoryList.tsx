@@ -40,13 +40,13 @@ export default (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const load = () => {
-    if (statusValue === 'loading') {
+  const load = useCallback(() => {
+    if (statusValue === 'loading' || statusValue === 'idle') {
       return;
     }
 
     dispatch(getStoryListAsync());
-  };
+  }, [dispatch, statusValue]);
 
   useEffect(() => {
     refresh();

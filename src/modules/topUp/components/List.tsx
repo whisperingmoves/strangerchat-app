@@ -50,15 +50,18 @@ export default (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const load = () => {
-    if (statusValue === 'loading' && sceneValue === 'getCoinProducts') {
+  const load = useCallback(() => {
+    if (
+      (statusValue === 'loading' || statusValue === 'idle') &&
+      sceneValue === 'getCoinProducts'
+    ) {
       return;
     }
 
     dispatch(setScene('getCoinProducts'));
 
     dispatch(getCoinProductsAsync());
-  };
+  }, [dispatch, sceneValue, statusValue]);
 
   useEffect(() => {
     if (statusValue === 'success' && sceneValue === 'getCoinProducts') {

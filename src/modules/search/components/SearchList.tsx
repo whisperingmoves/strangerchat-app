@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {
   getLatestPostsAsync,
   list,
@@ -41,13 +41,16 @@ export default (props: Props) => {
     dispatch(getLatestPostsAsync());
   };
 
-  const load = () => {
-    if (statusValue === 'loading' && sceneValue === 'getLatestPosts') {
+  const load = useCallback(() => {
+    if (
+      (statusValue === 'loading' || statusValue === 'idle') &&
+      sceneValue === 'getLatestPosts'
+    ) {
       return;
     }
 
     dispatch(getLatestPostsAsync());
-  };
+  }, [dispatch, sceneValue, statusValue]);
 
   useEffect(() => {
     if (statusValue === 'success' && sceneValue === 'getLatestPosts') {

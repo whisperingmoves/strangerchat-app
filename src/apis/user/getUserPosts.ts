@@ -1,7 +1,7 @@
 import axiosInstance from '../axios';
 
 export interface GetUserPostsRequest {
-  userId: number;
+  userId: string;
   page?: number;
   pageSize?: number;
 }

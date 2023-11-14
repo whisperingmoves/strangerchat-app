@@ -38,7 +38,7 @@ export default (props: Props) => {
   }, []);
 
   const load = () => {
-    if (statusValue === 'loading') {
+    if (statusValue === 'loading' || statusValue === 'idle') {
       return;
     }
 

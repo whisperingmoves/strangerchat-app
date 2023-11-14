@@ -48,13 +48,14 @@ import {FollowersCount, setUser, VisitorsCount} from '../../stores/user/slice';
 import ViewShot from 'react-native-view-shot';
 import {ViewShotContext} from '../../contexts/ViewShotContext';
 import {GiftsReceived} from '../../apis/notification/giftsReceived';
+import {UserId} from '../profile/store/slice';
 
 export type RootBottomTabParamList = {
   Home: undefined;
   Explore: {tabBarHeight: number};
   Post: undefined;
   Chat: {tabBarHeight: number};
-  Profile: {tabBarHeight: number};
+  Profile: {tabBarHeight: number; userId?: UserId};
 };
 
 const BottomTab = createBottomTabNavigator<RootBottomTabParamList>();

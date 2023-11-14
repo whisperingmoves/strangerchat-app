@@ -69,7 +69,10 @@ export default (props: Props) => {
   }, []);
 
   const load = useCallback(() => {
-    if (statusValue === 'loading' && sceneValue === 'getPostComments') {
+    if (
+      (statusValue === 'loading' || statusValue === 'idle') &&
+      sceneValue === 'getPostComments'
+    ) {
       return;
     }
 

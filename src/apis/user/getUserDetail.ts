@@ -1,7 +1,7 @@
 import axiosInstance from '../axios';
 
 export interface GetUserDetailRequest {
-  userId: number;
+  userId: string;
 }
 
 export interface GetUserDetailResponse {

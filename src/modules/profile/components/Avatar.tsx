@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useContext, useEffect, useMemo} from 'react';
 import {Image, ImageStyle, StyleSheet, TouchableOpacity} from 'react-native';
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {checkFileExistence} from '../../../utils/file';
@@ -16,10 +16,12 @@ import {
   updateUserProfileAsync,
   uploadAvatarAsync,
 } from '../../../stores/user/slice';
+import {avatar as profileAvatar} from '../store/slice';
 import {useActionSheet} from '@expo/react-native-action-sheet';
 import {openImagePicker} from '../../../utils/image';
 import {store} from '../../../stores/store';
 import {generateFullURL} from '../../helper';
+import {UserIdContext} from '../context/UserIdContext';
 
 type Props = {
   style: StyleProp<ImageStyle>;
@@ -30,7 +32,9 @@ export default (props: Props) => {
 
   const {showActionSheetWithOptions} = useActionSheet();
 
-  const avatarValue = useAppSelector(avatar);
+  const userAvatarValue = useAppSelector(avatar);
+
+  const profileAvatarValue = useAppSelector(profileAvatar);
 
   const statusValue = useAppSelector(status);
 
@@ -87,9 +91,20 @@ export default (props: Props) => {
     [dispatch],
   );
 
+  const profileUserIdValue = useContext(UserIdContext);
+
   const handlePress = useCallback(() => {
+    if (profileUserIdValue) {
+      return;
+    }
+
     openImagePicker(showActionSheetWithOptions, uploadAvatar);
-  }, [showActionSheetWithOptions, uploadAvatar]);
+  }, [profileUserIdValue, showActionSheetWithOptions, uploadAvatar]);
+
+  const avatarValue = useMemo(
+    () => (profileUserIdValue ? profileAvatarValue : userAvatarValue),
+    [profileAvatarValue, profileUserIdValue, userAvatarValue],
+  );
 
   return (
     <TouchableOpacity activeOpacity={0.7} onPress={handlePress}>

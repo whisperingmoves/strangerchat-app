@@ -6,6 +6,7 @@ import {scene as userScene, status as userStatus} from '../stores/user/slice';
 import {status as navigationBarStatus} from '../modules/navigationBar/store/slice';
 import {status as homeStatus} from '../modules/home/store/slice';
 import {status as newPostStatus} from '../modules/newPost/store/slice';
+import {status as profileStatus} from '../modules/profile/store/slice';
 import {
   scene as commentDetailScene,
   status as commentDetailStatus,
@@ -43,6 +44,7 @@ const useLoading = () => {
   const giftStatusValue = useAppSelector(giftStatus);
   const giftSceneValue = useAppSelector(giftScene);
   const myGiftStatusValue = useAppSelector(myGiftStatus);
+  const profileStatusValue = useAppSelector(profileStatus);
 
   const loading =
     loginStatusValue === 'loading' ||
@@ -58,7 +60,8 @@ const useLoading = () => {
       chatDetailSceneValue === 'uploadMessage') ||
     (topUpStatusValue === 'loading' && topUpSceneValue === 'buyCoinProduct') ||
     (giftStatusValue === 'loading' && giftSceneValue === 'sendGift') ||
-    myGiftStatusValue === 'loading';
+    myGiftStatusValue === 'loading' ||
+    profileStatusValue === 'loading';
 
   useEffect(() => {
     return () => {};

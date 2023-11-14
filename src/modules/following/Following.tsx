@@ -37,13 +37,13 @@ export default (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const load = () => {
-    if (statusValue === 'loading') {
+  const load = useCallback(() => {
+    if (statusValue === 'loading' || statusValue === 'idle') {
       return;
     }
 
     dispatch(getFollowedPostsAsync());
-  };
+  }, [dispatch, statusValue]);
 
   useEffect(() => {
     refresh();
