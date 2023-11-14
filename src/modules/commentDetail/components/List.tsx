@@ -96,7 +96,7 @@ export default (props: Props) => {
       return;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
+  }, [statusValue]);
 
   return (
     <FlatList

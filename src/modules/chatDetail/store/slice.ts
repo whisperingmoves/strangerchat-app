@@ -30,7 +30,7 @@ export type Scene =
   | 'uploadMessage'
   | undefined;
 
-export type Status = 'idle' | 'loading' | 'failed' | 'success';
+export type Status = 'idle' | 'loading' | 'failed' | 'success' | 'reset';
 
 export type ConversationId = string;
 
@@ -308,7 +308,7 @@ export const slice = createSlice({
     },
 
     resetStatus: state => {
-      state.status = initialState.status;
+      state.status = 'reset';
     },
 
     resetMessageUri: state => {

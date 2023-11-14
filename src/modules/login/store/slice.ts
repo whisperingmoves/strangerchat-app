@@ -11,7 +11,7 @@ export type Error = string;
 
 export type Scene = 'login' | 'getLocation' | 'verificationCode' | undefined;
 
-export type Status = 'idle' | 'loading' | 'failed' | 'success';
+export type Status = 'idle' | 'loading' | 'failed' | 'success' | 'reset';
 
 export interface State {
   position: GeoPosition | undefined;
@@ -48,7 +48,7 @@ export const slice = createSlice({
 
   reducers: {
     resetStatus: state => {
-      state.status = initialState.status;
+      state.status = 'reset';
     },
 
     setScene: (state, action: PayloadAction<Scene>) => {

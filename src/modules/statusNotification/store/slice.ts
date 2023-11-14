@@ -11,7 +11,7 @@ import {getStatusNotifications, markStatusNotificationAsRead} from './api';
 
 export type Error = string;
 
-export type Status = 'idle' | 'loading' | 'failed' | 'success';
+export type Status = 'idle' | 'loading' | 'failed' | 'success' | 'reset';
 
 export type Scene = 'getStatusNotifications' | 'markStatusNotificationAsRead';
 
@@ -63,7 +63,7 @@ export const slice = createSlice({
 
   reducers: {
     resetStatus: state => {
-      state.status = initialState.status;
+      state.status = 'reset';
     },
 
     resetPage: state => {

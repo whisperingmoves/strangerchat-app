@@ -66,7 +66,7 @@ export default (props: Props) => {
       showError(error);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
+  }, [statusValue]);
 
   return (
     <PostList

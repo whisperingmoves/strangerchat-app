@@ -6,7 +6,7 @@ import {RootState} from '../../../stores/store';
 
 export type Error = string;
 
-export type Status = 'idle' | 'loading' | 'failed' | 'success';
+export type Status = 'idle' | 'loading' | 'failed' | 'success' | 'reset';
 
 export type Range = 0 | 1 | 2;
 
@@ -46,7 +46,7 @@ export const slice = createSlice({
 
   reducers: {
     resetStatus: state => {
-      state.status = initialState.status;
+      state.status = 'reset';
     },
 
     setRange: (state, action: PayloadAction<Range>) => {

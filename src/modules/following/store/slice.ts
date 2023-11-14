@@ -37,7 +37,7 @@ export type IsBlocked = number;
 
 export type Error = string;
 
-export type Status = 'idle' | 'loading' | 'failed' | 'success';
+export type Status = 'idle' | 'loading' | 'failed' | 'success' | 'reset';
 
 export interface State extends GetFollowedPostsRequest {
   list: FollowedPostData[];
@@ -71,7 +71,7 @@ export const slice = createSlice({
 
   reducers: {
     resetStatus: state => {
-      state.status = initialState.status;
+      state.status = 'reset';
     },
 
     resetPage: state => {
