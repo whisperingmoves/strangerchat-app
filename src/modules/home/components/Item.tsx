@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useContext} from 'react';
 import {ImageBackground, StyleSheet, TouchableOpacity} from 'react-native';
 
 import {
@@ -14,6 +14,9 @@ import Relation from './Relation';
 import Info from './Info';
 import {generateFullURL, getUsername} from '../../helper';
 import LinearGradient from 'react-native-linear-gradient';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {TabBarHeightContext} from '../../../contexts/TabBarHeightContext';
 
 export type Props = {
   relation?: RelationType;
@@ -26,8 +29,19 @@ export type Props = {
 };
 
 export default (props: Props) => {
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const tabBarHeight = useContext(TabBarHeightContext);
+
+  const handlePress = useCallback(() => {
+    navigation.push('Profile', {
+      tabBarHeight,
+      profileUserIdValue: props.userId,
+    });
+  }, [navigation, props.userId, tabBarHeight]);
+
   return (
-    <TouchableOpacity activeOpacity={0.7}>
+    <TouchableOpacity activeOpacity={0.7} onPress={handlePress}>
       <ImageBackground
         style={styles.root}
         source={{
