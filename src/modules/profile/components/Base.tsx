@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useContext} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -7,6 +7,7 @@ import {
   FollowingCount,
   VisitorsCount,
 } from '../../../stores/user/slice';
+import {UserIdContext} from '../context/UserIdContext';
 
 type Props = {
   count: FollowingCount | FollowersCount | VisitorsCount;
@@ -16,7 +17,13 @@ type Props = {
 export default (props: Props) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
+  const profileUserIdValue = useContext(UserIdContext);
+
   const handlePress = useCallback(() => {
+    if (profileUserIdValue) {
+      return;
+    }
+
     navigation.push('MyFollowing');
   }, [navigation]);
 
