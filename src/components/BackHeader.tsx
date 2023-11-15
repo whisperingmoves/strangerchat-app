@@ -2,13 +2,17 @@ import React from 'react';
 import {Image, StyleSheet, TouchableOpacity} from 'react-native';
 
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
+import {
+  ImageStyle,
+  ViewStyle,
+} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 import icon_backtrack from '../assets/images/icons/icon_backtrack.png';
 
 type Props = {
   onPress: () => void;
   style: StyleProp<ViewStyle>;
+  iconStyle?: StyleProp<ImageStyle>;
 };
 
 export default (props: Props) => {
@@ -17,7 +21,7 @@ export default (props: Props) => {
       style={props.style}
       activeOpacity={0.7}
       onPress={props.onPress}>
-      <Image style={styles.img} source={icon_backtrack} />
+      <Image style={[styles.img, props.iconStyle]} source={icon_backtrack} />
     </TouchableOpacity>
   );
 };
