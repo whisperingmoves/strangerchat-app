@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useContext} from 'react';
 import {
   Image,
   ImageBackground,
@@ -16,6 +16,9 @@ import {Distance, UserId, Username} from '../store/slice';
 import {Avatar} from '../../avatar/store/slice';
 import {AWAY_FROM} from '../../../constants/home/Config';
 import {generateFullURL, getUsername} from '../../helper';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {TabBarHeightContext} from '../../../contexts/TabBarHeightContext';
 
 type Props = {
   style: StyleProp<ViewStyle>;
@@ -26,6 +29,17 @@ type Props = {
 };
 
 export default (props: Props) => {
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const tabBarHeight = useContext(TabBarHeightContext);
+
+  const handlePress = useCallback(() => {
+    navigation.push('Profile', {
+      tabBarHeight,
+      profileUserIdValue: props.userId,
+    });
+  }, [navigation, props.userId, tabBarHeight]);
+
   return (
     <View style={[styles.root, props.style]}>
       <View>
@@ -42,7 +56,7 @@ export default (props: Props) => {
         source={icon_bubble}
         style={styles.avatarBg}
         imageStyle={styles.avatarBgImg}>
-        <TouchableOpacity activeOpacity={0.7}>
+        <TouchableOpacity activeOpacity={0.7} onPress={handlePress}>
           <Image
             source={{uri: generateFullURL(props.avatar)}}
             style={styles.avatar}

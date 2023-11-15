@@ -30,6 +30,7 @@ import {showError} from '../../utils/notification';
 import {Route} from '@react-navigation/native';
 import ListFooter from '../../components/ListFooter';
 import {UserIdContext} from './context/UserIdContext';
+import {TabBarHeight} from '../../contexts/TabBarHeightContext';
 
 const renderItem = ({item}: {item: ItemProps}) => <Item {...item} />;
 
@@ -37,7 +38,10 @@ const keyExtractor = (item: ItemProps, index: number) =>
   `${item.postId}-${index}`;
 
 type Props = {
-  route: Route<string, {tabBarHeight: number; profileUserIdValue?: UserId}>;
+  route: Route<
+    string,
+    {tabBarHeight: TabBarHeight; profileUserIdValue?: UserId}
+  >;
 };
 
 export default (props: Props) => {
@@ -66,7 +70,7 @@ export default (props: Props) => {
   }, [dispatch]);
 
   const loadUser = useCallback(() => {
-    if (userStatusValue === 'loading') {
+    if (userStatusValue === 'loading' || userStatusValue === 'idle') {
       return;
     }
 

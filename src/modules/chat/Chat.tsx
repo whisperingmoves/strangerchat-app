@@ -1,9 +1,7 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useContext} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
-
-import {Route} from '@react-navigation/native';
 
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
@@ -13,17 +11,14 @@ import FAB from './components/FAB';
 import List from './components/List';
 import {keyword, setKeyword} from './store/slice';
 import {useAppDispatch, useAppSelector} from '../../hooks';
+import {TabBarHeightContext} from '../../contexts/TabBarHeightContext';
 
-type Props = {
-  route: Route<string, {tabBarHeight: number}>;
-};
-
-export default (props: Props) => {
+export default () => {
   const insets = useSafeAreaInsets();
 
   const statusBarStyle: StyleProp<ViewStyle> = {paddingTop: insets.top};
 
-  const {tabBarHeight} = props.route.params;
+  const tabBarHeight = useContext(TabBarHeightContext);
 
   const dispatch = useAppDispatch();
 

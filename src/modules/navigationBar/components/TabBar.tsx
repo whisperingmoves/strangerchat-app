@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import {
   Image,
@@ -25,10 +25,20 @@ import {conversationList} from '../../chat/store/slice';
 import Badge from '../../../components/Badge';
 import {convertNumberToString} from '../../../utils/number';
 import {calculateTotalUnreadCount} from '../helper';
+import {TabBarHeight} from '../../../contexts/TabBarHeightContext';
 
-export default ({state, descriptors, navigation}: BottomTabBarProps) => {
-  const [tabBarHeight, setTabBarHeight] = useState(30);
+type Props = BottomTabBarProps & {
+  tabBarHeight: TabBarHeight;
+  setTabBarHeight: (tabBarHeight: TabBarHeight) => void;
+};
 
+export default ({
+  state,
+  descriptors,
+  navigation,
+  tabBarHeight,
+  setTabBarHeight,
+}: Props) => {
   const conversationListValue = useAppSelector(conversationList);
 
   const unreadCount = calculateTotalUnreadCount(conversationListValue);

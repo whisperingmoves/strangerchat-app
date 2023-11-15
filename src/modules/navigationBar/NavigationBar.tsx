@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
@@ -49,13 +49,18 @@ import ViewShot from 'react-native-view-shot';
 import {ViewShotContext} from '../../contexts/ViewShotContext';
 import {GiftsReceived} from '../../apis/notification/giftsReceived';
 import {UserId} from '../profile/store/slice';
+import {BottomTabBarProps} from '@react-navigation/bottom-tabs/src/types';
+import {
+  TabBarHeight,
+  TabBarHeightContext,
+} from '../../contexts/TabBarHeightContext';
 
 export type RootBottomTabParamList = {
   Home: undefined;
-  Explore: {tabBarHeight: number};
+  Explore: undefined;
   Post: undefined;
-  Chat: {tabBarHeight: number};
-  Profile: {tabBarHeight: number; userId?: UserId};
+  Chat: undefined;
+  Profile: {tabBarHeight: TabBarHeight; profileUserIdValue?: UserId};
 };
 
 const BottomTab = createBottomTabNavigator<RootBottomTabParamList>();
@@ -214,58 +219,72 @@ export default () => {
 
   const viewShotRef = useRef<ViewShot>(null);
 
+  const [tabBarHeight, setTabBarHeight] = useState(30);
+
+  const renderTabBar = useCallback(
+    (props: BottomTabBarProps) => (
+      <TabBar
+        {...props}
+        setTabBarHeight={setTabBarHeight}
+        tabBarHeight={tabBarHeight}
+      />
+    ),
+    [tabBarHeight],
+  );
+
   return (
     <ViewShot style={styles.root} ref={viewShotRef}>
       <ViewShotContext.Provider value={viewShotRef}>
-        {/* eslint-disable-next-line react/no-unstable-nested-components */}
-        <BottomTab.Navigator tabBar={props => <TabBar {...props} />}>
-          <BottomTab.Screen
-            name="Home"
-            component={Home}
-            options={{
-              title: HOME,
-              headerShown: false,
-            }}
-          />
+        <TabBarHeightContext.Provider value={tabBarHeight}>
+          <BottomTab.Navigator tabBar={renderTabBar}>
+            <BottomTab.Screen
+              name="Home"
+              component={Home}
+              options={{
+                title: HOME,
+                headerShown: false,
+              }}
+            />
 
-          <BottomTab.Screen
-            name="Explore"
-            component={Explore}
-            options={{
-              title: EXPLORE,
-              headerShown: false,
-            }}
-          />
+            <BottomTab.Screen
+              name="Explore"
+              component={Explore}
+              options={{
+                title: EXPLORE,
+                headerShown: false,
+              }}
+            />
 
-          <BottomTab.Screen
-            name="Post"
-            component={Empty}
-            options={{
-              title: POST,
-              headerShown: false,
-            }}
-          />
+            <BottomTab.Screen
+              name="Post"
+              component={Empty}
+              options={{
+                title: POST,
+                headerShown: false,
+              }}
+            />
 
-          <BottomTab.Screen
-            name="Chat"
-            component={Chat}
-            options={{
-              title: CHAT,
-              headerShown: false,
-            }}
-          />
+            <BottomTab.Screen
+              name="Chat"
+              component={Chat}
+              options={{
+                title: CHAT,
+                headerShown: false,
+              }}
+            />
 
-          <BottomTab.Screen
-            name="Profile"
-            component={Profile}
-            options={{
-              title: PROFILE,
-              headerShown: false,
-            }}
-          />
-        </BottomTab.Navigator>
+            <BottomTab.Screen
+              name="Profile"
+              component={Profile}
+              options={{
+                title: PROFILE,
+                headerShown: false,
+              }}
+            />
+          </BottomTab.Navigator>
 
-        <DailyAttendance ref={dailyAttendanceRef} />
+          <DailyAttendance ref={dailyAttendanceRef} />
+        </TabBarHeightContext.Provider>
       </ViewShotContext.Provider>
     </ViewShot>
   );

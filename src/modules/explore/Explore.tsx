@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useContext} from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 import Following from '../following/Following';
@@ -7,17 +7,13 @@ import Latest from '../latest/Latest';
 import TabBar from './components/TabBar';
 import {FOLLOWING} from '../../constants/Config';
 import {LATEST, RECOMMEND} from '../../constants/explore/Config';
-import {Route} from '@react-navigation/native';
 import {MaterialTopTabBarProps} from '@react-navigation/material-top-tabs/lib/typescript/src/types';
+import {TabBarHeightContext} from '../../contexts/TabBarHeightContext';
 
 const Tab = createMaterialTopTabNavigator();
 
-type Props = {
-  route: Route<string, {tabBarHeight: number}>;
-};
-
-export default (props: Props) => {
-  const {tabBarHeight} = props.route.params;
+export default () => {
+  const tabBarHeight = useContext(TabBarHeightContext);
 
   const following = useCallback(
     () => <Following tabBarHeight={tabBarHeight} />,
