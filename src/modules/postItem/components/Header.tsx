@@ -206,9 +206,9 @@ export default (props: Props) => {
   const handlePress = useCallback(() => {
     navigation.push('Profile', {
       tabBarHeight,
-      profileUserIdValue: props.authorId === userId ? '' : props.authorId,
+      profileUserIdValue: props.authorId,
     });
-  }, [navigation, props.authorId, tabBarHeight, userId]);
+  }, [navigation, props.authorId, tabBarHeight]);
 
   return (
     <View style={[styles.root, props.style]}>
