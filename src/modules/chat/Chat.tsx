@@ -1,4 +1,4 @@
-import React, {useCallback, useContext} from 'react';
+import React, {useCallback} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
@@ -11,14 +11,11 @@ import FAB from './components/FAB';
 import List from './components/List';
 import {keyword, setKeyword} from './store/slice';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {TabBarHeightContext} from '../../contexts/TabBarHeightContext';
 
 export default () => {
   const insets = useSafeAreaInsets();
 
   const statusBarStyle: StyleProp<ViewStyle> = {paddingTop: insets.top};
-
-  const tabBarHeight = useContext(TabBarHeightContext);
 
   const dispatch = useAppDispatch();
 
@@ -41,7 +38,7 @@ export default () => {
         text={keywordValue}
       />
 
-      <List tabBarHeight={tabBarHeight} style={styles.list} />
+      <List style={styles.list} />
 
       <FAB style={styles.fab} />
     </View>

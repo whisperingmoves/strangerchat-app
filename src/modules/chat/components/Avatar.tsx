@@ -1,16 +1,21 @@
-import React from 'react';
+import React, {useCallback, useContext} from 'react';
 import {Image, StyleSheet, TouchableOpacity} from 'react-native';
 import OnlineIndicator from '../../../components/OnlineIndicator';
 import {
   OpponentAvatar,
   OpponentOnlineStatus,
+  OpponentUserId,
   UnreadCount,
 } from '../store/slice';
 import {generateFullURL} from '../../helper';
 import Badge from '../../../components/Badge';
 import {convertNumberToString} from '../../../utils/number';
+import {TabBarHeightContext} from '../../../contexts/TabBarHeightContext';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 type Props = {
+  userId: OpponentUserId;
   avatar: OpponentAvatar;
   online?: OpponentOnlineStatus;
   unreadCount?: UnreadCount;
@@ -19,8 +24,19 @@ type Props = {
 export default (props: Props) => {
   const unreadCount = props.unreadCount || 0;
 
+  const tabBarHeight = useContext(TabBarHeightContext);
+
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const handlePress = useCallback(() => {
+    navigation.push('Profile', {
+      tabBarHeight,
+      profileUserIdValue: props.userId,
+    });
+  }, [navigation, props.userId, tabBarHeight]);
+
   return (
-    <TouchableOpacity activeOpacity={0.7}>
+    <TouchableOpacity activeOpacity={0.7} onPress={handlePress}>
       <Image
         source={{uri: generateFullURL(props.avatar)}}
         style={styles.avatar}

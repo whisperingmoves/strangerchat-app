@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {FlatList, StyleSheet} from 'react-native';
 
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
@@ -13,6 +13,7 @@ import {conversationList, keyword} from '../store/slice';
 import {IMAGE, VOICE} from '../../../constants/chatDetail/Config';
 import {GIFT} from '../../../constants/Config';
 import ListSeparator from '../../../components/ListSeparator';
+import {TabBarHeightContext} from '../../../contexts/TabBarHeightContext';
 
 const renderItem = ({item}: {item: ItemProps}) => <Item {...item} />;
 
@@ -20,11 +21,12 @@ const keyExtractor = (item: ItemProps, index: number) =>
   `${item.content}-${index}`;
 
 type Props = {
-  tabBarHeight: number;
   style: StyleProp<ViewStyle>;
 };
 
 export default (props: Props) => {
+  const tabBarHeight = useContext(TabBarHeightContext);
+
   const conversationListValue = useAppSelector(conversationList);
 
   const keywordValue = useAppSelector(keyword);
@@ -74,7 +76,7 @@ export default (props: Props) => {
       showsVerticalScrollIndicator={false}
       keyExtractor={keyExtractor}
       contentContainerStyle={props.style}
-      ListFooterComponent={<Footer tabBarHeight={props.tabBarHeight} />}
+      ListFooterComponent={<Footer tabBarHeight={tabBarHeight} />}
     />
   );
 };

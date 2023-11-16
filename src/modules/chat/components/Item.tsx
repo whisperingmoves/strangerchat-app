@@ -66,6 +66,7 @@ export default (props: Props) => {
       style={styles.root}
       onPress={handlePress}>
       <Avatar
+        userId={props.userId}
         avatar={props.avatar}
         online={props.online}
         unreadCount={props.unreadCount}
