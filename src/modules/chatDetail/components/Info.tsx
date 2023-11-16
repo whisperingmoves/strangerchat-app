@@ -4,7 +4,7 @@ import {Image, StyleSheet, View} from 'react-native';
 import Tag from './Tag';
 import Match from './Match';
 import Details from './Details';
-import {OpponentAvatar} from '../../chat/store/slice';
+import {OpponentAvatar, OpponentUserId} from '../../chat/store/slice';
 import {Avatar} from '../../../stores/user/slice';
 import {generateFullURL} from '../../helper';
 
@@ -13,6 +13,7 @@ type Props = {
   percentage: string;
   userAvatar: Avatar;
   opponentAvatar: OpponentAvatar;
+  opponentUserId: OpponentUserId;
 };
 
 export default (props: Props) => {
@@ -34,7 +35,7 @@ export default (props: Props) => {
         <Match percentage={props.percentage} />
       </View>
 
-      <Details style={styles.details} />
+      <Details style={styles.details} opponentUserId={props.opponentUserId} />
     </View>
   );
 };

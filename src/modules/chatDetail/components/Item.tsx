@@ -1,6 +1,7 @@
 import React, {
   RefObject,
   useCallback,
+  useContext,
   useEffect,
   useMemo,
   useState,
@@ -53,6 +54,9 @@ import RNFS, {DownloadProgressCallbackResult} from 'react-native-fs';
 import {getFileName} from '../../../utils/file';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import {LayoutChangeEvent} from 'react-native/Libraries/Types/CoreEventTypes';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {TabBarHeightContext} from '../../../contexts/TabBarHeightContext';
 
 export type Props = {
   conversationId: ConversationId;
@@ -243,6 +247,17 @@ export default (props: Props) => {
     [],
   );
 
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const tabBarHeight = useContext(TabBarHeightContext);
+
+  const handlePress = useCallback(() => {
+    navigation.push('Profile', {
+      tabBarHeight,
+      profileUserIdValue: props.senderId,
+    });
+  }, [navigation, props.senderId, tabBarHeight]);
+
   return (
     <View style={styles.root}>
       {props.sentTime && (
@@ -253,7 +268,7 @@ export default (props: Props) => {
 
       <View style={contentContainerStyle}>
         {!isSelf && props.avatar && (
-          <TouchableOpacity activeOpacity={0.7}>
+          <TouchableOpacity activeOpacity={0.7} onPress={handlePress}>
             <Image
               source={{uri: generateFullURL(props.avatar)}}
               style={styles.avatar}

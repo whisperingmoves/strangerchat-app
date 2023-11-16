@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useContext} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -6,14 +6,33 @@ import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 import icon_details from '../../../assets/images/icons/icon_details.png';
 import {DETAILS} from '../../../constants/chatDetail/Config';
+import {OpponentUserId} from '../../chat/store/slice';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {useNavigation} from '@react-navigation/native';
+import {TabBarHeightContext} from '../../../contexts/TabBarHeightContext';
 
 type Props = {
   style: ViewStyle;
+  opponentUserId: OpponentUserId;
 };
 
 export default (props: Props) => {
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const tabBarHeight = useContext(TabBarHeightContext);
+
+  const handlePress = useCallback(() => {
+    navigation.push('Profile', {
+      tabBarHeight,
+      profileUserIdValue: props.opponentUserId,
+    });
+  }, [navigation, props.opponentUserId, tabBarHeight]);
+
   return (
-    <TouchableOpacity activeOpacity={0.7} style={props.style}>
+    <TouchableOpacity
+      activeOpacity={0.7}
+      style={props.style}
+      onPress={handlePress}>
       <LinearGradient
         colors={['#D988FF', '#8B5CFF']}
         start={{x: 0, y: 0}}

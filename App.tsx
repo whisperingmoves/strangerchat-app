@@ -47,6 +47,7 @@ export type RootStackParamList = {
   NewPost: undefined;
   Search: {tabBarHeight: TabBarHeight};
   ChatDetail: {
+    tabBarHeight: TabBarHeight;
     conversationId: ConversationId;
     clientConversationId?: ConversationId;
   };

@@ -54,11 +54,19 @@ import {showError, showSuccess} from '../../utils/notification';
 import {store} from '../../stores/store';
 import {IsBlocked, IsFollowed} from '../recommend/store/slice';
 import {getUsername} from '../helper';
+import {
+  TabBarHeight,
+  TabBarHeightContext,
+} from '../../contexts/TabBarHeightContext';
 
 type Props = {
   route: Route<
     string,
-    {conversationId?: ConversationId; clientConversationId?: ConversationId}
+    {
+      tabBarHeight: TabBarHeight;
+      conversationId?: ConversationId;
+      clientConversationId?: ConversationId;
+    }
   >;
 };
 
@@ -73,7 +81,8 @@ export default (props: Props) => {
 
   const dispatch = useAppDispatch();
 
-  const {conversationId, clientConversationId} = props.route.params;
+  const {tabBarHeight, conversationId, clientConversationId} =
+    props.route.params;
 
   const conversationIndex = conversationListValue.findIndex(item =>
     clientConversationId
@@ -269,42 +278,45 @@ export default (props: Props) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <View style={[styles.root, statusBarStyle]}>
-        <DetailHeader
-          title={
-            conversation.opponentUsername
-              ? conversation.opponentUsername
-              : getUsername(conversation.opponentUserId)
-          }
-          style={styles.header}
-          onBackPress={handleBackPress}
-          onMorePress={handleMorePress}
-        />
+      <TabBarHeightContext.Provider value={tabBarHeight}>
+        <View style={[styles.root, statusBarStyle]}>
+          <DetailHeader
+            title={
+              conversation.opponentUsername
+                ? conversation.opponentUsername
+                : getUsername(conversation.opponentUserId)
+            }
+            style={styles.header}
+            onBackPress={handleBackPress}
+            onMorePress={handleMorePress}
+          />
 
-        <Info
-          tag={'Same hobby'}
-          percentage={'93%'}
-          userAvatar={avatarValue}
-          opponentAvatar={conversation.opponentAvatar}
-        />
+          <Info
+            tag={'Same hobby'}
+            percentage={'93%'}
+            userAvatar={avatarValue}
+            opponentAvatar={conversation.opponentAvatar}
+            opponentUserId={conversation.opponentUserId}
+          />
 
-        <List
-          opponentAvatar={conversation.opponentAvatar}
-          conversationId={conversation.conversationId}
-          clientConversationId={conversation.clientConversationId}
-          style={styles.list}
-          inputRef={inputRef}
-        />
+          <List
+            opponentAvatar={conversation.opponentAvatar}
+            conversationId={conversation.conversationId}
+            clientConversationId={conversation.clientConversationId}
+            style={styles.list}
+            inputRef={inputRef}
+          />
 
-        <Footer
-          style={styles.footer}
-          conversationId={conversation.conversationId}
-          clientConversationId={conversation.clientConversationId}
-          opponentUserId={conversation.opponentUserId}
-          ref={inputRef}
-          blurInput={blurInput}
-        />
-      </View>
+          <Footer
+            style={styles.footer}
+            conversationId={conversation.conversationId}
+            clientConversationId={conversation.clientConversationId}
+            opponentUserId={conversation.opponentUserId}
+            ref={inputRef}
+            blurInput={blurInput}
+          />
+        </View>
+      </TabBarHeightContext.Provider>
     </KeyboardAvoidingView>
   );
 };
