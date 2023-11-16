@@ -12,9 +12,10 @@ import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {store} from '../../../stores/store';
 import {showError} from '../../../utils/notification';
 import PostList from '../../postList/PostList';
+import {TabBarHeight} from '../../../contexts/TabBarHeightContext';
 
 type Props = {
-  tabBarHeight: number;
+  tabBarHeight: TabBarHeight;
 };
 
 export default (props: Props) => {

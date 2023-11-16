@@ -10,8 +10,9 @@ import {
   resetStatus,
   status,
 } from './store/slice';
+import {TabBarHeight} from '../../contexts/TabBarHeightContext';
 
-type Props = {tabBarHeight: number};
+type Props = {tabBarHeight: TabBarHeight};
 
 export default (props: Props) => {
   const {tabBarHeight} = props;

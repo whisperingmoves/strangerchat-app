@@ -7,6 +7,10 @@ import Separator from './components/Separator';
 import Footer from '../../components/ListFooter';
 import {resetPostDetail} from '../commentDetail/store/slice';
 import {useAppDispatch} from '../../hooks';
+import {
+  TabBarHeight,
+  TabBarHeightContext,
+} from '../../contexts/TabBarHeightContext';
 
 const keyExtractor = (item: ItemProps, index: number) =>
   `${item.postId}-${index}`;
@@ -22,7 +26,7 @@ type Props = {
   refreshing: boolean;
   refresh: () => void;
   load: () => void;
-  tabBarHeight: number;
+  tabBarHeight: TabBarHeight;
 };
 
 export default (props: Props) => {
@@ -33,21 +37,23 @@ export default (props: Props) => {
   }, [dispatch]);
 
   return (
-    <FlatList
-      style={styles.root}
-      data={props.data}
-      renderItem={renderItem}
-      keyExtractor={keyExtractor}
-      contentContainerStyle={styles.contentContainer}
-      ItemSeparatorComponent={Separator}
-      showsVerticalScrollIndicator={false}
-      refreshing={props.refreshing}
-      onRefresh={props.refresh}
-      onEndReachedThreshold={0.1}
-      onEndReached={props.load}
-      bounces={bounces}
-      ListFooterComponent={<Footer tabBarHeight={props.tabBarHeight} />}
-    />
+    <TabBarHeightContext.Provider value={props.tabBarHeight}>
+      <FlatList
+        style={styles.root}
+        data={props.data}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        contentContainerStyle={styles.contentContainer}
+        ItemSeparatorComponent={Separator}
+        showsVerticalScrollIndicator={false}
+        refreshing={props.refreshing}
+        onRefresh={props.refresh}
+        onEndReachedThreshold={0.1}
+        onEndReached={props.load}
+        bounces={bounces}
+        ListFooterComponent={<Footer tabBarHeight={props.tabBarHeight} />}
+      />
+    </TabBarHeightContext.Provider>
   );
 };
 

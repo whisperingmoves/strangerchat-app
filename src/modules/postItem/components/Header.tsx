@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {
   Image,
   LayoutAnimation,
@@ -47,6 +47,9 @@ import {
   setOperationPostId,
 } from '../../../stores/post/slice';
 import {conversationList} from '../../chat/store/slice';
+import {TabBarHeightContext} from '../../../contexts/TabBarHeightContext';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 type Props = {
   authorId: AuthorId;
@@ -196,9 +199,20 @@ export default (props: Props) => {
     userId,
   ]);
 
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const tabBarHeight = useContext(TabBarHeightContext);
+
+  const handlePress = useCallback(() => {
+    navigation.push('Profile', {
+      tabBarHeight,
+      profileUserIdValue: props.authorId === userId ? '' : props.authorId,
+    });
+  }, [navigation, props.authorId, tabBarHeight, userId]);
+
   return (
     <View style={[styles.root, props.style]}>
-      <TouchableOpacity activeOpacity={0.7}>
+      <TouchableOpacity activeOpacity={0.7} onPress={handlePress}>
         <Image
           source={{uri: generateFullURL(props.authorAvatar)}}
           style={styles.avatarImg}

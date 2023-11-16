@@ -30,7 +30,10 @@ import {showError} from '../../utils/notification';
 import {Route} from '@react-navigation/native';
 import ListFooter from '../../components/ListFooter';
 import {UserIdContext} from './context/UserIdContext';
-import {TabBarHeight} from '../../contexts/TabBarHeightContext';
+import {
+  TabBarHeight,
+  TabBarHeightContext,
+} from '../../contexts/TabBarHeightContext';
 
 const renderItem = ({item}: {item: ItemProps}) => <Item {...item} />;
 
@@ -181,20 +184,22 @@ export default (props: Props) => {
 
   return (
     <UserIdContext.Provider value={profileUserIdValue as UserId}>
-      <FlatList
-        style={styles.root}
-        data={list}
-        renderItem={renderItem}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={keyExtractor}
-        ItemSeparatorComponent={Separator}
-        ListHeaderComponent={<Header style={styles.header} />}
-        ListFooterComponent={<ListFooter tabBarHeight={tabBarHeight} />}
-        refreshing={refreshing}
-        onRefresh={refresh}
-        onEndReachedThreshold={0.1}
-        onEndReached={load}
-      />
+      <TabBarHeightContext.Provider value={tabBarHeight}>
+        <FlatList
+          style={styles.root}
+          data={list}
+          renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={keyExtractor}
+          ItemSeparatorComponent={Separator}
+          ListHeaderComponent={<Header style={styles.header} />}
+          ListFooterComponent={<ListFooter tabBarHeight={tabBarHeight} />}
+          refreshing={refreshing}
+          onRefresh={refresh}
+          onEndReachedThreshold={0.1}
+          onEndReached={load}
+        />
+      </TabBarHeightContext.Provider>
     </UserIdContext.Provider>
   );
 };

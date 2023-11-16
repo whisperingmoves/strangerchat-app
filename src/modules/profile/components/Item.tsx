@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useContext} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 import Location from '../../../components/Location';
@@ -11,6 +11,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {store} from '../../../stores/store';
 import {UserPostData} from '../../../apis/user/getUserPosts';
+import {TabBarHeightContext} from '../../../contexts/TabBarHeightContext';
 
 export type Props = MyPostData | UserPostData;
 
@@ -19,8 +20,11 @@ export default (props: Props) => {
 
   const navigation = useNavigation<StackNavigationProp<any>>();
 
+  const tabBarHeight = useContext(TabBarHeightContext);
+
   const handlePress = useCallback(() => {
     navigation.push('CommentDetail', {
+      tabBarHeight,
       postId: props.postId,
       authorId: store.getState().user.userId,
       authorName: store.getState().user.username,

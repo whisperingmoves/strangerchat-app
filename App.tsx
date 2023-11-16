@@ -34,6 +34,7 @@ import MyFollowing from './src/modules/myFollowing/MyFollowing';
 import Notification from './src/modules/notification/Notification';
 import Profile from './src/modules/profile/Profile';
 import {UserId} from './src/modules/profile/store/slice';
+import {TabBarHeight} from './src/contexts/TabBarHeightContext';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -44,18 +45,23 @@ export type RootStackParamList = {
   Avatar: {gender: GenderType; mobile: Mobile; birthday: BirthdayType};
   NavigationBar: undefined;
   NewPost: undefined;
-  Search: {tabBarHeight: number};
+  Search: {tabBarHeight: TabBarHeight};
   ChatDetail: {
     conversationId: ConversationId;
     clientConversationId?: ConversationId;
   };
-  CommentDetail: {postId: PostId; authorId: AuthorId; authorName?: AuthorName};
+  CommentDetail: {
+    tabBarHeight: TabBarHeight;
+    postId: PostId;
+    authorId: AuthorId;
+    authorName?: AuthorName;
+  };
   Setting: undefined;
   Wallet: undefined;
   MyGift: undefined;
   MyFollowing: undefined;
   Notification: undefined;
-  Profile: {tabBarHeight: number; userId?: UserId};
+  Profile: {tabBarHeight: TabBarHeight; userId?: UserId};
 };
 
 const Stack = createStackNavigator<RootStackParamList>();

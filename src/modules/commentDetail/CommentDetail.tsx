@@ -73,11 +73,16 @@ import {store} from '../../stores/store';
 import ViewShot from 'react-native-view-shot';
 import {ViewShotContext} from '../../contexts/ViewShotContext';
 import {getUsername} from '../helper';
+import {
+  TabBarHeight,
+  TabBarHeightContext,
+} from '../../contexts/TabBarHeightContext';
 
 type Props = {
   route: Route<
     string,
     {
+      tabBarHeight: TabBarHeight;
       postId: PostId;
       authorId: AuthorId;
       authorName?: AuthorName;
@@ -94,7 +99,7 @@ export default (props: Props) => {
     };
   }, [insets.top]);
 
-  const {postId, authorId, authorName} = props.route.params;
+  const {tabBarHeight, postId, authorId, authorName} = props.route.params;
 
   const navigation = useNavigation<StackNavigationProp<any>>();
 
@@ -384,29 +389,31 @@ export default (props: Props) => {
   return (
     <ViewShot style={[styles.root, statusBarStyle]} ref={viewShotRef}>
       <ViewShotContext.Provider value={viewShotRef}>
-        <DetailHeader
-          title={authorName ? authorName : getUsername(authorId)}
-          onBackPress={handleBackPress}
-          onMorePress={handleMorePress}
-          style={styles.header}
-          hideMore={hideHeaderMore}
-        />
+        <TabBarHeightContext.Provider value={tabBarHeight}>
+          <DetailHeader
+            title={authorName ? authorName : getUsername(authorId)}
+            onBackPress={handleBackPress}
+            onMorePress={handleMorePress}
+            style={styles.header}
+            hideMore={hideHeaderMore}
+          />
 
-        <List
-          {...postDetailValue}
-          postId={postId}
-          updateListItemCallback={updateListItemCallback}
-          showCollect={showCollect}
-          focusInput={focusInput}
-        />
+          <List
+            {...postDetailValue}
+            postId={postId}
+            updateListItemCallback={updateListItemCallback}
+            showCollect={showCollect}
+            focusInput={focusInput}
+          />
 
-        <Footer
-          style={styles.footer}
-          postId={postId}
-          ref={inputRef}
-          updateListItemCallback={updateListItemCallback}
-          commentCount={postDetailValue.commentCount}
-        />
+          <Footer
+            style={styles.footer}
+            postId={postId}
+            ref={inputRef}
+            updateListItemCallback={updateListItemCallback}
+            commentCount={postDetailValue.commentCount}
+          />
+        </TabBarHeightContext.Provider>
       </ViewShotContext.Provider>
     </ViewShot>
   );

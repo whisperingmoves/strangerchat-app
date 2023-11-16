@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useContext} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
@@ -16,6 +16,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {UpdateListItemCallback} from '../recommend/store/slice';
 import Location from '../../components/Location';
+import {TabBarHeightContext} from '../../contexts/TabBarHeightContext';
 
 type CustomProps = {
   isFollowing?: boolean;
@@ -42,12 +43,15 @@ export default (props: Props) => {
 
   const navigation = useNavigation<StackNavigationProp<any>>();
 
+  const tabBarHeight = useContext(TabBarHeightContext);
+
   const handlePress = useCallback(() => {
     if (props.isCommentDetail) {
       return;
     }
 
     navigation.push('CommentDetail', {
+      tabBarHeight,
       postId: props.postId,
       authorId: props.authorId,
       authorName: props.authorName,
@@ -58,6 +62,7 @@ export default (props: Props) => {
     props.authorName,
     props.isCommentDetail,
     props.postId,
+    tabBarHeight,
   ]);
 
   let photoIsMarginLeft: boolean = true;
