@@ -5,12 +5,20 @@ import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import NavigationBar from './components/NavigationBar';
-import {useNavigation} from '@react-navigation/native';
+import {Route, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import DetailHeader from '../../components/DetailHeader';
 import {NOTIFICATION} from '../../constants/notification/Config';
+import {
+  TabBarHeight,
+  TabBarHeightContext,
+} from '../../contexts/TabBarHeightContext';
 
-export default () => {
+type Props = {
+  route: Route<string, {tabBarHeight: TabBarHeight}>;
+};
+
+export default (props: Props) => {
   const insets = useSafeAreaInsets();
 
   const statusBarStyle: StyleProp<ViewStyle> = useMemo(() => {
@@ -25,17 +33,21 @@ export default () => {
     navigation.goBack();
   }, [navigation]);
 
-  return (
-    <View style={[styles.root, statusBarStyle]}>
-      <DetailHeader
-        style={styles.header}
-        title={NOTIFICATION}
-        onBackPress={handleBackPress}
-        hideMore={true}
-      />
+  const {tabBarHeight} = props.route.params;
 
-      <NavigationBar style={styles.navigationBar} />
-    </View>
+  return (
+    <TabBarHeightContext.Provider value={tabBarHeight}>
+      <View style={[styles.root, statusBarStyle]}>
+        <DetailHeader
+          style={styles.header}
+          title={NOTIFICATION}
+          onBackPress={handleBackPress}
+          hideMore={true}
+        />
+
+        <NavigationBar style={styles.navigationBar} />
+      </View>
+    </TabBarHeightContext.Provider>
   );
 };
 

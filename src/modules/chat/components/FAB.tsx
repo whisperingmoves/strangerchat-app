@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useContext} from 'react';
 import {Image, StyleSheet, TouchableOpacity} from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
@@ -10,6 +10,7 @@ import icon_envelope from '../../../assets/images/icons/icon_envelope.png';
 import HasNewIndicator from '../../../components/HasNewIndicator';
 import {useAppSelector} from '../../../hooks';
 import {unreadNotificationsCount} from '../store/slice';
+import {TabBarHeightContext} from '../../../contexts/TabBarHeightContext';
 
 type Props = {
   style: StyleProp<ViewStyle>;
@@ -22,9 +23,11 @@ export default (props: Props) => {
     unreadNotificationsCount,
   );
 
+  const tabBarHeight = useContext(TabBarHeightContext);
+
   const handlePress = useCallback(() => {
-    navigation.push('Notification');
-  }, [navigation]);
+    navigation.push('Notification', {tabBarHeight});
+  }, [navigation, tabBarHeight]);
 
   return (
     <TouchableOpacity
