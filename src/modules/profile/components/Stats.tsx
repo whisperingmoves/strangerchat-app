@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
 
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
@@ -11,36 +11,71 @@ import {FOLLOW, FOLLOWING} from '../../../constants/Config';
 import {VISITED_ME} from '../../../constants/profile/Config';
 import {useAppSelector} from '../../../hooks';
 import {
-  FollowersCount,
   followersCount,
-  FollowingCount,
   followingCount,
-  VisitorsCount,
   visitorsCount,
 } from '../../../stores/user/slice';
+import {
+  followersCount as profileFollowersCount,
+  followingCount as profileFollowingCount,
+  visitorsCount as profileVisitorsCount,
+} from '../store/slice';
+import {UserIdContext} from '../context/UserIdContext';
 
 type Props = {
   style: StyleProp<ViewStyle>;
 };
 
 export default (props: Props) => {
-  const followingCountValue = useAppSelector(followingCount);
+  const userFollowingCountValue = useAppSelector(followingCount);
 
-  const followersCountValue = useAppSelector(followersCount);
+  const userFollowersCountValue = useAppSelector(followersCount);
 
-  const visitorsCountValue = useAppSelector(visitorsCount);
+  const userVisitorsCountValue = useAppSelector(visitorsCount);
+
+  const profileFollowingCountValue = useAppSelector(profileFollowingCount);
+
+  const profileFollowersCountValue = useAppSelector(profileFollowersCount);
+
+  const profileVisitorsCountValue = useAppSelector(profileVisitorsCount);
+
+  const profileUserIdValue = useContext(UserIdContext);
+
+  const followingCountValue = useMemo(
+    () =>
+      (profileUserIdValue
+        ? profileFollowingCountValue
+        : userFollowingCountValue) || 0,
+    [profileFollowingCountValue, profileUserIdValue, userFollowingCountValue],
+  );
+
+  const followersCountValue = useMemo(
+    () =>
+      (profileUserIdValue
+        ? profileFollowersCountValue
+        : userFollowersCountValue) || 0,
+    [profileFollowersCountValue, profileUserIdValue, userFollowersCountValue],
+  );
+
+  const visitorsCountValue = useMemo(
+    () =>
+      (profileUserIdValue
+        ? profileVisitorsCountValue
+        : userVisitorsCountValue) || 0,
+    [profileUserIdValue, profileVisitorsCountValue, userVisitorsCountValue],
+  );
 
   return (
     <View style={[styles.root, props.style]}>
-      <Base count={followingCountValue as FollowingCount} label={FOLLOWING} />
+      <Base count={followingCountValue} label={FOLLOWING} />
 
       <Line />
 
-      <Base count={followersCountValue as FollowersCount} label={FOLLOW} />
+      <Base count={followersCountValue} label={FOLLOW} />
 
       <Line />
 
-      <Base count={visitorsCountValue as VisitorsCount} label={VISITED_ME} />
+      <Base count={visitorsCountValue} label={VISITED_ME} />
     </View>
   );
 };

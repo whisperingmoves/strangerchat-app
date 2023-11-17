@@ -1,4 +1,4 @@
-import React, {useCallback, useContext} from 'react';
+import React, {useCallback, useContext, useMemo} from 'react';
 import {StyleSheet} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -17,6 +17,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {UserIdContext} from '../context/UserIdContext';
 import BackHeader from '../../../components/BackHeader';
+import {city as profileCity} from '../store/slice';
 
 type Props = {
   style: StyleProp<ViewStyle>;
@@ -27,7 +28,9 @@ export default (props: Props) => {
 
   const statusBarStyle: StyleProp<ViewStyle> = {paddingTop: insets.top};
 
-  const cityValue = useAppSelector(city);
+  const userCityValue = useAppSelector(city);
+
+  const profileCityValue = useAppSelector(profileCity);
 
   const navigation = useNavigation<StackNavigationProp<any>>();
 
@@ -36,6 +39,11 @@ export default (props: Props) => {
   const handleBackPress = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
+
+  const cityValue = useMemo(
+    () => (profileUserIdValue ? profileCityValue : userCityValue),
+    [profileCityValue, profileUserIdValue, userCityValue],
+  );
 
   return (
     <LinearGradient

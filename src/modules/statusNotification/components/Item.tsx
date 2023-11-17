@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {generateFullURL, getUsername} from '../../helper';
 import {formatTimestamp} from '../../../utils/date';
@@ -17,6 +17,9 @@ import {showError} from '../../../utils/notification';
 import {StatusNotificationData} from '../../../apis/notification/getStatusNotifications';
 import {STATUS_MAP} from '../../../constants/statusNotification/Config';
 import {setUnreadNotificationsCount} from '../../chat/store/slice';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {TabBarHeightContext} from '../../../contexts/TabBarHeightContext';
 
 export type Props = StatusNotificationData;
 
@@ -79,12 +82,23 @@ export default (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statusValue]);
 
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const tabBarHeight = useContext(TabBarHeightContext);
+
+  const handleAvatarPress = useCallback(() => {
+    navigation.push('Profile', {
+      tabBarHeight,
+      profileUserIdValue: props.userId,
+    });
+  }, [navigation, props.userId, tabBarHeight]);
+
   return (
     <TouchableOpacity
       style={styles.root}
       activeOpacity={0.7}
       onPress={handlePress}>
-      <TouchableOpacity activeOpacity={0.7}>
+      <TouchableOpacity activeOpacity={0.7} onPress={handleAvatarPress}>
         <Image
           source={{uri: generateFullURL(props.userAvatar)}}
           style={styles.avatar}

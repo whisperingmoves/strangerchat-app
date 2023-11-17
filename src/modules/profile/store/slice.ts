@@ -31,6 +31,11 @@ const initialState: State = {
   error: '',
   status: 'idle',
   avatar: '',
+  username: '',
+  city: '',
+  followingCount: 0,
+  followersCount: 0,
+  visitorsCount: 0,
 };
 
 export const getUserDetailAsync = createAsyncThunk<
