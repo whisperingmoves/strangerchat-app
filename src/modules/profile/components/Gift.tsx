@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useContext} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
@@ -7,13 +7,16 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import icon_gift from '../../../assets/images/icons/icon_gift.png';
 import {giftsReceived} from '../../../stores/user/slice';
 import {useAppSelector} from '../../../hooks';
+import {TabBarHeightContext} from '../../../contexts/TabBarHeightContext';
 
 export default () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
+  const tabBarHeight = useContext(TabBarHeightContext);
+
   const handlePress = useCallback(() => {
-    navigation.push('MyGift');
-  }, [navigation]);
+    navigation.push('MyGift', {tabBarHeight});
+  }, [navigation, tabBarHeight]);
 
   const giftsReceivedValue = useAppSelector(giftsReceived);
 

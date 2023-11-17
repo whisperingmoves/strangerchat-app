@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useContext} from 'react';
 import {ImageSourcePropType} from 'react-native/Libraries/Image/Image';
 import {Image, StyleSheet, TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -11,15 +11,33 @@ import icon_second_wreath from '../../../assets/images/icons/icon_second_wreath.
 import icon_third_wreath from '../../../assets/images/icons/icon_third_wreath.png';
 import {Avatar, CurrentRanking} from '../store/slice';
 import {generateFullURL} from '../../helper';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {TabBarHeightContext} from '../../../contexts/TabBarHeightContext';
 
 type Props = {
+  userId: string;
   avatar: Avatar;
   currentRanking: CurrentRanking;
 };
 
 export default (props: Props) => {
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const tabBarHeight = useContext(TabBarHeightContext);
+
+  const handlePress = useCallback(() => {
+    navigation.push('Profile', {
+      tabBarHeight,
+      profileUserIdValue: props.userId,
+    });
+  }, [navigation, props.userId, tabBarHeight]);
+
   return (
-    <TouchableOpacity activeOpacity={0.7} style={styles.root}>
+    <TouchableOpacity
+      activeOpacity={0.7}
+      style={styles.root}
+      onPress={handlePress}>
       <Image source={CROWN_MAP[props.currentRanking]} style={styles.crown} />
 
       <LinearGradient

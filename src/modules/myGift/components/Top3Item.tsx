@@ -15,7 +15,11 @@ type Props = Top3Item & {style: StyleProp<ViewStyle>};
 export default (props: Props) => {
   return (
     <View style={[styles.root, props.style]}>
-      <Avatar avatar={props.avatar} currentRanking={props.currentRanking} />
+      <Avatar
+        avatar={props.avatar}
+        currentRanking={props.currentRanking}
+        userId={props.userId}
+      />
 
       <Text style={styles.countTxt}>{props.count}</Text>
 

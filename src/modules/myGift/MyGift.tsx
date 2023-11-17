@@ -4,7 +4,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 import LinearGradient from 'react-native-linear-gradient';
 
-import {useNavigation} from '@react-navigation/native';
+import {Route, useNavigation} from '@react-navigation/native';
 
 import {StackNavigationProp} from '@react-navigation/stack';
 
@@ -21,8 +21,18 @@ import {getReceivedGiftsAsync, list, resetStatus, status} from './store/slice';
 import {showError} from '../../utils/notification';
 import {store} from '../../stores/store';
 import {splitListValue} from './helper';
+import {
+  TabBarHeight,
+  TabBarHeightContext,
+} from '../../contexts/TabBarHeightContext';
 
-export default () => {
+type Props = {
+  route: Route<string, {tabBarHeight: TabBarHeight}>;
+};
+
+export default (props: Props) => {
+  const {tabBarHeight} = props.route.params;
+
   const insets = useSafeAreaInsets();
 
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -68,23 +78,25 @@ export default () => {
   }, []);
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={styles.root}>
-      <LinearGradient
-        colors={['#D988FF', '#8B5CFF']}
-        style={[styles.background, statusBarStyle]}>
-        <Header style={styles.header} onPress={handlePress} />
+    <TabBarHeightContext.Provider value={tabBarHeight}>
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.root}>
+        <LinearGradient
+          colors={['#D988FF', '#8B5CFF']}
+          style={[styles.background, statusBarStyle]}>
+          <Header style={styles.header} onPress={handlePress} />
 
-        <Switch style={styles.switch} />
+          <Switch style={styles.switch} />
 
-        <Top3 style={styles.top3} itemList={TOP3_LIST} />
-      </LinearGradient>
+          <Top3 style={styles.top3} itemList={TOP3_LIST} />
+        </LinearGradient>
 
-      <View style={styles.leftContainer}>
-        {LEFT_LIST.map((value, index) => (
-          <Item key={index} {...value} style={styles.left} />
-        ))}
-      </View>
-    </ScrollView>
+        <View style={styles.leftContainer}>
+          {LEFT_LIST.map((value, index) => (
+            <Item key={index} {...value} style={styles.left} />
+          ))}
+        </View>
+      </ScrollView>
+    </TabBarHeightContext.Provider>
   );
 };
 

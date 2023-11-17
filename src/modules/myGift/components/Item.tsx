@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useContext} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
@@ -10,10 +10,24 @@ import {Top3Item as ItemProps} from './Top3Item';
 import icon_fall from '../../../assets/images/icons/icon_fall.png';
 import icon_rise from '../../../assets/images/icons/icon_rise.png';
 import {generateFullURL, getUsername} from '../../helper';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {TabBarHeightContext} from '../../../contexts/TabBarHeightContext';
 
 type Props = ItemProps & {style: StyleProp<ViewStyle>};
 
 export default (props: Props) => {
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const tabBarHeight = useContext(TabBarHeightContext);
+
+  const handleAvatarPress = useCallback(() => {
+    navigation.push('Profile', {
+      tabBarHeight,
+      profileUserIdValue: props.userId,
+    });
+  }, [navigation, props.userId, tabBarHeight]);
+
   return (
     <View style={[styles.root, props.style]}>
       <View style={styles.ranking}>
@@ -22,7 +36,10 @@ export default (props: Props) => {
         <Image source={props.diff > 0 ? icon_rise : icon_fall} />
       </View>
 
-      <TouchableOpacity activeOpacity={0.7} style={styles.avatarBtn}>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        style={styles.avatarBtn}
+        onPress={handleAvatarPress}>
         <Image
           source={{uri: generateFullURL(props.avatar)}}
           style={styles.avatar}
