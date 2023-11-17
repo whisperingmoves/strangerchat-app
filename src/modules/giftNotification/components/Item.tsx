@@ -1,4 +1,10 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {generateFullURL, getUsername} from '../../helper';
 import {formatTimestamp} from '../../../utils/date';
@@ -17,6 +23,9 @@ import {
 import {GiftNotificationData} from '../../../apis/notification/getGiftNotifications';
 import {GIFT_TEMPLATE} from '../../../constants/giftNotification/Config';
 import {setUnreadNotificationsCount} from '../../chat/store/slice';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {TabBarHeightContext} from '../../../contexts/TabBarHeightContext';
 
 export type Props = GiftNotificationData;
 
@@ -99,12 +108,23 @@ export default (props: Props) => {
     [props.giftTime],
   );
 
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const tabBarHeight = useContext(TabBarHeightContext);
+
+  const handleAvatarPress = useCallback(() => {
+    navigation.push('Profile', {
+      tabBarHeight,
+      profileUserIdValue: props.userId,
+    });
+  }, [navigation, props.userId, tabBarHeight]);
+
   return (
     <TouchableOpacity
       style={styles.root}
       activeOpacity={0.7}
       onPress={handlePress}>
-      <TouchableOpacity activeOpacity={0.7}>
+      <TouchableOpacity activeOpacity={0.7} onPress={handleAvatarPress}>
         <Image source={{uri: userAvatarUri}} style={styles.avatar} />
 
         {readStatus !== 1 && <HasNewIndicator style={styles.indicator} />}
