@@ -8,6 +8,7 @@ import {
   VisitorsCount,
 } from '../../../stores/user/slice';
 import {UserIdContext} from '../context/UserIdContext';
+import {TabBarHeightContext} from '../../../contexts/TabBarHeightContext';
 
 type Props = {
   count: FollowingCount | FollowersCount | VisitorsCount;
@@ -19,13 +20,15 @@ export default (props: Props) => {
 
   const profileUserIdValue = useContext(UserIdContext);
 
+  const tabBarHeight = useContext(TabBarHeightContext);
+
   const handlePress = useCallback(() => {
     if (profileUserIdValue) {
       return;
     }
 
-    navigation.push('MyFollowing');
-  }, [navigation]);
+    navigation.push('MyFollowing', {tabBarHeight});
+  }, [navigation, profileUserIdValue, tabBarHeight]);
 
   return (
     <TouchableOpacity

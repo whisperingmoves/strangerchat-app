@@ -9,9 +9,19 @@ import NavigationBar from './components/NavigationBar';
 import DetailHeader from '../../components/DetailHeader';
 import {FOLLOWING} from '../../constants/Config';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {useNavigation} from '@react-navigation/native';
+import {Route, useNavigation} from '@react-navigation/native';
+import {
+  TabBarHeight,
+  TabBarHeightContext,
+} from '../../contexts/TabBarHeightContext';
 
-export default () => {
+type Props = {
+  route: Route<string, {tabBarHeight: TabBarHeight}>;
+};
+
+export default (props: Props) => {
+  const {tabBarHeight} = props.route.params;
+
   const insets = useSafeAreaInsets();
 
   const statusBarStyle: StyleProp<ViewStyle> = useMemo(() => {
@@ -27,18 +37,20 @@ export default () => {
   }, [navigation]);
 
   return (
-    <View style={[styles.root, statusBarStyle]}>
-      <DetailHeader
-        title={FOLLOWING}
-        style={styles.header}
-        hideMore={true}
-        onBackPress={handleBackPress}
-      />
+    <TabBarHeightContext.Provider value={tabBarHeight}>
+      <View style={[styles.root, statusBarStyle]}>
+        <DetailHeader
+          title={FOLLOWING}
+          style={styles.header}
+          hideMore={true}
+          onBackPress={handleBackPress}
+        />
 
-      <Search style={styles.search} />
+        <Search style={styles.search} />
 
-      <NavigationBar style={styles.navigationBar} />
-    </View>
+        <NavigationBar style={styles.navigationBar} />
+      </View>
+    </TabBarHeightContext.Provider>
   );
 };
 

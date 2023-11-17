@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useContext, useEffect} from 'react';
 
 import UserList from '../userList/UserList';
 import {
@@ -12,6 +12,7 @@ import {
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {store} from '../../stores/store';
 import {showError} from '../../utils/notification';
+import {TabBarHeightContext} from '../../contexts/TabBarHeightContext';
 
 export default () => {
   const statusValue = useAppSelector(status);
@@ -63,13 +64,15 @@ export default () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statusValue]);
 
+  const tabBarHeight = useContext(TabBarHeightContext);
+
   return (
     <UserList
       data={listValue}
       refreshing={statusValue === 'loading'}
       refresh={refresh}
       load={load}
-      tabBarHeight={56}
+      tabBarHeight={tabBarHeight}
     />
   );
 };

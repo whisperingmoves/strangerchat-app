@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {
   Image,
   LayoutAnimation,
@@ -25,6 +25,9 @@ import {showError} from '../../../utils/notification';
 import {setState as setFollowingUserState} from '../../followingUser/store/slice';
 import {setState as setCloseFriendState} from '../../closeFriend/store/slice';
 import {setState as setFollowerState} from '../../follower/store/slice';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {TabBarHeightContext} from '../../../contexts/TabBarHeightContext';
 
 export type Props = UserData;
 
@@ -181,9 +184,20 @@ export default (props: Props) => {
     dispatch(followOrUnfollowUserAsync(0));
   }, [dispatch, props.userId]);
 
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const tabBarHeight = useContext(TabBarHeightContext);
+
+  const handleAvatarPress = useCallback(() => {
+    navigation.push('Profile', {
+      tabBarHeight,
+      profileUserIdValue: props.userId,
+    });
+  }, [navigation, props.userId, tabBarHeight]);
+
   return (
     <View style={styles.root}>
-      <TouchableOpacity activeOpacity={0.7}>
+      <TouchableOpacity activeOpacity={0.7} onPress={handleAvatarPress}>
         <Image
           source={{uri: generateFullURL(props.userAvatar)}}
           style={styles.avatar}

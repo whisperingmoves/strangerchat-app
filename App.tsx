@@ -60,7 +60,7 @@ export type RootStackParamList = {
   Setting: undefined;
   Wallet: undefined;
   MyGift: undefined;
-  MyFollowing: undefined;
+  MyFollowing: {tabBarHeight: TabBarHeight};
   Notification: {tabBarHeight: TabBarHeight};
   Profile: {tabBarHeight: TabBarHeight; userId?: UserId};
 };
