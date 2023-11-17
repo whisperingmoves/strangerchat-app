@@ -39,6 +39,7 @@ import statusNotificationReducer from '../modules/statusNotification/store/slice
 import giftNotificationReducer from '../modules/giftNotification/store/slice';
 import systemNotificationReducer from '../modules/systemNotification/store/slice';
 import profileReducer from '../modules/profile/store/slice';
+import {socket} from '../apis/socket';
 
 export const LOG_OUT = 'LOG_OUT';
 
@@ -85,6 +86,8 @@ const appReducer = combineReducers({
 const rootReducer = (state: any, action: any) => {
   if (action.type === LOG_OUT) {
     AsyncStorage.removeItem(STORAGE_KEY).then(() => {});
+
+    socket.disconnect();
     return appReducer(undefined, action);
   }
   return appReducer(state, action);

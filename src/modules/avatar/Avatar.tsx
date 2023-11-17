@@ -47,6 +47,7 @@ import {GeoPosition} from 'react-native-geolocation-service';
 import {checkFileExistence} from '../../utils/file';
 import {COULD_NOT_FIND_IMAGE} from '../../constants/Config';
 import {AVATAR_BOY_URL_LIST, AVATAR_GIRL_URL_LIST} from '../helper';
+import {socket} from '../../apis/socket';
 
 type Props = {
   route: Route<string, {gender: Gender; mobile: Mobile; birthday: Birthday}>;
@@ -115,6 +116,8 @@ export default (props: Props) => {
         index: 0,
         routes: [{name: 'NavigationBar'}],
       });
+
+      socket.connect();
 
       return;
     }

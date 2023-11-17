@@ -12,6 +12,7 @@ import {userId} from '../../stores/user/slice';
 import {useAppSelector} from '../../hooks';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {socket} from '../../apis/socket';
 
 export default () => {
   const insets = useSafeAreaInsets();
@@ -27,6 +28,8 @@ export default () => {
           index: 0,
           routes: [{name: 'NavigationBar'}],
         });
+
+        socket.connect();
       } else {
         navigation.replace('Login');
       }

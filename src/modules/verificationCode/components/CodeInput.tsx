@@ -23,6 +23,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {GeoPosition} from 'react-native-geolocation-service';
 import {setUser} from '../../../stores/user/slice';
+import {socket} from '../../../apis/socket';
 
 type Props = {
   style: StyleProp<ViewStyle>;
@@ -62,6 +63,8 @@ export default (props: Props) => {
         index: 0,
         routes: [{name: 'NavigationBar'}],
       });
+
+      socket.connect();
 
       return;
     }
