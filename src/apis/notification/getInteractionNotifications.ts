@@ -13,6 +13,8 @@ export interface InteractionNotificationData {
   interactionType: number;
   interactionTime: number;
   postId: string;
+  postAuthorId: string;
+  postAuthorName?: string;
   postImage?: string;
   readStatus?: number;
   commentId?: string;

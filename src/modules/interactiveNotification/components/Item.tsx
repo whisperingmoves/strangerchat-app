@@ -36,8 +36,19 @@ export default (props: Props) => {
 
   const sceneValue = useAppSelector(scene);
 
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const tabBarHeight = useContext(TabBarHeightContext);
+
   const handlePress = useCallback(() => {
     if (readStatus === 1) {
+      navigation.push('CommentDetail', {
+        tabBarHeight,
+        postId: props.postId,
+        authorId: props.postAuthorId,
+        authorName: props.postAuthorName,
+      });
+
       return;
     }
 
@@ -46,7 +57,23 @@ export default (props: Props) => {
     dispatch(markInteractionNotificationAsReadAsync(props.notificationId));
 
     setReadStatus(1);
-  }, [dispatch, props.notificationId, readStatus]);
+
+    navigation.push('CommentDetail', {
+      tabBarHeight,
+      postId: props.postId,
+      authorId: props.postAuthorId,
+      authorName: props.postAuthorName,
+    });
+  }, [
+    dispatch,
+    navigation,
+    props.notificationId,
+    props.postAuthorId,
+    props.postAuthorName,
+    props.postId,
+    readStatus,
+    tabBarHeight,
+  ]);
 
   useEffect(() => {
     if (
@@ -81,10 +108,6 @@ export default (props: Props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statusValue]);
-
-  const navigation = useNavigation<StackNavigationProp<any>>();
-
-  const tabBarHeight = useContext(TabBarHeightContext);
 
   const handleAvatarPress = useCallback(() => {
     navigation.push('Profile', {
