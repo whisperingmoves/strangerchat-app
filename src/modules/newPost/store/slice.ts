@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import {RootState} from '../../../stores/store';
-import {createPost, uploadPost} from './api';
+import {createPost, geoReverse, uploadPost} from './api';
 import {State as UserState} from '../../../stores/user/slice';
 import {
   CreatePostRequest,
@@ -14,6 +14,7 @@ import {GeoPosition} from 'react-native-geolocation-service';
 import {getLocation} from '../../../utils/geolocation';
 import {PRIVATE, PUBLIC} from '../../../constants/newPost/Config';
 import {HOME} from '../../../constants/Config';
+import {Lat, Lon, ReverseResponse} from '../../../nominatim/reverse';
 
 export type Visibility = number;
 
@@ -21,7 +22,12 @@ export type Photo = string;
 
 export type Error = string;
 
-export type Scene = 'newPost' | 'uploadPost' | 'getLocation' | undefined;
+export type Scene =
+  | 'newPost'
+  | 'uploadPost'
+  | 'getLocation'
+  | 'geoReverse'
+  | undefined;
 
 export type Status = 'idle' | 'loading' | 'failed' | 'success' | 'reset';
 
@@ -101,6 +107,25 @@ export const getLocationAsync = createAsyncThunk<GeoPosition | undefined, void>(
     return await getLocation();
   },
 );
+
+export const geoReverseAsync = createAsyncThunk<
+  ReverseResponse | undefined,
+  void,
+  {state: {newPost: State}}
+>('newPost/geoReverse', async (_, {getState}) => {
+  const {latitude, longitude} = getState().newPost;
+
+  if (!latitude || !longitude) {
+    return;
+  }
+
+  const request = {
+    lat: latitude as Lat,
+    lon: longitude as Lon,
+  };
+
+  return await geoReverse(request);
+});
 
 export const slice = createSlice({
   name: 'newPost',
@@ -248,6 +273,22 @@ export const slice = createSlice({
         state.status = 'failed';
 
         state.error = action.error.message || '';
+      })
+
+      .addCase(geoReverseAsync.pending, state => {
+        state.status = 'loading';
+      })
+
+      .addCase(geoReverseAsync.fulfilled, (state, action) => {
+        state.status = 'success';
+
+        state.city = action.payload?.features[0].properties.geocoding.city;
+      })
+
+      .addCase(geoReverseAsync.rejected, (state, action) => {
+        state.status = 'failed';
+
+        state.error = action.error.message || '';
       });
   },
 });
@@ -284,5 +325,7 @@ export const confirmedAtUsers = (state: RootState) =>
   state.newPost.confirmedAtUsers;
 
 export const keyword = (state: RootState) => state.newPost.keyword;
+
+export const city = (state: RootState) => state.newPost.city;
 
 export default slice.reducer;

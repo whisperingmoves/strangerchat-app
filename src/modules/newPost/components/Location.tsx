@@ -5,18 +5,22 @@ import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 import icon_location from '../../../assets/images/icons/icon_location.png';
+import {city} from '../store/slice';
+import {useAppSelector} from '../../../hooks';
+import {UNKNOWN} from '../../../constants/newPost/Config';
 
 type Props = {
-  country: string;
   style: StyleProp<ViewStyle>;
 };
 
 export default (props: Props) => {
+  const cityValue = useAppSelector(city);
+
   return (
     <TouchableOpacity activeOpacity={0.7} style={[styles.root, props.style]}>
       <Image style={styles.img} source={icon_location} />
 
-      <Text style={styles.txt}>{props.country}</Text>
+      <Text style={styles.txt}>{cityValue || UNKNOWN}</Text>
     </TouchableOpacity>
   );
 };

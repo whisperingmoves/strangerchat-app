@@ -7,6 +7,11 @@ import {
   uploadPost as uploadPostApi,
   UploadPostResponse,
 } from '../../../apis/resource/uploadPost';
+import {
+  reverse,
+  ReverseRequest,
+  ReverseResponse,
+} from '../../../nominatim/reverse';
 
 export const createPost = async (
   request: CreatePostRequest,
@@ -19,4 +24,10 @@ export const uploadPost = async (
   photo: string,
 ): Promise<UploadPostResponse> => {
   return await uploadPostApi(photo);
+};
+
+export const geoReverse = async (
+  request: ReverseRequest,
+): Promise<ReverseResponse> => {
+  return await reverse(request);
 };

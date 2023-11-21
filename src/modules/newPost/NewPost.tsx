@@ -19,6 +19,7 @@ import Input, {InputRef} from './components/Input';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {
   createPostAsync,
+  geoReverseAsync,
   getLocationAsync,
   resetState,
   resetStatus,
@@ -114,10 +115,28 @@ export default () => {
     if (statusValue === 'success' && sceneValue === 'getLocation') {
       dispatch(resetStatus());
 
+      dispatch(setScene('geoReverse'));
+
+      dispatch(geoReverseAsync());
+
       return;
     }
 
     if (statusValue === 'failed' && sceneValue === 'getLocation') {
+      dispatch(resetStatus());
+
+      showError(store.getState().newPost.error);
+
+      return;
+    }
+
+    if (statusValue === 'success' && sceneValue === 'geoReverse') {
+      dispatch(resetStatus());
+
+      return;
+    }
+
+    if (statusValue === 'failed' && sceneValue === 'geoReverse') {
       dispatch(resetStatus());
 
       showError(store.getState().newPost.error);
@@ -149,7 +168,7 @@ export default () => {
 
         <Input ref={inputRef} style={styles.input} />
 
-        <Location country={'Tokyo'} style={styles.location} />
+        <Location style={styles.location} />
 
         <Visibility
           visibility={visibilityValue}

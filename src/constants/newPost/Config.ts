@@ -7,3 +7,5 @@ export const PLACE_HOLDER = 'For those who understand you...';
 export const PUBLIC = 'Public';
 
 export const PRIVATE = 'Private';
+
+export const UNKNOWN = 'Unknown';
