@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
 
 import TitleBar from './TitleBar';
@@ -11,17 +11,25 @@ import {rewardData} from '../helper';
 export default () => {
   const checkedDaysValue = useAppSelector(checkedDays);
 
+  const rewardDataValue = useMemo(() => {
+    return rewardData.map((value, index) => {
+      if (checkedDaysValue && checkedDaysValue - 1 >= index) {
+        value.active = true;
+      } else {
+        value.active = false;
+      }
+
+      return value;
+    });
+  }, [checkedDaysValue]);
+
   return (
     <View style={styles.root}>
       <TitleBar />
 
       <View style={styles.content}>
         <View style={styles.rewardContainer}>
-          {rewardData.map((value, index) => {
-            if (checkedDaysValue && checkedDaysValue - 1 >= index) {
-              value.active = true;
-            }
-
+          {rewardDataValue.map((value, index) => {
             return <Reward {...value} key={index} />;
           })}
         </View>
