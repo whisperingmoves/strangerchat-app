@@ -16,7 +16,6 @@ import {store} from '../../../stores/store';
 import {showError} from '../../../utils/notification';
 import {StatusNotificationData} from '../../../apis/notification/getStatusNotifications';
 import {STATUS_MAP} from '../../../constants/statusNotification/Config';
-import {setUnreadNotificationsCount} from '../../chat/store/slice';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {TabBarHeightContext} from '../../../contexts/TabBarHeightContext';
@@ -54,15 +53,6 @@ export default (props: Props) => {
       sceneValue === 'markStatusNotificationAsRead'
     ) {
       dispatch(resetStatus());
-
-      const unreadNotificationsCount =
-        store.getState().chat.unreadNotificationsCount - 1;
-
-      dispatch(
-        setUnreadNotificationsCount({
-          count: unreadNotificationsCount < 0 ? 0 : unreadNotificationsCount,
-        }),
-      );
 
       return;
     }
