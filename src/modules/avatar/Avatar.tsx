@@ -37,6 +37,7 @@ import {
 import {showError} from '../../utils/notification';
 import {RegisterUserRequest} from '../../apis/user/registerUser';
 import {
+  Language,
   registerUserAsync,
   resetStatus as resetUserStatus,
   setScene,
@@ -48,6 +49,7 @@ import {checkFileExistence} from '../../utils/file';
 import {COULD_NOT_FIND_IMAGE} from '../../constants/Config';
 import {AVATAR_BOY_URL_LIST, AVATAR_GIRL_URL_LIST} from '../helper';
 import {socket} from '../../apis/socket';
+import {getLocales} from 'react-native-localize';
 
 type Props = {
   route: Route<string, {gender: Gender; mobile: Mobile; birthday: Birthday}>;
@@ -82,6 +84,8 @@ export default (props: Props) => {
 
   const dispatch = useAppDispatch();
 
+  const [languageCode, setLanguageCode] = useState<Language>('');
+
   useEffect(() => {
     if (avatarStatusValue === 'success') {
       dispatch(resetAvatarStatus());
@@ -102,15 +106,19 @@ export default (props: Props) => {
     if (userStatusValue === 'success') {
       dispatch(resetUserStatus());
 
-      dispatch(
-        setUser({
-          mobile,
-          gender,
-          birthday,
-          avatar:
-            selectedIndex === 8 ? avatarUri : AVATAR_URL_LIST[selectedIndex],
-        }),
-      );
+      const payload: any = {
+        mobile,
+        gender,
+        birthday,
+        avatar:
+          selectedIndex === 8 ? avatarUri : AVATAR_URL_LIST[selectedIndex],
+      };
+
+      if (languageCode) {
+        payload.language = languageCode;
+      }
+
+      dispatch(setUser(payload));
 
       navigation.reset({
         index: 0,
@@ -157,6 +165,14 @@ export default (props: Props) => {
     if (position) {
       params.longitude = position.coords.longitude;
       params.latitude = position.coords.latitude;
+    }
+
+    const locales = getLocales();
+
+    if (locales.length > 0) {
+      params.language = locales[0].languageCode;
+
+      setLanguageCode(locales[0].languageCode);
     }
 
     dispatch(setScene('avatar'));

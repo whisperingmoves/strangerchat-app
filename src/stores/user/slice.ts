@@ -40,6 +40,7 @@ export type Scene =
   | 'reportUserOnCommentDetail'
   | 'updateAvatar'
   | 'updateUsername'
+  | 'updateLanguage'
   | 'getMyPosts'
   | 'followUserOnMyFollowing'
   | 'unfollowUserOnMyFollowing'
@@ -59,6 +60,8 @@ export type Action = number;
 
 export type CoinBalance = number;
 
+export type Language = string;
+
 export interface State
   extends RegisterUserResponse,
     VerifyCodeResponse,
@@ -70,6 +73,7 @@ export interface State
   scene: Scene;
   status: Status;
   list: MyPostData[];
+  language: Language;
 }
 
 const initialState: State = {
@@ -96,6 +100,7 @@ const initialState: State = {
   list: [],
   page: 1,
   pageSize: 10,
+  language: '',
 };
 
 export const registerUserAsync = createAsyncThunk<

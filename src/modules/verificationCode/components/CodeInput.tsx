@@ -22,8 +22,9 @@ import {CODE_ERROR} from '../../../constants/verificationCode/Config';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {GeoPosition} from 'react-native-geolocation-service';
-import {setUser} from '../../../stores/user/slice';
+import {Language, setUser} from '../../../stores/user/slice';
 import {socket} from '../../../apis/socket';
+import {getLocales} from 'react-native-localize';
 
 type Props = {
   style: StyleProp<ViewStyle>;
@@ -48,16 +49,22 @@ export default (props: Props) => {
 
   const dispatch = useAppDispatch();
 
+  const [languageCode, setLanguageCode] = useState<Language>('');
+
   useEffect(() => {
     if (statusValue === 'success') {
       dispatch(resetStatus());
 
-      dispatch(
-        setUser({
-          ...store.getState().verificationCode.payload,
-          mobile: props.mobile,
-        }),
-      );
+      const payload: any = {
+        ...store.getState().verificationCode.payload,
+        mobile: props.mobile,
+      };
+
+      if (languageCode) {
+        payload.language = languageCode;
+      }
+
+      dispatch(setUser(payload));
 
       navigation.reset({
         index: 0,
@@ -140,6 +147,14 @@ export default (props: Props) => {
       if (position) {
         params.longitude = position.coords.longitude;
         params.latitude = position.coords.latitude;
+      }
+
+      const locales = getLocales();
+
+      if (locales.length > 0) {
+        params.language = locales[0].languageCode;
+
+        setLanguageCode(locales[0].languageCode);
       }
 
       dispatch(verifyCodeAsync(params));

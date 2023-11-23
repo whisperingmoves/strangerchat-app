@@ -15,7 +15,7 @@ import DailyAttendance, {
 import {CHAT, HOME} from '../../constants/Config';
 import {isTimestampToday} from '../../utils/date';
 import {store} from '../../stores/store';
-import {useAppDispatch} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import {socket} from '../../apis/socket';
 import {setNearestUsers, setOnlineUsers} from '../home/store/slice';
 import {NearestUsers} from '../../apis/notification/nearestUsers';
@@ -44,7 +44,17 @@ import {RecentMessage} from '../../apis/notification/recentMessages';
 import {SentMessage} from '../../apis/notification/sentMessage';
 import {MarkedAsReadMessage} from '../../apis/notification/markedAsReadMessage';
 import {CoinBalance} from '../../apis/notification/coinBalance';
-import {FollowersCount, setUser, VisitorsCount} from '../../stores/user/slice';
+import {
+  FollowersCount,
+  Language,
+  resetStatus as resetUserStatus,
+  scene as userScene,
+  setScene as setUserScene,
+  setUser,
+  status as userStatus,
+  updateUserProfileAsync,
+  VisitorsCount,
+} from '../../stores/user/slice';
 import ViewShot from 'react-native-view-shot';
 import {ViewShotContext} from '../../contexts/ViewShotContext';
 import {GiftsReceived} from '../../apis/notification/giftsReceived';
@@ -54,6 +64,8 @@ import {
   TabBarHeight,
   TabBarHeightContext,
 } from '../../contexts/TabBarHeightContext';
+import {getLocales} from 'react-native-localize';
+import {showError} from '../../utils/notification';
 
 export type RootBottomTabParamList = {
   Home: undefined;
@@ -71,6 +83,12 @@ export default () => {
   const todayIsCheckedIn = isTimestampToday(
     store.getState().user.lastCheckDate as number,
   );
+
+  const [languageCode, setLanguageCode] = useState<Language>('');
+
+  const userStatusValue = useAppSelector(userStatus);
+
+  const userSceneValue = useAppSelector(userScene);
 
   const dispatch = useAppDispatch();
 
@@ -209,6 +227,18 @@ export default () => {
       }
     });
 
+    const language = store.getState().user.language;
+
+    const locales = getLocales();
+
+    if (locales.length > 0 && locales[0].languageCode !== language) {
+      setLanguageCode(locales[0].languageCode);
+
+      dispatch(setUserScene('updateLanguage'));
+
+      dispatch(updateUserProfileAsync({language: locales[0].languageCode}));
+    }
+
     return () => {
       socket.off('notifications');
 
@@ -216,6 +246,28 @@ export default () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (userStatusValue === 'success' && userSceneValue === 'updateLanguage') {
+      dispatch(resetUserStatus());
+
+      dispatch(setUser({language: languageCode}));
+
+      return;
+    }
+
+    if (userStatusValue === 'failed' && userSceneValue === 'updateLanguage') {
+      dispatch(resetUserStatus());
+
+      const {error} = store.getState().user;
+
+      showError(error);
+
+      return;
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userStatusValue]);
 
   const viewShotRef = useRef<ViewShot>(null);
 

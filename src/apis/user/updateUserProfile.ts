@@ -6,6 +6,7 @@ export interface UpdateUserProfileRequest {
   city?: string;
   longitude?: number;
   latitude?: number;
+  language?: string;
 }
 
 export const updateUserProfile = async (

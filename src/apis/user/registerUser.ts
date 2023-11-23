@@ -7,6 +7,7 @@ export interface RegisterUserRequest {
   avatar: string;
   longitude?: number;
   latitude?: number;
+  language?: string;
 }
 
 export interface RegisterUserResponse {

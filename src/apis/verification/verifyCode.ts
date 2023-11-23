@@ -5,6 +5,7 @@ export interface VerifyCodeRequest {
   code: string;
   longitude?: number;
   latitude?: number;
+  language?: string;
 }
 
 export interface VerifyCodeResponse {
