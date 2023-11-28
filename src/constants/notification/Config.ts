@@ -1,14 +1,28 @@
-export const NOTIFICATION = 'Notification';
+import {getLocales} from 'react-native-localize';
+import {__} from '../../lang/lang';
 
-export const INTERACTIVE = 'Interactive';
+const locales = getLocales();
 
-export const STATUS = 'Status';
+const languageCode = locales.length > 0 ? locales[0].languageCode : 'en';
 
-export const NOTICE = 'Notice';
+export const NOTIFICATION = __('Notification', [], languageCode);
 
-export const VIEW_DETAILS = 'View details';
+export const INTERACTIVE = __('Interactive', [], languageCode);
 
-export const NO_NOTIFICATION_FOUND = 'No notification found';
+export const STATUS = __('Status', [], languageCode);
 
-export const WE_DID_NOT_FOUND_ANY_NOTIFICATION =
-  'We did not found any notification';
+export const SYSTEM = __('System', [], languageCode);
+
+export const VIEW_DETAILS = __('View details', [], languageCode);
+
+export const NO_NOTIFICATION_FOUND = __(
+  'No notification found',
+  [],
+  languageCode,
+);
+
+export const WE_DID_NOT_FOUND_ANY_NOTIFICATION = __(
+  'We did not found any notification',
+  [],
+  languageCode,
+);

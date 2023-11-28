@@ -9,8 +9,8 @@ import TabBar from './TabBar';
 import InteractiveNotification from '../../interactiveNotification/InteractiveNotification';
 import {
   INTERACTIVE,
-  NOTICE,
   STATUS,
+  SYSTEM,
 } from '../../../constants/notification/Config';
 import StatusNotification from '../../statusNotification/StatusNotification';
 import GiftNotification from '../../giftNotification/GiftNotification';
@@ -46,9 +46,9 @@ export default (styleProps: Props) => {
       />
 
       <Tab.Screen
-        name="Notice"
+        name="System"
         component={SystemNotification}
-        options={{title: NOTICE}}
+        options={{title: SYSTEM}}
       />
     </Tab.Navigator>
   );

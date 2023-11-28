@@ -1,13 +1,20 @@
-export const DETAILS = 'Details';
+import {getLocales} from 'react-native-localize';
+import {__} from '../../lang/lang';
 
-export const MATCH = 'Match';
+const locales = getLocales();
 
-export const SAY_SOMETHING = 'Say something...';
+const languageCode = locales.length > 0 ? locales[0].languageCode : 'en';
 
-export const IMAGE = 'Image';
+export const DETAILS = __('Details', [], languageCode);
 
-export const VOICE = 'Voice';
+export const MATCH = __('Match', [], languageCode);
 
-export const IMAGE_CACHE_FAILURE = 'Image Cache Failure';
+export const SAY_SOMETHING = __('Say something...', [], languageCode);
 
-export const VOICE_CACHE_FAILURE = 'Voice Cache Failure';
+export const IMAGE = __('Image', [], languageCode);
+
+export const VOICE = __('Voice', [], languageCode);
+
+export const IMAGE_CACHE_FAILURE = __('Image Cache Failure', [], languageCode);
+
+export const VOICE_CACHE_FAILURE = __('Voice Cache Failure', [], languageCode);

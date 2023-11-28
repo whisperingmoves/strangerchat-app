@@ -1,13 +1,20 @@
-export const USD = 'USD';
+import {getLocales} from 'react-native-localize';
+import {__} from '../../lang/lang';
 
-export const WALLET = 'Wallet';
+const locales = getLocales();
 
-export const CARD = 'Card';
+const languageCode = locales.length > 0 ? locales[0].languageCode : 'en';
 
-export const TRANSACTIONS = 'Transactions';
+export const WALLET = __('Wallet', [], languageCode);
 
-export const MORE = 'More';
+export const CARD = __('Card', [], languageCode);
 
-export const TOTAL_ASSETS = 'Total assets';
+export const TRANSACTIONS = __('Transactions', [], languageCode);
 
-export const RECENTLY_TRANSACTIONS = 'Recently Transactions';
+export const TOTAL_ASSETS = __('Total assets', [], languageCode);
+
+export const RECENTLY_TRANSACTIONS = __(
+  'Recently Transactions',
+  [],
+  languageCode,
+);

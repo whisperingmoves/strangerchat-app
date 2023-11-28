@@ -1,5 +1,10 @@
-export const FRIEND = 'Friend';
+import {getLocales} from 'react-native-localize';
+import {__} from '../../lang/lang';
 
-export const SEARCH_PLACEHOLDER = 'Search notes, name';
+const locales = getLocales();
 
-export const CLOSE_FRIEND = 'Close friend';
+const languageCode = locales.length > 0 ? locales[0].languageCode : 'en';
+
+export const SEARCH_PLACEHOLDER = __('Search notes, name', [], languageCode);
+
+export const CLOSE_FRIEND = __('Close friend', [], languageCode);

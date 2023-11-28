@@ -1,7 +1,18 @@
-export const AVATAR = 'Avatar';
+import {getLocales} from 'react-native-localize';
+import {__} from '../../lang/lang';
 
-export const AVATAR_DESC = 'Select the avatar you like';
+const locales = getLocales();
 
-export const UPLOAD = 'Upload';
+const languageCode = locales.length > 0 ? locales[0].languageCode : 'en';
 
-export const AVATAR_CANNOT_BE_EMPTY = 'Avatar cannot be empty';
+export const AVATAR = __('Avatar', [], languageCode);
+
+export const AVATAR_DESC = __('Select the avatar you like', [], languageCode);
+
+export const UPLOAD = __('Upload', [], languageCode);
+
+export const AVATAR_CANNOT_BE_EMPTY = __(
+  'Avatar cannot be empty',
+  [],
+  languageCode,
+);

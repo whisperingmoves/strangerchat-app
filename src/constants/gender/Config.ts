@@ -1,7 +1,14 @@
-export const GENDER = 'Gender';
+import {getLocales} from 'react-native-localize';
+import {__} from '../../lang/lang';
 
-export const GENDER_DESC = 'Only one chance to choose';
+const locales = getLocales();
 
-export const MALE = 'Male';
+const languageCode = locales.length > 0 ? locales[0].languageCode : 'en';
 
-export const FEMALE = 'Female';
+export const GENDER = __('Gender', [], languageCode);
+
+export const GENDER_DESC = __('Only one chance to choose', [], languageCode);
+
+export const MALE = __('Male', [], languageCode);
+
+export const FEMALE = __('Female', [], languageCode);

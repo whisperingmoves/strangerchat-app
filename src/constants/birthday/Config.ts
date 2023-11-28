@@ -1,3 +1,14 @@
-export const BIRTHDAY = 'Birthday';
+import {getLocales} from 'react-native-localize';
+import {__} from '../../lang/lang';
 
-export const BIRTHDAY_DESC = 'Receive birthday wishes from friends';
+const locales = getLocales();
+
+const languageCode = locales.length > 0 ? locales[0].languageCode : 'en';
+
+export const BIRTHDAY = __('Birthday', [], languageCode);
+
+export const BIRTHDAY_DESC = __(
+  'Receive birthday wishes from friends',
+  [],
+  languageCode,
+);

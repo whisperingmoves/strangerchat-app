@@ -1,10 +1,25 @@
-export const BAD_REQUEST = 'Bad Request';
+import {getLocales} from 'react-native-localize';
+import {__} from '../../lang/lang';
 
-export const FORBIDDEN = 'Access Forbidden';
+const locales = getLocales();
 
-export const NOT_FOUND = 'Resource Not Found';
+const languageCode = locales.length > 0 ? locales[0].languageCode : 'en';
+
+export const BAD_REQUEST = __('Bad Request', [], languageCode);
+
+export const FORBIDDEN = __('Access Forbidden', [], languageCode);
+
+export const NOT_FOUND = __('Resource Not Found', [], languageCode);
 
 export const TOO_MANY_REQUESTS = (retryAfter: string) =>
-  `Too Many Requests. Please retry after ${retryAfter} seconds.`;
+  __(
+    'Too Many Requests. Please retry after %s seconds.',
+    [retryAfter],
+    languageCode,
+  );
 
-export const INTERNAL_SERVER_ERROR = 'Internal Server Error';
+export const INTERNAL_SERVER_ERROR = __(
+  'Internal Server Error',
+  [],
+  languageCode,
+);

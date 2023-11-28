@@ -1,23 +1,44 @@
-export const WELCOME = 'Welcome.';
+import {getLocales} from 'react-native-localize';
+import {__} from '../../lang/lang';
 
-export const WELCOME_MESSAGE = 'A new and exciting way to make new friends !';
+const locales = getLocales();
 
-export const AGREE_TO_OUR = 'Agree to our ';
+const languageCode = locales.length > 0 ? locales[0].languageCode : 'en';
 
-export const AND = ' and ';
+export const WELCOME = __('Welcome.', [], languageCode);
 
-export const TERMS = 'Terms';
+export const WELCOME_MESSAGE = __(
+  'A new and exciting way to make new friends !',
+  [],
+  languageCode,
+);
 
-export const DATA_POLICY = 'Data Policy.';
+export const AGREE_TO_OUR = __('Agree to our ', [], languageCode);
 
-export const GET_VERIFICATION_CODE = 'Get verification code';
+export const AND = __(' and ', [], languageCode);
 
-export const LOGIN_WITH = 'Login with';
+export const TERMS = __('Terms', [], languageCode);
 
-export const MOBILE_NUMBER = 'Mobile number';
+export const DATA_POLICY = __('Data Policy.', [], languageCode);
 
-export const MOBILE_NUMBER_CAN_NOT_BE_EMPTY = 'Mobile number can not be empty';
+export const GET_VERIFICATION_CODE = __(
+  'Get verification code',
+  [],
+  languageCode,
+);
 
-export const INVALID_MOBILE_NUMBER = 'Invalid mobile number';
+export const LOGIN_WITH = __('Login with', [], languageCode);
 
-export const UNDO = 'UNDO';
+export const MOBILE_NUMBER = __('Mobile number', [], languageCode);
+
+export const MOBILE_NUMBER_CAN_NOT_BE_EMPTY = __(
+  'Mobile number can not be empty',
+  [],
+  languageCode,
+);
+
+export const INVALID_MOBILE_NUMBER = __(
+  'Invalid mobile number',
+  [],
+  languageCode,
+);

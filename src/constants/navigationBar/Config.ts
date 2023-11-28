@@ -1,23 +1,30 @@
-export const MARK_NOW = 'Mark now';
+import {getLocales} from 'react-native-localize';
+import {__} from '../../lang/lang';
 
-export const DAILY_ATTENDANCE = 'Daily attendance';
+const locales = getLocales();
 
-export const FIRST_DAY = 'First day';
+const languageCode = locales.length > 0 ? locales[0].languageCode : 'en';
 
-export const SECOND_DAY = 'Second day';
+export const MARK_NOW = __('Mark now', [], languageCode);
 
-export const THIRD_DAY = 'Third day';
+export const DAILY_ATTENDANCE = __('Daily attendance', [], languageCode);
 
-export const FOURTH_DAY = 'Fourth day';
+export const FIRST_DAY = __('First day', [], languageCode);
 
-export const FIFTH_DAY = 'Fifth day';
+export const SECOND_DAY = __('Second day', [], languageCode);
 
-export const SIXTH_DAY = 'Sixth day';
+export const THIRD_DAY = __('Third day', [], languageCode);
 
-export const SEVENTH_DAY = 'Seventh day';
+export const FOURTH_DAY = __('Fourth day', [], languageCode);
 
-export const EXPLORE = 'Explore';
+export const FIFTH_DAY = __('Fifth day', [], languageCode);
 
-export const PROFILE = 'Profile';
+export const SIXTH_DAY = __('Sixth day', [], languageCode);
 
-export const POST = 'Post';
+export const SEVENTH_DAY = __('Seventh day', [], languageCode);
+
+export const EXPLORE = __('Explore', [], languageCode);
+
+export const PROFILE = __('Profile', [], languageCode);
+
+export const POST = __('Post', [], languageCode);

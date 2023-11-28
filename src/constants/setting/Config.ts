@@ -1,19 +1,12 @@
-export const SETTING = 'Setting';
+import {getLocales} from 'react-native-localize';
+import {__} from '../../lang/lang';
 
-export const ACCOUNT_SECURITY = 'Account security';
+const locales = getLocales();
 
-export const NEW_NOTICE = 'New notices';
+const languageCode = locales.length > 0 ? locales[0].languageCode : 'en';
 
-export const PRIVACY = 'Privacy';
+export const SETTING = __('Setting', [], languageCode);
 
-export const ACCESSIBILITY = 'Accessibility';
+export const NEW_NOTICE = __('New notices', [], languageCode);
 
-export const PROMOTE = 'Promote';
-
-export const PROMOTE_DESC = 'Invite friends to get free coins';
-
-export const HELP_FEEDBACK = 'Help& feedback';
-
-export const ABOUT_US = 'About us';
-
-export const SIGN_OUT = 'Sign out';
+export const SIGN_OUT = __('Sign out', [], languageCode);
