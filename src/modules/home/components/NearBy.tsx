@@ -22,6 +22,7 @@ export default (props: Props) => {
           key={index}
           style={{...styles.people, ...POSITION_LIST[index]}}
           userId={value.userId}
+          username={value.username}
           distance={value.distance}
           avatar={value.avatarUrl}
         />
