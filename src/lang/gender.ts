@@ -9,7 +9,7 @@ export default {
   },
   Male: {
     en: 'Male',
-    zh: '女性',
+    zh: '男性',
   },
   Female: {
     en: 'Female',
