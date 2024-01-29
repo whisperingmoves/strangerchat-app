@@ -71,6 +71,12 @@ export default () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statusValue]);
 
+  useEffect(() => {
+    refresh();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <FlatList
       showsHorizontalScrollIndicator={false}
