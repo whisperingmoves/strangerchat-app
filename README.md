@@ -1,79 +1,115 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# 陌聊 App
 
-# Getting Started
+跨平台陌生人聊天App，支持 Android 和 iOS。
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## 安装 React Native 开发环境（0.72）
 
-## Step 1: Start the Metro Server
+[React Native - 环境安装](https://reactnative.dev/docs/environment-setup)
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
-
-To start Metro, run the following command from the _root_ of your React Native project:
+## 安装项目依赖
 
 ```bash
-# using npm
+npm install
+```
+
+## 运行项目
+
+启动Metro：
+
+```bash
 npm start
-
-# OR using Yarn
-yarn start
 ```
 
-## Step 2: Start your Application
+## 功能展示
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+- 注册登录
 
-### For Android
+![注册登录截图](./samples/login.png)
 
-```bash
-# using npm
-npm run android
+- 发送验证码
 
-# OR using Yarn
-yarn android
-```
+![发送验证码截图](./samples/verification-code.png)
 
-### For iOS
+- 选择性别
 
-```bash
-# using npm
-npm run ios
+![选择性别截图](./samples/gender.png)
 
-# OR using Yarn
-yarn ios
-```
+- 选择生日
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+![选择生日截图](./samples/birthday.png)
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+- 选择头像
 
-## Step 3: Modifying your App
+![选择头像截图](./samples/avatar.png)
 
-Now that you have successfully run the app, let's modify it.
+- 首页（附近的人，新的动态）
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+![首页（附近的人，新的动态）截图](./samples/home.png)
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+- 探索页（关注的人）
 
-## Congratulations! :tada:
+![探索页（关注的人）截图](./samples/explore-following.png)
 
-You've successfully run and modified your React Native App. :partying_face:
+- 探索页（推荐的人）
 
-### Now what?
+![探索页（推荐的人）截图](./samples/explore-recommend.png)
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+- 模糊搜索
 
-# Troubleshooting
+![模糊搜索截图](./samples/search.png)
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+- 发布帖子
 
-# Learn More
+![发布帖子截图](./samples/new-post.png)
 
-To learn more about React Native, take a look at the following resources:
+- 聊天列表
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+![聊天列表截图](./samples/chat.png)
+
+- 用户资料页
+
+![用户资料页截图](./samples/profile.png)
+
+- 聊天详情页
+
+![聊天详情页截图](./samples/chat-detail.png)
+
+- 通知列表页
+
+![通知列表页截图](./samples/notification-interactive.png)
+
+![通知列表页截图](./samples/notification-notice.png)
+
+![通知列表页截图](./samples/notification-empty-states.png)
+
+- 签到奖励
+
+![签到奖励截图](./samples/daily-attendance.png)
+
+- 帖子详情页
+
+![帖子详情页截图](./samples/comment-details.png)
+
+- 关注用户列表
+
+![关注用户列表截图](./samples/my-following.png)
+
+- App 设置
+
+![App 设置截图](./samples/setting.png)
+
+- 金币充值
+
+![金币充值截图](./samples/wallet.png)
+
+- 礼物排行榜
+
+![礼物排行榜截图](./samples/my-gifts.png)
+
+- 聊天送礼
+
+![聊天送礼截图](./samples/chat–gift.png)
+
+- 聊天礼物充值
+
+![聊天礼物充值截图](./samples/chat–gift–top-up.png)
