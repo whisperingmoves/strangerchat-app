@@ -2,7 +2,7 @@
 
 # 陌聊 App
 
-跨平台陌生人聊天App，支持 Android 和 iOS。
+跨平台陌生人聊天 App，支持 Android 和 iOS。
 
 [服务器代码](https://github.com/whisperingmoves/strangerchat-api)
 
