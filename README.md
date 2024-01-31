@@ -4,6 +4,8 @@
 
 跨平台陌生人聊天App，支持 Android 和 iOS。
 
+[服务器代码](https://github.com/whisperingmoves/strangerchat-api)
+
 ## 安装 React Native 开发环境（0.72）
 
 [React Native - 环境安装](https://reactnative.dev/docs/environment-setup)
@@ -13,6 +15,10 @@
 ```bash
 npm install
 ```
+
+## 修改配置文件
+
+将 .env.sample 文件拷贝成一个新文件，并将文件重命名为 .env ，然后修改 .env 文件
 
 ## 运行项目
 
