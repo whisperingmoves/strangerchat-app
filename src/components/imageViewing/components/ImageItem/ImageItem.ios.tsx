@@ -85,6 +85,8 @@ const ImageItem = ({
   const onScrollEndDrag = useCallback(
     ({nativeEvent}: NativeSyntheticEvent<NativeScrollEvent>) => {
       const velocityY = nativeEvent?.velocity?.y ?? 0;
+
+      // eslint-disable-next-line @typescript-eslint/no-shadow
       const scaled = nativeEvent?.zoomScale > 1;
 
       onZoom(scaled);
@@ -98,6 +100,8 @@ const ImageItem = ({
         onRequestClose();
       }
     },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [scaled],
   );
 
@@ -112,6 +116,7 @@ const ImageItem = ({
   };
 
   const onLongPressHandler = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (event: GestureResponderEvent) => {
       onLongPress(imageSrc);
     },

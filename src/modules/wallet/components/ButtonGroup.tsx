@@ -63,7 +63,7 @@ export default (props: Props) => {
       //   label: MORE,
       // },
     ];
-  }, []);
+  }, [props.scrollToListItem]);
 
   return (
     <View style={[styles.root, props.style]}>

@@ -84,6 +84,8 @@ function ImageViewing({
     if (onImageIndexChange) {
       onImageIndexChange(currentImageIndex);
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentImageIndex]);
 
   const onZoom = useCallback(
@@ -92,6 +94,8 @@ function ImageViewing({
       imageList?.current?.setNativeProps({scrollEnabled: !isScaled});
       toggleBarsVisible(!isScaled);
     },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [imageList],
   );
 

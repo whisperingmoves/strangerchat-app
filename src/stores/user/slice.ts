@@ -268,7 +268,7 @@ export const slice = createSlice({
         state.status = 'loading';
       })
 
-      .addCase(blockOrUnblockUserAsync.fulfilled, (state, action) => {
+      .addCase(blockOrUnblockUserAsync.fulfilled, state => {
         state.status = 'success';
       })
 
@@ -282,7 +282,7 @@ export const slice = createSlice({
         state.status = 'loading';
       })
 
-      .addCase(reportUserAsync.fulfilled, (state, action) => {
+      .addCase(reportUserAsync.fulfilled, state => {
         state.status = 'success';
       })
 

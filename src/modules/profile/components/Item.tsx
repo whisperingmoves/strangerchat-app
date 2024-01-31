@@ -44,7 +44,7 @@ export default (props: Props) => {
       authorId: store.getState().user.userId,
       authorName: store.getState().user.username,
     });
-  }, [navigation, props.postId]);
+  }, [tabBarHeight, navigation, props.postId]);
 
   return (
     <TouchableOpacity

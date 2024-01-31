@@ -26,6 +26,8 @@ const useImagePrefetch = (images: ImageSource[]) => {
         return Image.prefetch(image.uri);
       }
     });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
 

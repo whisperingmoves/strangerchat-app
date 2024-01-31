@@ -238,7 +238,7 @@ const usePanResponder = ({
       }
 
       const isTapGesture =
-        numberInitialTouches == 1 && gestureState.numberActiveTouches === 1;
+        numberInitialTouches == 1 && gestureState.numberActiveTouches === 1; // eslint-disable-line eqeqeq
       const isPinchGesture =
         numberInitialTouches === 2 && gestureState.numberActiveTouches === 2;
 
@@ -291,6 +291,8 @@ const usePanResponder = ({
 
       if (isTapGesture && currentScale > initialScale) {
         const {x, y} = currentTranslate;
+
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         const {dx, dy} = gestureState;
         const [topBound, leftBound, bottomBound, rightBound] =
           getBounds(currentScale);
