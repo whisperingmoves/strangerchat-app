@@ -1,3 +1,5 @@
+<img src="android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="192" height="192">
+
 # 陌聊 App
 
 跨平台陌生人聊天App，支持 Android 和 iOS。
