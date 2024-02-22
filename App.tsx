@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StatusBar} from 'react-native';
 
 import {SafeAreaProvider} from 'react-native-safe-area-context';
@@ -25,7 +25,10 @@ import VerificationCode from './src/modules/verificationCode/VerificationCode';
 import Gender from './src/modules/gender/Gender';
 import Birthday from './src/modules/birthday/Birthday';
 import Avatar from './src/modules/avatar/Avatar';
-import {Mobile} from './src/modules/login/store/slice';
+import {
+  Mobile,
+  resetStatus as resetLoginStatus,
+} from './src/modules/login/store/slice';
 import {Gender as GenderType} from './src/modules/gender/store/slice';
 import {Birthday as BirthdayType} from './src/modules/birthday/store/slice';
 import Splash from './src/modules/splash/Splash';
@@ -41,6 +44,7 @@ import {
   AuthorId,
   AuthorName,
   PostId,
+  resetStatus as resetCommentDetailStatus,
 } from './src/modules/commentDetail/store/slice';
 import Setting from './src/modules/setting/Setting';
 import Wallet from './src/modules/wallet/Wallet';
@@ -48,8 +52,22 @@ import MyGift from './src/modules/myGift/MyGift';
 import MyFollowing from './src/modules/myFollowing/MyFollowing';
 import Notification from './src/modules/notification/Notification';
 import Profile from './src/modules/profile/Profile';
-import {UserId} from './src/modules/profile/store/slice';
+import {
+  resetStatus as resetProfileStatus,
+  UserId,
+} from './src/modules/profile/store/slice';
 import {TabBarHeight} from './src/contexts/TabBarHeightContext';
+import {resetStatus as resetVerificationCodeStatus} from './src/modules/verificationCode/store/slice';
+import {resetStatus as resetAvatarStatus} from './src/modules/avatar/store/slice';
+import {resetStatus as resetUserStatus} from './src/stores/user/slice';
+import {resetStatus as resetNavigationBarStatus} from './src/modules/navigationBar/store/slice';
+import {resetStatus as resetHomeStatus} from './src/modules/home/store/slice';
+import {resetStatus as resetNewPostStatus} from './src/modules/newPost/store/slice';
+import {resetStatus as resetTopUpStatus} from './src/modules/topUp/store/slice';
+import {resetStatus as resetChatDetailStatus} from './src/modules/chatDetail/store/slice';
+import {resetStatus as resetGiftStatus} from './src/modules/gift/store/slice';
+import {resetStatus as resetMyGiftStatus} from './src/modules/myGift/store/slice';
+import {useAppDispatch} from './src/hooks';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -84,6 +102,26 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 function App(): Element {
   const loading = useLoading();
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(resetLoginStatus());
+    dispatch(resetVerificationCodeStatus());
+    dispatch(resetAvatarStatus());
+    dispatch(resetUserStatus());
+    dispatch(resetNavigationBarStatus());
+    dispatch(resetHomeStatus());
+    dispatch(resetNewPostStatus());
+    dispatch(resetProfileStatus());
+    dispatch(resetCommentDetailStatus());
+    dispatch(resetTopUpStatus());
+    dispatch(resetChatDetailStatus());
+    dispatch(resetGiftStatus());
+    dispatch(resetMyGiftStatus());
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <SafeAreaProvider>
